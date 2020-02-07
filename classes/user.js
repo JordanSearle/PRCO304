@@ -11,34 +11,34 @@ class user{
       this.#email = email;
       this.#user_DOB = dob;
     }
-    function validateDetails(){
+    validateDetails(){
+      return false;
+    }
+    addUser(){
 
     }
-    function addUser(){
+    delUser(){
 
     }
-    function delUser(){
+    addGame() {
 
     }
-    function addGame() {
+    addBookmark() {
 
     }
-    function addBookmark() {
+    delBookmark() {
 
     }
-    function delBookmark() {
+    addTag() {
 
     }
-    function addTag() {
+    delTag() {
 
     }
-    function delTag() {
+    addRating() {
 
     }
-    function addRating() {
-
-    }
-    function delRating() {
+    delRating() {
 
     }
   }
