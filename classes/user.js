@@ -4,6 +4,13 @@ class user{
     #password;
     #email;
     #user_DOB;
+    constructor(ID,username,password,email,dob){
+      this.#userID = ID;
+      this.#username = username;
+      this.#password = password;
+      this.#email = email;
+      this.#user_DOB = dob;
+    }
     function validateDetails(){
 
     }
@@ -35,3 +42,4 @@ class user{
 
     }
   }
+module.exports.user = user;
