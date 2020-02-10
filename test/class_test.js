@@ -2,17 +2,14 @@ const user = require('../classes/user');
 const expect  = require("chai").expect;
 var schemas = require("../schemas");
 
-describe('User Class',function() {
+describe('User Class Getters and Setters',function() {
   var acc = new user.user("sda","sda","sda","sda","sda");
-  context("Testing Validate User", function(){
-    it('Should return as true: details correct', function() {
-      var result = acc.validateDetails();
-      expect(result).to.equal(true);
+  context("Testing Getters", function(){
+    it('Should return username as "UserOne"', function() {
+      expect(acc.getUsername()).to.equal("UserOne");
     })
     it('Should return as false: details incorrect', function() {
-      acc.setPassword(null);
-      var result = acc.validateDetails();
-      expect(result).to.equal(false);
+      expect(result).to.not.equal("false");
     })
 
   })
