@@ -29,7 +29,7 @@ describe('User Class Getters and Setters',function() {
     it('Should return Email as false: details incorrect', function() {
       expect(acc.getEmail()).to.not.equal("false");
     })
-    it('Should return DOB as "04 Dec 1995 00:12:00 GMT"', function() {
+    it('Should return DOB as "Mon, 04 Dec 1995 00:12:00 GMT"', function() {
       expect(acc.getDOB()).to.equal("04 Dec 1995 00:12:00 GMT");
     })
     it('Should return DOB as false: details incorrect', function() {
