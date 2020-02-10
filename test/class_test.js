@@ -58,17 +58,19 @@ describe('User Class Getters and Setters',function() {
     it('password should no longer be password', function() {
       expect(acc.getPassword()).to.not.equal("password");
     })
-    it('Should return Email as "email@email.com"', function() {
-      expect(acc.getEmail()).to.equal("email@email.com");
+    it('Should set Email as "email@gmail.com"', function() {
+      acc.setEmail("email@gmail.com")
+      expect(acc.getEmail()).to.equal("email@gmail.com");
     })
-    it('Should return Email as false: details incorrect', function() {
+    it('Email Should no longer be email@email.com', function() {
       expect(acc.getEmail()).to.not.equal("false");
     })
-    it('Should return DOB as "Mon, 04 Dec 1995 00:12:00 GMT"', function() {
-      expect(acc.getDOB()).to.equal("Mon, 04 Dec 1995 00:12:00 GMT");
+    it('Should set DOB as "Mon, 04 Dec 1996 00:12:00 GMT"', function() {
+      acc.setDOB("Mon, 04 Dec 1996 00:12:00 GMT");
+      expect(acc.getDOB()).to.equal("Mon, 04 Dec 1996 00:12:00 GMT");
     })
-    it('Should return DOB as false: details incorrect', function() {
-      expect(acc.getDOB()).to.not.equal("false");
+    it('DOB should no longer be "Mon, 04 Dec 1996 00:12:00 GMT"', function() {
+      expect(acc.getDOB()).to.not.equal("Mon, 04 Dec 1995 00:12:00 GMT");
     })
   })
 })
