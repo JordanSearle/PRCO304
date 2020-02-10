@@ -87,7 +87,7 @@ class user{
       return this.#email;
     }
     getDOB(){
-      return this.#user_DOB;
+      return this.#user_DOB.toUTCString();
     }
     setPassword(password){
       this.#password = password;
