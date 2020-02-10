@@ -107,3 +107,8 @@ class user{
     }
   }
 module.exports.user = user;
+class admin extends user {
+  constructor() {
+
+  }
+}
