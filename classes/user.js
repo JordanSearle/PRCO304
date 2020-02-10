@@ -113,21 +113,6 @@ class admin extends user {
     super(userID,username,password,email,dob);
     this.#isAdmin = true;
   }
-  getUserID(){
-    return super.getUserID();
-  }
-  getUsername(){
-    return super.getUsername();
-  }
-  getPassword(){
-    return super.getPassword();
-  }
-  getEmail(){
-    return super.getEmail();
-  }
-  getDOB(){
-    return super.getDOB();
-  }
   getIsAdmin(){
     return this.#isAdmin;
   }
