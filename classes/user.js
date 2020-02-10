@@ -5,12 +5,12 @@ class user{
     #password;
     #email;
     #user_DOB;
-    constructor(ID,username,password,email,dob){
-      this.#userID = ID;
+    constructor(userID,username,password,email,dob){
+      this.#userID = userID;
       this.#username = username;
       this.#password = password;
       this.#email = email;
-      this.#user_DOB = dob;
+      this.#user_DOB = Date.parse(dob);
     }
     validateDetails(){
       //Return true or false based on password and username values
