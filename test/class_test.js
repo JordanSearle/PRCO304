@@ -100,17 +100,17 @@ describe('Admin class getters and setters',function() {
   context("Testing Setters", function(){
     it('Should set userID as "5"', function() {
       admin.setUserID("A5");
-      expect(admin.getUserID()).to.equal("A1");
+      expect(admin.getUserID()).to.equal("A5");
     })
     it('UserID should no longer = 1', function() {
-      expect(admin.getUserID()).to.not.equal("1");
+      expect(admin.getUserID()).to.not.equal("A1");
     })
-    it('Should set username as "UserFive"', function() {
-      admin.setUsername("UserFive");
-      expect(admin.getUsername()).to.equal("UserFive");
+    it('Should set username as "AdminFive"', function() {
+      admin.setUsername("AdminFive");
+      expect(admin.getUsername()).to.equal("AdminFive");
     })
-    it('Username should no longer be UserOne', function() {
-      expect(admin.getUsername()).to.not.equal("UserOne");
+    it('Username should no longer be AdminOne', function() {
+      expect(admin.getUsername()).to.not.equal("AdminOne");
     })
     it('Should set password as "MoreSecurePassword"', function() {
       admin.setPassword("MoreSecurePassword");
@@ -119,9 +119,9 @@ describe('Admin class getters and setters',function() {
     it('password should no longer be password', function() {
       expect(admin.getPassword()).to.not.equal("password");
     })
-    it('Should set Email as "email@gmail.com"', function() {
-      admin.setEmail("email@gmail.com")
-      expect(admin.getEmail()).to.equal("email@gmail.com");
+    it('Should set Email as "admin@gmail.com"', function() {
+      admin.setEmail("admin@gmail.com")
+      expect(admin.getEmail()).to.equal("admin@gmail.com");
     })
     it('Email Should no longer be email@email.com', function() {
       expect(admin.getEmail()).to.not.equal("email@email.com");
