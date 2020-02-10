@@ -116,6 +116,21 @@ class admin extends user {
   getUserID(){
     return super.getUserID();
   }
+  getUsername(){
+    return super.getUsername();
+  }
+  getPassword(){
+    return super.getPassword();
+  }
+  getEmail(){
+    return super.getEmail();
+  }
+  getDOB{
+    return super.getDOB();
+  }
+  getIsAdmin(){
+    return this.#isAdmin;
+  }
 }
 module.exports.user = user;
 module.exports.admin = admin;
