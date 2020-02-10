@@ -38,7 +38,7 @@ describe('User Class Getters and Setters',function() {
   })
   context("Testing Setters", function(){
     it('Should set userID as "5"', function() {
-      acc.setUserID(5);
+      acc.setUserID("5");
       expect(acc.getUserID()).to.equal("5");
     })
     it('User ID should no longer = 1', function() {
@@ -63,11 +63,11 @@ describe('User Class Getters and Setters',function() {
       expect(acc.getEmail()).to.equal("email@gmail.com");
     })
     it('Email Should no longer be email@email.com', function() {
-      expect(acc.getEmail()).to.not.equal("false");
+      expect(acc.getEmail()).to.not.equal("email@email.com");
     })
-    it('Should set DOB as "Mon, 04 Dec 1996 00:12:00 GMT"', function() {
-      acc.setDOB("Mon, 04 Dec 1996 00:12:00 GMT");
-      expect(acc.getDOB()).to.equal("Mon, 04 Dec 1996 00:12:00 GMT");
+    it('Should set DOB as "Wed, 04 Dec 1996 00:12:00 GMT"', function() {
+      acc.setDOB("Wed, 04 Dec 1996 00:12:00 GMT");
+      expect(acc.getDOB()).to.equal("Wed, 04 Dec 1996 00:12:00 GMT");
     })
     it('DOB should no longer be "Mon, 04 Dec 1996 00:12:00 GMT"', function() {
       expect(acc.getDOB()).to.not.equal("Mon, 04 Dec 1995 00:12:00 GMT");

@@ -90,8 +90,20 @@ class user{
       var date = new Date(this.#user_DOB)
       return date.toUTCString();
     }
+    setUserID(userID){
+      this.#userID = userID;
+    }
+    setUsername(username){
+      this.#username = username;
+    }
     setPassword(password){
       this.#password = password;
+    }
+    setEmail(email){
+      this.#email = email;
+    }
+    setDOB(dob){
+      this.#user_DOB = new Date(dob);
     }
   }
 module.exports.user = user;
