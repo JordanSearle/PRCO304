@@ -75,5 +75,10 @@ describe('User Class Getters and Setters',function() {
   })
 })
 describe('Admin class getters and setters',function() {
-
+  context('Testing getters',function () {
+    var admin = new user.admin("A1","AdminOne","password","Admin@email.com","04 Dec 1995 00:12:00 GMT");
+    it('username return UserID as "A1"',function () {
+      expect(admin.getUserID()).to.equal("A1");
+    })
+  })
 })

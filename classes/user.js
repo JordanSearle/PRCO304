@@ -108,8 +108,13 @@ class user{
   }
 
 class admin extends user {
+  #isAdmin;
   constructor(userID,username,password,email,dob) {
     super(userID,username,password,email,dob);
+    this.#isAdmin = true;
+  }
+  getUserID(){
+    return super.getUserID();
   }
 }
 module.exports.user = user;
