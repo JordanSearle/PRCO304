@@ -106,9 +106,11 @@ class user{
       this.#user_DOB = new Date(dob);
     }
   }
-module.exports.user = user;
-class admin extends user {
-  constructor() {
 
+class admin extends user {
+  constructor(userID,username,password,email,dob) {
+    super(userID,username,password,email,dob);
   }
 }
+module.exports.user = user;
+module.exports.admin = admin;

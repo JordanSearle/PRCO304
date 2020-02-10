@@ -74,3 +74,6 @@ describe('User Class Getters and Setters',function() {
     })
   })
 })
+describe('Admin class getters and setters',function() {
+
+})
