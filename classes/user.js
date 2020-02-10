@@ -125,7 +125,7 @@ class admin extends user {
   getEmail(){
     return super.getEmail();
   }
-  getDOB{
+  getDOB(){
     return super.getDOB();
   }
   getIsAdmin(){
