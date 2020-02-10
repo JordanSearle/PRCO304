@@ -75,8 +75,8 @@ describe('User Class Getters and Setters',function() {
   })
 })
 describe('Admin class getters and setters',function() {
+  var admin = new user.admin("A1","AdminOne","password","Admin@email.com","04 Dec 1995 00:12:00 GMT");
   context('Testing getters',function () {
-    var admin = new user.admin("A1","AdminOne","password","Admin@email.com","04 Dec 1995 00:12:00 GMT");
     it('getUserID returns UserID as "A1"',function () {
       expect(admin.getUserID()).to.equal("A1");
     })
@@ -94,6 +94,44 @@ describe('Admin class getters and setters',function() {
     })
     it('getIsAdmin returns isAdmin as true',function () {
       expect(admin.getIsAdmin()).to.equal(true);
+    })
+  })
+
+  context("Testing Setters", function(){
+    it('Should set userID as "5"', function() {
+      admin.setUserID("A5");
+      expect(admin.getUserID()).to.equal("A1");
+    })
+    it('UserID should no longer = 1', function() {
+      expect(admin.getUserID()).to.not.equal("1");
+    })
+    it('Should set username as "UserFive"', function() {
+      admin.setUsername("UserFive");
+      expect(admin.getUsername()).to.equal("UserFive");
+    })
+    it('Username should no longer be UserOne', function() {
+      expect(admin.getUsername()).to.not.equal("UserOne");
+    })
+    it('Should set password as "MoreSecurePassword"', function() {
+      admin.setPassword("MoreSecurePassword");
+      expect(admin.getPassword()).to.equal("MoreSecurePassword");
+    })
+    it('password should no longer be password', function() {
+      expect(admin.getPassword()).to.not.equal("password");
+    })
+    it('Should set Email as "email@gmail.com"', function() {
+      admin.setEmail("email@gmail.com")
+      expect(admin.getEmail()).to.equal("email@gmail.com");
+    })
+    it('Email Should no longer be email@email.com', function() {
+      expect(admin.getEmail()).to.not.equal("email@email.com");
+    })
+    it('Should set DOB as "Wed, 04 Dec 1996 00:12:00 GMT"', function() {
+      admin.setDOB("Wed, 04 Dec 1996 00:12:00 GMT");
+      expect(admin.getDOB()).to.equal("Wed, 04 Dec 1996 00:12:00 GMT");
+    })
+    it('DOB should no longer be "Mon, 04 Dec 1996 00:12:00 GMT"', function() {
+      expect(admin.getDOB()).to.not.equal("Mon, 04 Dec 1995 00:12:00 GMT");
     })
   })
 })
