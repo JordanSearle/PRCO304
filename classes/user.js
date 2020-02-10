@@ -74,6 +74,21 @@ class user{
       //returns user details from database
     }
     //getters and setters
+    getUserID(){
+      return this.#userID;
+    }
+    getUsername(){
+      return this.#username;
+    }
+    getPassword(){
+      return this.#password;
+    }
+    getEmail(){
+      return this.#email;
+    }
+    getDOB(){
+      return this.#user_DOB;
+    }
     setPassword(password){
       this.#password = password;
     }
