@@ -1,4 +1,5 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 var user = new Schema({
   username:{type: String, required: true, unique: true},
   password:{type: String, required: true},
@@ -7,47 +8,37 @@ var user = new Schema({
   isAdmin:{type: Boolean}
 });
 var bookmark = new Schema({
-  bookmarkID:{type: String, required: true, unique: true},
-  userID:{type: String, required: true},
-  gameID:{type: String, required: true, unique: true},
+  userID:{type: Schema.Types.ObjectId, ref: 'User', required: true},
+  gameID:{type: Schema.Types.ObjectId, ref: 'Game', required: true, unique: true},
 });
 var tag = new Schema({
   bookmarkTag:{type: String, required: true, unique: true},
-  bookmarkID:{type: String, required: true}
+  bookmarkID: [{ type: Schema.Types.ObjectId, ref: 'Bookmark'}]
 });
 var game = new Schema({
-  userID:{type: String, required: true},
+  userID:{type: Schema.Types.ObjectId, ref: 'User', required: true},
   game_Name:{type: String, required: true},
   game_Summery:{type: String, required: true},
   game_Rules:{type: String, required: true},
   game_Player_Count:{type: String, required: true},
-  game_Creator:{type: String, required: true}
-});
-var equipment = new Schema({
-  gameID:{type: String, required: true},
-  game_Equipment:{type: String, required: true}
+  game_Equipment:{type:[]}
 });
 var rating = new Schema({
-  gameID:{type: String, required: true},
+  gameID:{type: Schema.Types.ObjectId, ref: 'Game', required: true},
+  userID:{type: Schema.Types.ObjectId, ref: 'User', required: true},
   game_Rating:{type: Number, required: true}
 });
 var pending = new Schema({
-  userID:{type: String, required: true},
+  edit_userID:{type: Schema.Types.ObjectId, ref: 'User', required: true},
   game_Name:{type: String},
   game_Summery:{type: String},
   game_Rules:{type: String},
   game_Player_Count:{type: String},
-  game_Creator:{type: String}
+  game_Equipment:{type:[]}
 });
-var pEquipment = new Schema({
-  pendingID:{type: String,required: true},
-  game_Equipment:{type: String}
-});
-module.exports.User = user;
-module.exports.Bookmark = bookmark;
-module.exports.Tag = tag;
-module.exports.Game = game;
-module.exports.Equipment = equipment;
-module.exports.Rating = rating;
-module.exports.Pending = pending;
-module.exports.PEquipment = pEquipment;
+module.exports.User = mongoose.model('User', user);
+module.exports.Bookmark = mongoose.model('Bookmark', bookmark);
+module.exports.Tag = mongoose.model('Tag', tag);
+module.exports.Game = mongoose.model('Game', game);
+module.exports.Rating = mongoose.model('Rating', rating);
+module.exports.Pending = mongoose.model('Pending', pending);
