@@ -6,8 +6,15 @@ var user = new Schema({
   user_DOB:{type: Date, required: true},
   isAdmin:{type: Boolean}
 });
-var bookmark = new Schema({});
-var tag = new Schema({});
+var bookmark = new Schema({
+  bookmarkID:{type: String, required: true, unique: true},
+  userID:{type: String, required: true},
+  gameID:{type: String, required: true, unique: true},
+});
+var tag = new Schema({
+  bookmarkTag:{type: String, required: true, unique: true},
+  bookmarkID:{type: String, required: true}
+});
 var game = new Schema({
   userID:{type: String, required: true, unique: true},
   game_Name:{type: String, required: true},
