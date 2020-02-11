@@ -14,10 +14,16 @@ var game = new Schema({
   game_Summery:{type: String, required: true},
   game_Rules:{type: String, required: true},
   game_Player_Count:{type: String, required: true},
-  game_Creator:{type: String, required: true},
+  game_Creator:{type: String, required: true}
 });
-var equipment = new Schema({});
-var rating = new Schema({});
+var equipment = new Schema({
+  gameID:{type: String, required: true,},
+  game_Equipment:{type: String, required: true}
+});
+var rating = new Schema({
+  gameID:{type: String, required: true},
+  game_Rating:{type: Number, required: true}
+});
 var pending = new Schema({});
 var pEquipment = new Schema({});
 module.exports.User = user;
