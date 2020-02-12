@@ -1,5 +1,7 @@
   var express = require('express');
-
+  var app = express();
+  var mongoose = require("mongoose");
+  const uri = 'mongodb://localhost:27017/PRCO304';
   //Server Start...
   var server = app.listen(9000, function() {
     // Connect to Mongoose.
