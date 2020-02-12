@@ -1,5 +1,5 @@
 var schemas = require("../schemas");
-class user{
+module.exports = class user{
     #userID;
     #username;
     #password;
@@ -106,16 +106,3 @@ class user{
       this.#user_DOB = new Date(dob);
     }
   }
-
-class admin extends user {
-  #isAdmin;
-  constructor(userID,username,password,email,dob) {
-    super(userID,username,password,email,dob);
-    this.#isAdmin = true;
-  }
-  getIsAdmin(){
-    return this.#isAdmin;
-  }
-}
-module.exports.user = user;
-module.exports.admin = admin;
