@@ -16,3 +16,8 @@
   });
 
   module.exports = server;
+
+  app.get('/', function (req, res) {
+    console.log("hello?");
+  res.send('Hello World');
+  })
