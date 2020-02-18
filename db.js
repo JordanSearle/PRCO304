@@ -25,7 +25,7 @@ module.exports = {
         game_Name: name,
         game_Summery:summery,
         game_Rules: rules,
-        game_Player_Count: pcount,
+        game_Player_Count: pCount,
         game_Equipment: equipment
      })
      game.save(function (err) {

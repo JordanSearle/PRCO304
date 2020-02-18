@@ -27,18 +27,15 @@
   module.exports.server = server;
 
   app.get('/', function (req, res) {
-    /*db.writeGames(function (err) {
-      if (err) console.log(err);
-    });*/
-    db.readGames(function(result) {
+    res.sendStatus(200);
+  })
+  app.get('/readgames', function (req, res) {
+    db.readGames(function (result) {
       res.send(result);
     })
   })
   app.post('/writegame', function (req, res) {
     db.writeGames(req.body.name,req.body.summery,req.body.rules,req.body.pcount,req.body.equipment,function (err) {
-      if (err) console.log(err);
-    });
-    db.readGames(function(result) {
-      res.send(result);
+          res.sendStatus(201);
     })
   })
