@@ -8,10 +8,10 @@ module.exports = {
     games.find().populate('userID').
     exec(function (err, game) {
       if (err) return err;
-      callback(game);
+      callback(game[0].userID.username);
     })
   },
-  writeGames: function (callback) {
+  writeGames: function (name,summery,rules,pCount,equipment,callback) {
     const user = new schemas.User({
       _id: new mongoose.Types.ObjectId(),
       username: 'JTest',
@@ -19,18 +19,20 @@ module.exports = {
       email: 'email@email.com',
       user_DOB: new Date()
     })
-       const game = new schemas.Game({
-         //UserID needs to be set from the logged on user.
-         userID: user._id,
-         game_Name: 'New Gamess',
-         game_Summery:'This is a test game summery.',
-         game_Rules: 'This is a test game rule.',
-         game_Player_Count: '1-8 Players',
-         game_Equipment: ['test','test2']
-      })
-      game.save(function (err) {
-        if (err) callback(err);
-        // thats it!
-      });
+      const game = new schemas.Game({
+        //UserID needs to be set from the logged on user.
+        userID: user._id,
+        game_Name: name,
+        game_Summery:summery,
+        game_Rules: rules,
+        game_Player_Count: pcount,
+        game_Equipment: equipment
+     })
+     game.save(function (err) {
+       if (err) callback(err);
+       // thats it!
+     });
+
+
   }
 }
