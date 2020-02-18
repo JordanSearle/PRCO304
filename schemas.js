@@ -18,7 +18,7 @@ var tag = new Schema({
 });
 var game = new Schema({
   userID:{type: Schema.Types.ObjectId, ref: 'User', required: true},
-  game_Name:{type: String, required: true},
+  game_Name:{type: String, required: true, unique: true},
   game_Summery:{type: String, required: true},
   game_Rules:{type: String, required: true},
   game_Player_Count:{type: String, required: true},

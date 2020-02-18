@@ -2,6 +2,8 @@
   var app = express();
   var mongoose = require("mongoose");
   const uri = 'mongodb://localhost:27017/PRCO304';
+
+  var db = require('./db');
   //Server Start...
   var server = app.listen(9000, function() {
     // Connect to Mongoose.
@@ -18,6 +20,10 @@
   module.exports = server;
 
   app.get('/', function (req, res) {
-    console.log("hello?");
-  res.send('Hello World');
+    db.writeGames(function (err) {
+      if (err) console.log(err);
+    });
+    db.readGames(function(result) {
+      res.send(result);
+    })
   })
