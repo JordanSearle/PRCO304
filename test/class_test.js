@@ -1,6 +1,7 @@
 const classes = require('../classes');
 const expect  = require("chai").expect;
 var schemas = require("../schemas");
+var db = require('../db');
 
 describe('User Class Getters and Setters',function() {
   var acc = new classes.user("1","UserOne","password","email@email.com","04 Dec 1995 00:12:00 GMT");
@@ -132,6 +133,53 @@ describe('Admin class getters and setters',function() {
     })
     it('DOB should no longer be "Mon, 04 Dec 1996 00:12:00 GMT"', function() {
       expect(admin.getDOB()).to.not.equal("Mon, 04 Dec 1995 00:12:00 GMT");
+    })
+  })
+})
+describe('Game test',function () {
+  var games = schemas.Game;
+  var game = new classes.game('5e4d2fbe9dcfd93b700d6f3b','test game name','test game summery','test game rules','test game count', 'test equipment',false);
+  beforeEach(function() {
+    game.game_Name = 'test game name';
+    game.game_Summery = 'test game summery';
+    game.game_Rules = 'test game rules';
+    game.game_Player_Count = '1-2';
+    game.game_Equipment = ['test1','test3'];
+    game.game_IsNSFW = false;
+
+  });
+  context('testing variable values',function () {
+    it('Expecting name to equal: test game name',function () {
+      expect(game.game_Name).to.equal('test game name');
+      game.game_Name = 'New Test Game Name';
+      expect(game.game_Name).to.equal('New Test Game Name');
+    })
+  })
+  context('Testing Game Methods',function () {
+    it('Saving new game to DB',function () {
+      game.saveGame(function (err) {
+      });
+      games.countDocuments({'game_Name':'test game name'}, function (err, count) {
+        expect(err).to.be.null;
+        expect(count).to.equal(1);
+      });
+
+    })
+    it('Updating game in DB',function() {
+      game.game_Rules = 'new game rules';
+      game.game_UID = '5e4d2fbe9dcfd93b700d6f3b';
+      game.updateGame();
+      games.countDocuments({'game_Rules':'dfkljshdfjjashgdfkjahg'}, function (err, count) {
+        expect(err).to.be.null;
+        expect(count).to.equal(1);
+      });
+    })
+    it('Deleting game in DB',function () {
+      game.delGame();
+      games.countDocuments({'game_Name':'test game name'}, function (err, count) {
+        expect(err).to.be.null;
+        expect(count).to.equal(0);
+      });
     })
   })
 })

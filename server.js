@@ -4,14 +4,15 @@ var mongoose = require("mongoose");
 var bodyParser = require('body-parser');
 const uri = 'mongodb://localhost:27017/PRCO304';
 var db = require('./db');
+//Express Setup
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 }));
 
 
-  //Server Start...
-app.listen(9000, function() {
+//Server Start...
+var server = app.listen(9000, function() {
     // Connect to Mongoose.
     mongoose.connect(uri, {
       useNewUrlParser: true,
