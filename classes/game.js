@@ -30,6 +30,7 @@ module.exports = class game {
     })
       const game = new schemas.Game({
         //UserID needs to be set from the logged on user.
+        _id: new mongoose.Types.ObjectId,
         userID: user._id,
         game_Name: this.game_Name,
         game_Summery:this.game_Summery,
@@ -37,12 +38,18 @@ module.exports = class game {
         game_Player_Count: this.game_Player_Count,
         game_Equipment: this.game_Equipment,
         game_IsNSFW:this.game_IsNSFW
+
      })
+     this.game_UID = game._id;
      game.save(function (err) {
+       if(err)callback(err);
      });
   }
   delGame(){
-
+    var uGame = schemas.Game;
+    uGame.deleteOne({'_id':this.game_UID}, function (err) {
+    if (err) return handleError(err);
+  });
   }
   updateGame(){
     var game = this;

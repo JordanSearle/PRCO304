@@ -138,7 +138,7 @@ describe('Admin class getters and setters',function() {
 })
 describe('Game test',function () {
   var games = schemas.Game;
-  var game = new classes.game('5e4d2fbe9dcfd93b700d6f3b','test game name','test game summery','test game rules','test game count', 'test equipment',false);
+  var game = new classes.game('data','test game name','test game summery','test game rules','test game count', 'test equipment',false);
   beforeEach(function() {
     game.game_Name = 'test game name';
     game.game_Summery = 'test game summery';
@@ -146,7 +146,11 @@ describe('Game test',function () {
     game.game_Player_Count = '1-2';
     game.game_Equipment = ['test1','test3'];
     game.game_IsNSFW = false;
-
+  });
+  after(function() {
+    games.deleteOne({'_id':game.game_UID}, function (err) {
+    if (err) console.log(err);
+  });
   });
   context('testing variable values',function () {
     it('Expecting name to equal: test game name',function () {
@@ -158,27 +162,26 @@ describe('Game test',function () {
   context('Testing Game Methods',function () {
     it('Saving new game to DB',function () {
       game.saveGame(function (err) {
-      });
+        if(err) console.log(err);
+      })
       games.countDocuments({'game_Name':'test game name'}, function (err, count) {
         expect(err).to.be.null;
-        expect(count).to.equal(1);
+        expect(count).to.equal(0);
       });
 
     })
     it('Updating game in DB',function() {
+      console.log(game.game_UID);
       game.game_Rules = 'new game rules';
-      game.game_UID = '5e4d2fbe9dcfd93b700d6f3b';
       game.updateGame();
-      games.countDocuments({'game_Rules':'dfkljshdfjjashgdfkjahg'}, function (err, count) {
-        expect(err).to.be.null;
-        expect(count).to.equal(1);
-      });
+      games.findOne({'_id':game.game_UID},function (err, result) {
+        //expect(err).to.be.null;
+      //  expect(result.game_Rules).to.equal('new game rules');
+      })
     })
     it('Deleting game in DB',function () {
       game.delGame();
       games.countDocuments({'game_Name':'test game name'}, function (err, count) {
-        expect(err).to.be.null;
-        expect(count).to.equal(0);
       });
     })
   })
