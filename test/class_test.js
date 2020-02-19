@@ -160,29 +160,41 @@ describe('Game test',function () {
     })
   })
   context('Testing Game Methods',function () {
-    it('Saving new game to DB',function () {
+    it('Saving new game to DB',function (done) {
+      this.timeout(3000);
       game.saveGame(function (err) {
         if(err) console.log(err);
       })
-      games.countDocuments({'game_Name':'test game name'}, function (err, count) {
-        expect(err).to.be.null;
-        expect(count).to.equal(0);
-      });
-
+      setTimeout(function(){
+        games.countDocuments({'game_Name':'test game name'}, function (err, count) {
+          expect(err).to.be.null;
+          expect(count).to.equal(1);
+          done();
+        });
+      }, 500);
     })
-    it('Updating game in DB',function() {
-      console.log(game.game_UID);
+    it('Updating game in DB',function(done) {
+      this.timeout(3000);
       game.game_Rules = 'new game rules';
       game.updateGame();
-      games.findOne({'_id':game.game_UID},function (err, result) {
-        //expect(err).to.be.null;
-      //  expect(result.game_Rules).to.equal('new game rules');
-      })
+      setTimeout(function(){
+        games.findOne({'_id':game.game_UID},function (err, result) {
+          expect(err).to.be.null;
+          expect(result.game_Rules).to.equal('new game rules');
+        })
+        done();
+      }, 100);
     })
-    it('Deleting game in DB',function () {
+    it('Deleting game in DB',function (done) {
+      this.timeout(500);
       game.delGame();
-      games.countDocuments({'game_Name':'test game name'}, function (err, count) {
-      });
+      setTimeout(function(){
+        games.countDocuments({'game_Name':'test game name'}, function (err, count) {
+        });
+        done();
+      }, 100);
+
+
     })
   })
 })

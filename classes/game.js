@@ -42,16 +42,16 @@ module.exports = class game {
      })
      this.game_UID = game._id;
      game.save(function (err) {
-       if(err)callback(err);
+       if(err)err(err);
      });
   }
-  delGame(){
+  delGame(callback){
     var uGame = schemas.Game;
     uGame.deleteOne({'_id':this.game_UID}, function (err) {
     if (err) return handleError(err);
   });
   }
-  updateGame(){
+  updateGame(callback){
     var game = this;
     var uGame = schemas.Game;
     uGame.findOne({'_id':this.game_UID},function (err, result) {
