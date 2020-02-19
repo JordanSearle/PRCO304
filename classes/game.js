@@ -1,13 +1,39 @@
+var db = require('../db.js');
+var user = require('./user');
 module.exports = class game {
-  /*userID:{type: Schema.Types.ObjectId, ref: 'User', required: true},
-  game_Name:{type: String, required: true},
-  game_Summery:{type: String, required: true},
-  game_Rules:{type: String, required: true},
-  game_Player_Count:{type: String, required: true},
-  game_Equipment:{type:[]}*/
-  #game_name;
-  #game_summery;
-  #game_Rules;
-  #game_Player_Count;
-  #game_Equipment;
+  constructor(gameID,name,summery,rules,count,equipment, nsfw){
+    this.game_UID = gameID;
+    this.game_Name = userID;
+    this.game_Summery = summery;
+    this.game_Rules = rules;
+    this.game_Player_Count = count;
+    this.game_Equipment = equipment;
+    this.game_IsNSFW = nsfw;
+  }
+  game_uniqueID;
+  game_Name;
+  game_Summery;
+  game_Rules;
+  game_Player_Count;
+  game_Equipment;
+  game_IsNSFW;
+  saveGame(){
+
+  }
+  delGame(){
+
+  }
+  updateGame(){
+
+  }
+  //Rating function, not important right now.
+  calculateRating(){
+
+  }
+  addRating(){
+
+  }
+  delRating(){
+
+  }
 }

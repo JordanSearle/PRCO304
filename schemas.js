@@ -22,7 +22,8 @@ var game = new Schema({
   game_Summery:{type: String, required: true},
   game_Rules:{type: String, required: true},
   game_Player_Count:{type: String, required: true},
-  game_Equipment:{type:[]}
+  game_Equipment:{type:[]},
+  game_IsNSFW:{type:Boolean, required:true}
 });
 var rating = new Schema({
   gameID:{type: Schema.Types.ObjectId, ref: 'Game', required: true},

@@ -41,7 +41,8 @@ describe('Testing Server functions', function() {
                   'summery': '123',
                   'rules': '123',
                   'pcount': '1-3',
-                  'equipment': ['123']
+                  'equipment': ['123'],
+                  'nsfw':true
               })
               .end(function(err, res) {
                   expect(err).to.be.null;

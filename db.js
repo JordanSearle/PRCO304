@@ -11,7 +11,7 @@ module.exports = {
       callback(game[0].userID.username);
     })
   },
-  writeGames: function (name,summery,rules,pCount,equipment,callback) {
+  writeGames: function (name,summery,rules,pCount,equipment,nsfw,callback) {
     const user = new schemas.User({
       _id: new mongoose.Types.ObjectId(),
       username: 'JTest',
@@ -26,7 +26,8 @@ module.exports = {
         game_Summery:summery,
         game_Rules: rules,
         game_Player_Count: pCount,
-        game_Equipment: equipment
+        game_Equipment: equipment,
+        game_IsNSFW:nsfw
      })
      game.save(function (err) {
        if (err) callback(err);
