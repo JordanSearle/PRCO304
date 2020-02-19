@@ -42,7 +42,7 @@ module.exports = class game {
      })
      this.game_UID = game._id;
      game.save(function (err) {
-       if(err)err(err);
+       if(err)callback(err);
      });
   }
   delGame(callback){

@@ -148,7 +148,7 @@ describe('Game test',function () {
     game.game_IsNSFW = false;
   });
   after(function() {
-    games.deleteOne({'_id':game.game_UID}, function (err) {
+    games.deleteMany({'game_Name':'test game name'}, function (err) {
     if (err) console.log(err);
   });
   });
@@ -163,7 +163,7 @@ describe('Game test',function () {
     it('Saving new game to DB',function (done) {
       this.timeout(3000);
       game.saveGame(function (err) {
-        if(err) console.log(err);
+        expect(err).to.be.null;
       })
       setTimeout(function(){
         games.countDocuments({'game_Name':'test game name'}, function (err, count) {
@@ -171,7 +171,7 @@ describe('Game test',function () {
           expect(count).to.equal(1);
           done();
         });
-      }, 500);
+      }, 50);
     })
     it('Updating game in DB',function(done) {
       this.timeout(3000);
@@ -180,11 +180,21 @@ describe('Game test',function () {
       setTimeout(function(){
         games.findOne({'_id':game.game_UID},function (err, result) {
           expect(err).to.be.null;
+          expect(result.game_Rules).to.not.equal('test game rules');
           expect(result.game_Rules).to.equal('new game rules');
         })
         done();
-      }, 100);
+      }, 50);
     })
+
+    it('Testing unique DB values',function (done) {
+      this.timeout(3000);
+      game.saveGame(function (err) {
+        expect(err).to.not.be.null;
+        done();
+      })
+    })
+
     it('Deleting game in DB',function (done) {
       this.timeout(500);
       game.delGame();
@@ -192,9 +202,7 @@ describe('Game test',function () {
         games.countDocuments({'game_Name':'test game name'}, function (err, count) {
         });
         done();
-      }, 100);
-
-
+      }, 50);
     })
   })
 })
