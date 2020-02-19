@@ -1,5 +1,6 @@
 const classes = require('../classes');
 const expect  = require("chai").expect;
+const mongoose = require('mongoose');
 var schemas = require("../schemas");
 var db = require('../db');
 
@@ -162,7 +163,7 @@ describe('Game test',function () {
   context('Testing Game Methods',function () {
     it('Saving new game to DB',function (done) {
       this.timeout(3000);
-      game.saveGame(function (err) {
+      game.saveGame(new mongoose.Types.ObjectId,function (err) {
         expect(err).to.be.null;
       })
       setTimeout(function(){
@@ -189,7 +190,7 @@ describe('Game test',function () {
 
     it('Testing unique DB values',function (done) {
       this.timeout(3000);
-      game.saveGame(function (err) {
+      game.saveGame(new mongoose.Types.ObjectId,function (err) {
         expect(err).to.not.be.null;
         done();
       })

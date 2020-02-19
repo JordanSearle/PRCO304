@@ -8,20 +8,13 @@ module.exports = {
     games.find().populate('userID').
     exec(function (err, game) {
       if (err) return err;
-      callback(game[0].userID.username);
+      callback(game);
     })
   },
-  writeGames: function (name,summery,rules,pCount,equipment,nsfw,callback) {
-    const user = new schemas.User({
-      _id: new mongoose.Types.ObjectId(),
-      username: 'JTest',
-      password: '12312jhsdf',
-      email: 'email@email.com',
-      user_DOB: new Date()
-    })
+  writeGames: function (id,name,summery,rules,pCount,equipment,nsfw,callback) {
       const game = new schemas.Game({
         //UserID needs to be set from the logged on user.
-        userID: user._id,
+        userID: mongoose.Types.ObjectId(id),
         game_Name: name,
         game_Summery:summery,
         game_Rules: rules,

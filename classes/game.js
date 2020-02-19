@@ -20,18 +20,11 @@ module.exports = class game {
   game_Player_Count;
   game_Equipment;
   game_IsNSFW;
-  saveGame(callback){
-    const user = new schemas.User({
-      _id: new mongoose.Types.ObjectId(),
-      username: 'JTest',
-      password: '12312jhsdf',
-      email: 'email@email.com',
-      user_DOB: new Date()
-    })
+  saveGame(id,callback){
       const game = new schemas.Game({
         //UserID needs to be set from the logged on user.
         _id: new mongoose.Types.ObjectId,
-        userID: user._id,
+        userID: mongoose.Types.ObjectId(id),
         game_Name: this.game_Name,
         game_Summery:this.game_Summery,
         game_Rules: this.game_Rules,

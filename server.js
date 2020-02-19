@@ -4,6 +4,7 @@ var mongoose = require("mongoose");
 var bodyParser = require('body-parser');
 const uri = 'mongodb://localhost:27017/PRCO304';
 var db = require('./db');
+var classes = require('./classes');
 //Express Setup
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
@@ -24,16 +25,34 @@ var server = app.listen(9000, function() {
     console.log('%s Listening on port %s', new Date(), port);
   });
 
-    app.get('/', function (req, res) {
-      res.sendStatus(200);
-    })
+  app.get("/", function(req, res) {
+    var ex = 'b';
+    switch (ex) {
+      case 'a': res.status(200).sendFile("/", {
+        root: "anon"
+      });
+      break;
+      case 'b':
+      res.status(200).sendFile("/", {
+        root: "admin"
+      });
+      break;
+      case 'c':
+      res.status(200).sendFile("/", {
+        root: "user"
+      });
+        break;
+    }
+  });
     app.get('/readgames', function (req, res) {
       db.readGames(function (result) {
         res.send(result);
       })
     })
     app.post('/writegame', function (req, res) {
-      db.writeGames(req.body.name,req.body.summery,req.body.rules,req.body.pcount,req.body.equipment,req.body.nsfw,function (err) {
-            res.sendStatus(201);
+      var game = new classes.game('data','test game name','test game summery','test game rules','test game count', 'test equipment',false);
+      game.saveGame('5e45baf12d9a272aa06127c0',function (err) {
+        if(err)console.log(err);
       })
+      res.sendStatus(201);
     })
