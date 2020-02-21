@@ -26,17 +26,23 @@ var server = app.listen(9000, function() {
   });
 
   app.get("/", function(req, res) {
-    var ex = 'b';
+    //Checking which user level is logged in.
+    //Would run user validation first
+    var ex = 'a';
+    //Would Switch roots between different user levels
     switch (ex) {
+      //Unregistered user
       case 'a': res.status(200).sendFile("/", {
         root: "anon"
       });
       break;
+      //Admin User
       case 'b':
       res.status(200).sendFile("/", {
         root: "admin"
       });
       break;
+      //Registered user
       case 'c':
       res.status(200).sendFile("/", {
         root: "user"
@@ -51,7 +57,7 @@ var server = app.listen(9000, function() {
     })
     app.post('/writegame', function (req, res) {
       var game = new classes.game('data','test game name','test game summery','test game rules','test game count', 'test equipment',false);
-      game.saveGame('5e45baf12d9a272aa06127c0',function (err) {
+      game.saveGame(function (err) {
         if(err)console.log(err);
       })
       res.sendStatus(201);
