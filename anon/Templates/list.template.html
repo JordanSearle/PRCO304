@@ -1,0 +1,8 @@
+<table class="w3-table w3-striped" >
+  <tr>
+    <th>Game Name:</th><th>Game Summery:</th><th>Game Rules:</th><th>Creator:</th>
+  </tr>
+  <tr ng-repeat="x in myWelcome">
+    <td>{{ x.game_Name }}</td><td>{{ x.game_Summery }}</td><td>{{ x.game_Rules }}</td><td>{{ x.userID.username }}</td>
+  </tr>
+</table>

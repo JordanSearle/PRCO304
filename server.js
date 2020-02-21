@@ -24,9 +24,12 @@ var server = app.listen(9000, function() {
     var port = server.address().port;
     console.log('%s Listening on port %s', new Date(), port);
   });
-
+app.use(express.static("anon"));
   app.get("/", function(req, res) {
-    //Checking which user level is logged in.
+    res.status(200).sendFile("/", {
+      root: "anon"
+    });
+    /*//Checking which user level is logged in.
     //Would run user validation first
     var ex = 'a';
     //Would Switch roots between different user levels
@@ -48,7 +51,7 @@ var server = app.listen(9000, function() {
         root: "user"
       });
         break;
-    }
+    }*/
   });
     app.get('/readgames', function (req, res) {
       db.readGames(function (result) {
