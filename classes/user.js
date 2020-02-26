@@ -15,8 +15,9 @@ module.exports = class user{
     validateDetails(callback){
       //Return true or false based on password and username values
       var user = schemas.User;
+      var thisUSR = this;
       user.findOne({
-        username: this.#username
+        username: thisUSR.getUsername()
       }, function(err, obj) {
         if (err) {
           console.log(err);
@@ -28,7 +29,7 @@ module.exports = class user{
         //If it find the item in the DB
         else {
           //if the username matches the password
-          if (obj.password == this.#password) {
+          if (obj.password == thisUSR.getPassword()) {
             //res.status(200).send(String(obj.userID));
             //Login Stuff and session processes here.
             callback(true);
@@ -53,8 +54,27 @@ module.exports = class user{
         if(err)callback(err);
       })
     }
-    delUser(){
-      //delete user
+    editUser(callback){
+      //edit and save current user
+      var usr = this;
+      var username = this.#username;
+      var user = schemas.User;
+      user.findOne({'_id':this.#userID},function (err, result) {
+        result.username=username;
+        result.password=usr.getPassword();
+        result.email=usr.getEmail();
+        result.user_DOB=usr.getDOB();
+        result.save(function (err) {
+          if(err)callback(err);
+        });
+      })
+    }
+    delUser(callback){
+      //delete current user
+      var user = schemas.User;
+      user.deleteOne({'_id':this.#userID},function (err) {
+        if(err)callback(err);
+      })
     }
     addGame() {
       //add a new pending game
