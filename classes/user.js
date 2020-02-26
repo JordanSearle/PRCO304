@@ -12,7 +12,7 @@ module.exports = class user{
       this.#email = email;
       this.#user_DOB = Date.parse(dob);
     }
-    validateDetails(){
+    validateDetails(callback){
       //Return true or false based on password and username values
       var user = schemas.User;
       user.findOne({
@@ -20,31 +20,38 @@ module.exports = class user{
       }, function(err, obj) {
         if (err) {
           console.log(err);
-          res.status(404).send(err);
         };
-        //If user doesn't exist
+        //If account doesn't exist
         if (obj === null) {
-          return "username";
+          callback("username");
         }
         //If it find the item in the DB
         else {
           //if the username matches the password
-          if (obj.password == req.body.Password) {
+          if (obj.password == this.#password) {
             //res.status(200).send(String(obj.userID));
             //Login Stuff and session processes here.
-            return true;
+            callback(true);
           }
           //If the password is incorrect
           else {
-            return "password";
+            callback("password");
           }
         }
       });
 
     }
-    addUser(){
+    addUser(callback){
       //Create new user
-
+      var user = new schemas.User({
+        username: this.#username,
+        password: this.#password,
+        email:this.#email,
+        user_DOB:this.#user_DOB,
+      })
+      user.save(function (err) {
+        if(err)callback(err);
+      })
     }
     delUser(){
       //delete user

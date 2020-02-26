@@ -60,7 +60,7 @@ app.use(express.static("anon"));
     })
     app.post('/writegame', function (req, res) {
       var game = new classes.game('data','test game name','test game summery','test game rules','test game count', 'test equipment',false);
-      game.saveGame(function (err) {
+      game.saveGame(new mongoose.Types.ObjectId,function (err) {
         if(err)console.log(err);
       })
       res.sendStatus(201);

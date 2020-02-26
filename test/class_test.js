@@ -76,6 +76,80 @@ describe('User Class Getters and Setters',function() {
     })
   })
 })
+describe('User Class account functions',function() {
+  var acc = new classes.user("1","UserTwo","password","emailTwo@email.com","04 Dec 1995 00:12:00 GMT");
+  var user = schemas.User;
+  this.timeout(400);
+  beforeEach(function() {
+    acc.setUsername('UserTwo');
+    acc.setPassword('password');
+    acc.setEmail('emailTwo@email.com');
+    acc.setDOB('04 Dec 1995 00:12:00 GMT');
+  });
+  after(function () {
+    user.deleteMany({'username':acc.getUsername()},function (err) {
+    if (err) console.log(err);
+  });
+  })
+  context('User class login and creation test',function () {
+    it('Testing account creation',function (done) {
+
+      acc.addUser(function (err) {
+        console.log(err);
+      });
+      //Read from DB to test if it worked
+      setTimeout(function () {
+        user.findOne({username: acc.getUsername()}).exec(function (err,account) {
+              expect(account).to.not.be.null;
+              expect(account.username).to.equal(acc.getUsername());
+
+        })
+      }, 50);
+      done();
+    })
+    it('Testing login with incorrect username',function (done) {
+      acc.setUsername('fakeUsername');
+      setTimeout(function () {
+        acc.validateDetails(function (result) {
+          expect(result).to.equal("username");
+          expect(result).to.not.equal("password");
+          expect(result).to.not.equal(true);
+        })
+      }, 50);
+      done();
+
+    })
+    it('Testing login with correct username but incorrect password',function (done) {
+      acc.setPassword('incorrectPassword')
+      setTimeout(function () {
+        acc.validateDetails(function (result) {
+          expect(result).to.not.equal("username");
+          expect(result).to.equal("password");
+          expect(result).to.not.equal(true);
+        })
+      }, 50);
+      done();
+    })
+
+    it('Testing login with correct username and correct password',function (done) {
+      setTimeout(function () {
+        acc.validateDetails(function (result) {
+          expect(result).to.not.equal("username");
+          expect(result).to.not.equal("password");
+          expect(result).to.equal(true);
+        })
+      }, 50);
+      done();
+    })
+
+    it('Testing account edit',function () {
+      expect(true).to.be.false;
+    })
+    it('Testing account deletion',function () {
+      expect(true).to.be.false;
+    })
+  })
+})
 describe('Admin class getters and setters',function() {
   var admin = new classes.admin("A1","AdminOne","password","Admin@email.com","04 Dec 1995 00:12:00 GMT");
   context('Testing getters',function () {
