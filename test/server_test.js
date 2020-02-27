@@ -51,4 +51,23 @@ describe('Testing Server functions', function() {
               })
       });
     })
+    context('Testing login',function () {
+      it('incorrect Username',function (done) {
+        chai.request('http://localhost:9000')
+        .post('/login')
+        .type('form')
+        .send({
+          'username':'test',
+          'password':'password'
+        })
+        .end(function (err,res) {
+          expect(err).to.be.null;
+          expect(res).to.have.status(201);
+          expect(res).to.include({text:'username'});
+          expect(res).to.not.include({text:'password'});
+          expect(res).to.not.include({text:true});
+          done();
+        })
+      })
+    })
 })
