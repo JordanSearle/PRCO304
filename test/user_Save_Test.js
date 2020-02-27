@@ -34,7 +34,6 @@ describe('User Class account functions',function() {
               expect(account).to.not.be.null;
               expect(account.username).to.equal(acc.getUsername());
               acc.setUserID(account._id);
-              console.log(account._id);
               done();
         })
       }, 10);
@@ -45,7 +44,7 @@ describe('User Class account functions',function() {
         acc.validateDetails(function (result) {
           expect(result).to.equal("username");
           expect(result).to.not.equal("password");
-          expect(result).to.not.equal(true);
+          expect(result).to.not.equal('true');
           done();
         })
       }, 10);
@@ -57,7 +56,7 @@ describe('User Class account functions',function() {
         acc.validateDetails(function (result) {
           expect(result).to.not.equal("username");
           expect(result).to.equal("password");
-          expect(result).to.not.equal(true);
+          expect(result).to.not.equal('true');
           done();
         })
       }, 10);
@@ -68,7 +67,7 @@ describe('User Class account functions',function() {
         acc.validateDetails(function (result) {
           expect(result).to.not.equal("username");
           expect(result).to.not.equal("password");
-          expect(result).to.equal(true);
+          expect(result).to.equal('true');
           done();
         })
       }, 10);

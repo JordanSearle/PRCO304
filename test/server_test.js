@@ -65,7 +65,41 @@ describe('Testing Server functions', function() {
           expect(res).to.have.status(201);
           expect(res).to.include({text:'username'});
           expect(res).to.not.include({text:'password'});
-          expect(res).to.not.include({text:true});
+          expect(res).to.not.include({text:'true'});
+          done();
+        })
+      })
+      it('correct Username, incorrect password',function (done) {
+        chai.request('http://localhost:9000')
+        .post('/login')
+        .type('form')
+        .send({
+          'username':'JTest',
+          'password':'password'
+        })
+        .end(function (err,res) {
+          expect(err).to.be.null;
+          expect(res).to.have.status(201);
+          expect(res).to.not.include({text:'username'});
+          expect(res).to.include({text:'password'});
+          expect(res).to.not.include({text:'true'});
+          done();
+        })
+      })
+      it('correct Username, correct password',function (done) {
+        chai.request('http://localhost:9000')
+        .post('/login')
+        .type('form')
+        .send({
+          'username':'JTest',
+          'password':'12312jhsdf'
+        })
+        .end(function (err,res) {
+          expect(err).to.be.null;
+          expect(res).to.have.status(201);
+          expect(res).to.not.include({text:'username'});
+          expect(res).to.not.include({text:'password'});
+          expect(res).to.include({text:'true'});
           done();
         })
       })

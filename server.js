@@ -71,7 +71,7 @@ var server = app.listen(9000, function() {
       user.setUsername(req.body.username);
       user.setPassword(req.body.password);
       user.validateDetails(function (response) {
-        console.log(response);
         res.status(201).send(response);
+        //setup cookies and session.
       })
     })

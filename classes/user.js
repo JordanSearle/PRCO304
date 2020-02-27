@@ -32,7 +32,7 @@ module.exports = class user{
           if (obj.password == thisUSR.getPassword()) {
             //res.status(200).send(String(obj.userID));
             //Login Stuff and session processes here.
-            callback(true);
+            callback('true');
           }
           //If the password is incorrect
           else {
