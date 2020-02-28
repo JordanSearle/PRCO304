@@ -100,6 +100,7 @@ describe('Testing Server functions', function() {
           expect(res).to.not.include({text:'username'});
           expect(res).to.not.include({text:'password'});
           expect(res).to.include({text:'true'});
+          expect(res).to.have.cookie('sessionid');
           done();
         })
       })

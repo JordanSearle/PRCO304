@@ -6,3 +6,11 @@
     <td>{{ x.game_Name }}</td><td>{{ x.game_Summery }}</td><td>{{ x.game_Rules }}</td><td>{{ x.userID.username }}</td>
   </tr>
 </table>
+<form>
+    First Name:<br>
+    <input type="text" ng-model="user.username"><br>
+    Last Name:<br>
+    <input type="text" ng-model="user.password">
+    <br><br>
+    <button ng-click="login()">submit</button>
+</form>

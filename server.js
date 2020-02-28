@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 }));
 
-
+  var ex = 'a';
 //Server Start...
 var server = app.listen(9000, function() {
     // Connect to Mongoose.
@@ -29,7 +29,7 @@ var server = app.listen(9000, function() {
     //Checking which user level is logged in.
     //Would run user validation first
     //'ex' would the user that is logged in (needs to check first)
-    var ex = 'a';
+
     //Would Switch roots between different user levels
     switch (ex) {
       //Unregistered user
@@ -73,5 +73,7 @@ var server = app.listen(9000, function() {
       user.validateDetails(function (response) {
         res.status(201).send(response);
         //setup cookies and session.
+        //temp attribute to set which user level is logged in
+        ex = 'c';
       })
     })

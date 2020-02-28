@@ -12,4 +12,11 @@ app.controller('myApps', function($scope, $http) {
   .then(function(response) {
     $scope.myWelcome = response.data;
   });
+  $scope.login = function() {
+    $http.post('http://localhost:9000/login',$scope.user)
+    .then(function (response) {
+      alert(response.data);
+       window.location.href = "/";
+    })
+  }
 });
