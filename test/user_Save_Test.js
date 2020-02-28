@@ -42,9 +42,9 @@ describe('User Class account functions',function() {
       acc.setUsername('fakeUsername');
       setTimeout(function () {
         acc.validateDetails(function (result) {
-          expect(result).to.equal("username");
-          expect(result).to.not.equal("password");
-          expect(result).to.not.equal('true');
+          expect(result.status).to.equal("username");
+          expect(result.status).to.not.equal("password");
+          expect(result.status).to.not.equal('true');
           done();
         })
       }, 10);
@@ -54,9 +54,9 @@ describe('User Class account functions',function() {
       acc.setPassword('incorrectPassword')
       setTimeout(function () {
         acc.validateDetails(function (result) {
-          expect(result).to.not.equal("username");
-          expect(result).to.equal("password");
-          expect(result).to.not.equal('true');
+          expect(result.status).to.not.equal("username");
+          expect(result.status).to.equal("password");
+          expect(result.status).to.not.equal('true');
           done();
         })
       }, 10);
@@ -65,9 +65,9 @@ describe('User Class account functions',function() {
     it('Testing login with correct username and correct password',function (done) {
       setTimeout(function () {
         acc.validateDetails(function (result) {
-          expect(result).to.not.equal("username");
-          expect(result).to.not.equal("password");
-          expect(result).to.equal('true');
+          expect(result.status).to.not.equal("username");
+          expect(result.status).to.not.equal("password");
+          expect(result.status).to.equal('true');
           done();
         })
       }, 10);

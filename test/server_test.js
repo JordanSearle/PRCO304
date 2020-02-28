@@ -51,7 +51,7 @@ describe('Testing Server functions', function() {
               })
       });
     })
-    context('Testing login',function () {
+    context('Testing login features',function () {
       it('incorrect Username',function (done) {
         chai.request('http://localhost:9000')
         .post('/login')
@@ -86,23 +86,30 @@ describe('Testing Server functions', function() {
           done();
         })
       })
-      it('correct Username, correct password',function (done) {
-        chai.request('http://localhost:9000')
+      it('correct Username, correct password',function () {
+        var agent = chai.request.agent('http://localhost:9000')
+        agent
         .post('/login')
         .type('form')
         .send({
           'username':'JTest',
           'password':'12312jhsdf'
         })
-        .end(function (err,res) {
-          expect(err).to.be.null;
+        .then(function (res) {
           expect(res).to.have.status(201);
           expect(res).to.not.include({text:'username'});
           expect(res).to.not.include({text:'password'});
           expect(res).to.include({text:'true'});
           expect(res).to.have.cookie('sessionid');
-          done();
+          return agent.get('/logout')
+            .then(function (response) {
+              expect(response).to.have.status(200);
+              expect(response).to.have.cookie('sessionid');
+            }).catch(function (err) {
+              console.log(err);
+            })
         })
+        agent.close();
       })
     })
 })

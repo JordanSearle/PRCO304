@@ -24,7 +24,9 @@ module.exports = class user{
         };
         //If account doesn't exist
         if (obj === null) {
-          callback("username");
+          callback({'status':"username",
+                    'uID':null
+        });
         }
         //If it find the item in the DB
         else {
@@ -32,11 +34,15 @@ module.exports = class user{
           if (obj.password == thisUSR.getPassword()) {
             //res.status(200).send(String(obj.userID));
             //Login Stuff and session processes here.
-            callback('true');
+            callback({'status':'true',
+                      'uID':obj._id
+          });
           }
           //If the password is incorrect
           else {
-            callback("password");
+            callback({'status':"password",
+                      'uID':null
+                      });
           }
         }
       });
@@ -69,6 +75,7 @@ module.exports = class user{
         });
       })
     }
+  
     delUser(callback){
       //delete current user
       var user = schemas.User;
