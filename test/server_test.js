@@ -98,12 +98,21 @@ describe('Testing Server functions', function() {
           expect(res).to.not.include({text:'username'});
           expect(res).to.not.include({text:'password'});
           expect(res).to.have.cookie('sessionid');
-          return agent.get('/logout')
+          //Testing returns correct user data
+          //Login test
+          agent.get('/user')
             .then(function (response) {
               expect(response).to.have.status(200);
-              expect(response).to.not.have.cookie('sessionid');
+              expect(response.text).to.include('"_id":"5e4bdab0e623ca4e5ca53955","username":"JTest","password":"12312jhsdf","email":"email@email.com","user_DOB":"2020-02-18T12:38:08.882Z","__v":0');
             }).catch(function (err) {
-              //console.log(err);
+              expect(err).to.be.null;
+            })
+            //Testing log out
+          agent.get('/logout')
+            .then(function (response) {
+              expect(response).to.have.status(200);
+            }).catch(function (err) {
+              expect(err).to.be.null;
             })
         })
         agent.close();
