@@ -85,7 +85,7 @@ module.exports = class user{
     }
     viewUser(callback){
       var user = schemas.User;
-      user.findOne({'_id':this.#userID},function (err, result) {
+      user.findOne({'_id':this.#userID}).select('-password').exec(function (err, result) {
         callback(result);
       })
     }

@@ -2,8 +2,12 @@ var app = angular.module("myApp", ["ngRoute"]);
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $routeProvider
   .when("/", {
-    templateUrl : "/Templates/list.template.html",
+    templateUrl : "/Template/list.template.html",
     controller: "myApps"
+  })
+  .when("/userdetails", {
+    templateUrl : "/Template/user.template.html",
+    controller: "userControl"
   })
   $locationProvider.html5Mode({
                 enabled: true,
@@ -12,15 +16,15 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 
     }]);
 app.controller('myApps', function($scope, $http) {
-  console.log('test');
   $http.get("/readgames")
   .then(function(response) {
     $scope.myWelcome = response.data;
   });
-  $scope.login = function() {
-    $http.post('http://localhost:9000/login',$scope.user)
-    .then(function (response) {
-       window.location.href = "/";
-    })
-  }
+});
+app.controller('userControl', function($scope, $http) {
+  $http.get("/user")
+  .then(function(response) {
+    console.log(response.data);
+    $scope.user = response.data;
+  });
 });

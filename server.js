@@ -74,7 +74,48 @@ var server = app.listen(9000, function() {
       req.session.destroy();
       res.redirect('/');
     })
+    app.post('/createuser',function (req,res) {
+      //create a new user
+      var user = new classes.user();
+      user.setUsername(req.body.username);
+      user.setPassword(req.body.password);
+      user.setEmail(req.body.email);
+      user.setDOB(req.body.user_DOB);
+      user.addUser(function (response) {
+        //do somehting with error.
+      })
+      res.sendStatus(201);//Correct Status?
+    })
+    app.delete('/user',function (req,res) {
+      //Delete a User
+      //Verifies the user is logged in or not. not logged in will redirect to default index page
+      verify(app,res,req.session.user);
+      //Delete a user
+      var user = new classes.user();
+      user.setUserID(req.session.user);
+      user.delUser(function (response) {
+        //Do something here
+        res.sendStatus(201);
+      })
+    })
+    app.put('/user',function (req,res) {
+      //edit a user
+      //Verifies the user is logged in or not. not logged in will redirect to default index page
+      verify(app,res,req.session.user);
+      //Delete a user
+      var user = new classes.user();
+      user.setUserID(req.session.user);
+      user.setUsername(req.body.username);
+      user.setEmail(req.body.email);
+      user.setPassword(req.body.password);
+      user.setDOB(req.body.user_DOB);
+      user.editUser(function (err) {
+        if(err)res.sendStatus(304);
+        res.sendStatus(200);
+      })
+    })
     app.get('/user',function (req,res) {
+      //view user
       //Verifies the user is logged in or not. not logged in will redirect to default index page
       verify(app,res,req.session.user);
       //will return the user's data
