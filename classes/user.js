@@ -75,12 +75,18 @@ module.exports = class user{
         });
       })
     }
-  
+
     delUser(callback){
       //delete current user
       var user = schemas.User;
       user.deleteOne({'_id':this.#userID},function (err) {
         if(err)callback(err);
+      })
+    }
+    viewUser(callback){
+      var user = schemas.User;
+      user.findOne({'_id':this.#userID},function (err, result) {
+        callback(result);
       })
     }
     addGame() {

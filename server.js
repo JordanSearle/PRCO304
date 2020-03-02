@@ -35,7 +35,8 @@ var server = app.listen(9000, function() {
   });
 
   app.get("/", function(req, res) {
-    verify(app,res,req.session.user);
+    //Checks if the user is logged in
+    verify.rootCheck(app,res,req.session.user);
   });
     app.get('/readgames', function (req, res) {
       db.readGames(function (result) {
@@ -50,19 +51,36 @@ var server = app.listen(9000, function() {
       res.sendStatus(201);
     })
     app.post('/login',function (req,res) {
+      //Check the user login
       var user = new classes.user();
       user.setUsername(req.body.username);
       user.setPassword(req.body.password);
       user.validateDetails(function (response) {
-        //setup session.
-        //temp attribute to set which user level is logged in
         if (response.uID !=null) {
+          //If the correct details have been entered
           req.session.user = response.uID;
+          app.use(express.static('user'));
+          res.status(200).sendFile("/", {
+            root: 'user'
+          });
         }
+        else{
         res.status(201).send(response.status);
+        }
       })
     })
-    app.get('/logout',function (req,res,next) {
+
+    app.get('/logout',function (req,res) {
       req.session.destroy();
       res.redirect('/');
+    })
+    app.get('/user',function (req,res) {
+      //Verifies the user is logged in or not. not logged in will redirect to default index page
+      verify(app,res,req.session.user);
+      //will return the user's data
+      var user = new classes.user();
+      user.setUserID(req.session.user);
+      user.viewUser(function (result) {
+        res.send(result);
+      })
     })

@@ -65,7 +65,6 @@ describe('Testing Server functions', function() {
           expect(res).to.have.status(201);
           expect(res).to.include({text:'username'});
           expect(res).to.not.include({text:'password'});
-          expect(res).to.not.include({text:'true'});
           done();
         })
       })
@@ -82,7 +81,6 @@ describe('Testing Server functions', function() {
           expect(res).to.have.status(201);
           expect(res).to.not.include({text:'username'});
           expect(res).to.include({text:'password'});
-          expect(res).to.not.include({text:'true'});
           done();
         })
       })
@@ -96,17 +94,16 @@ describe('Testing Server functions', function() {
           'password':'12312jhsdf'
         })
         .then(function (res) {
-          expect(res).to.have.status(201);
+          expect(res).to.have.status(200);
           expect(res).to.not.include({text:'username'});
           expect(res).to.not.include({text:'password'});
-          expect(res).to.include({text:'true'});
           expect(res).to.have.cookie('sessionid');
           return agent.get('/logout')
             .then(function (response) {
               expect(response).to.have.status(200);
-              expect(response).to.have.cookie('sessionid');
+              expect(response).to.not.have.cookie('sessionid');
             }).catch(function (err) {
-              console.log(err);
+              //console.log(err);
             })
         })
         agent.close();

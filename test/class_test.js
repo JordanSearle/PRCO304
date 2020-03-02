@@ -95,9 +95,6 @@ describe('Admin class getters and setters',function() {
     it('getDOB returns DOB as "Mon, 04 Dec 1995 00:12:00 GMT"',function () {
       expect(admin.getDOB()).to.equal("Mon, 04 Dec 1995 00:12:00 GMT");
     })
-    it('getIsAdmin returns isAdmin as true',function () {
-      expect(admin.getIsAdmin()).to.equal(true);
-    })
   })
 
   context("Testing Setters", function(){
