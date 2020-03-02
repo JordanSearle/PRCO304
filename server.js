@@ -81,7 +81,7 @@ var server = app.listen(9000, function() {
       user.setPassword(req.body.password);
       user.setEmail(req.body.email);
       user.setDOB(req.body.user_DOB);
-      user.addUser(function (response) {
+      user.addUser(function (err) {
         //do somehting with error.
       })
       res.sendStatus(201);//Correct Status?
@@ -109,10 +109,10 @@ var server = app.listen(9000, function() {
       user.setEmail(req.body.email);
       user.setPassword(req.body.password);
       user.setDOB(req.body.user_DOB);
-      user.editUser(function (err) {
-        if(err)res.sendStatus(304);
-        res.sendStatus(200);
-      })
+      user.editUser(function(err) {
+
+      });
+      res.sendStatus(200);
     })
     app.get('/user',function (req,res) {
       //view user

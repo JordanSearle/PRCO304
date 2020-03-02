@@ -98,6 +98,7 @@ describe('Testing Server functions', function() {
             'password':'password1'
           })
           .end(function (err,res) {
+            if(err)console.log(err);
             expect(err).to.be.null;
             expect(res).to.have.status(201);
             expect(res).to.not.include({text:'username'});
@@ -125,30 +126,63 @@ describe('Testing Server functions', function() {
                 expect(response).to.have.status(200);
                 expect(response.text).to.match(/^(.*),"username":"testUsername",(.*)/);
               }).catch(function (err) {
+                if(err)console.log(err);
                 expect(err).to.be.null;
               })
-              //Edit User
-              agent.put('/user')
+          })
+          agent.close();
+          done();
+        })
+        it('testing edit user funtion',function (done) {
+          var agent = chai.request.agent('http://localhost:9000')
+          agent
+          .post('/login')
+          .type('form')
+          .send({
+            'username':'testUsername',
+            'password':'password'
+          })
+          .then(function (res) {
+            expect(res).to.have.status(200);
+            expect(res).to.not.include({text:'username'});
+            expect(res).to.not.include({text:'password'});
+            expect(res).to.have.cookie('sessionid');
+            //Testing returns correct user data
+            agent.put('/user')
               .send({
                 'username':'testUsername',
                 'email':'newEmail@email.com',
                 'password':'password',
                 'user_DOB':'"04 Dec 1995 00:12:00 GMT"'
               })
-              .then(function (response) {
-                //test if changed
-                expect(response).to.have.status(200);
-              }).catch(function (err) {
+              .end(function (err, response) {
                 expect(err).to.be.null;
+                expect(res).to.have.status(200);
               })
-              //Delete User
-              agent.delete('/user')
-              .then(function (response) {
-                //test if deleted
-              }).catch(function (err) {
+          })
+          agent.close();
+          done();
+        })
+        it('testing edit delete funtion',function (done) {
+          var agent = chai.request.agent('http://localhost:9000')
+          agent
+          .post('/login')
+          .type('form')
+          .send({
+            'username':'testUsername',
+            'password':'password'
+          })
+          .then(function (res) {
+            expect(res).to.have.status(200);
+            expect(res).to.not.include({text:'username'});
+            expect(res).to.not.include({text:'password'});
+            expect(res).to.have.cookie('sessionid');
+            //Testing returns correct user data
+            agent.delete('/user')
+              .then(function (err, response) {
                 expect(err).to.be.null;
+                expect(res).to.have.status(200);
               })
-              //Testing log out
           })
           agent.close();
           done();
