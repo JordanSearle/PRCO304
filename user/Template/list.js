@@ -10,7 +10,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     controller: "userControl"
   })
   $locationProvider.html5Mode({
-                enabled: true,
+                enabled: false,
                 requireBase: false
          });
 
@@ -30,9 +30,13 @@ app.controller('myApps', function($scope, $http) {
 app.controller('userControl', function($scope, $http) {
 
   $scope.load = function () {
+
   $http.get("/user")
   .then(function(response) {
     $scope.user = response.data;
+    var test = new Date($scope.user.user_DOB).toISOString().substr(0, 10);
+    console.log(test);
+    $scope.dInput = test
   });
     }
   $scope.logout = function () {
@@ -44,7 +48,7 @@ app.controller('userControl', function($scope, $http) {
   $scope.delete= function () {
     $http.delete("/user")
     .then(function (res) {
-      window.location.href = "/";
+      $scope.logout();
     })
   }
   $scope.editAccount= function () {

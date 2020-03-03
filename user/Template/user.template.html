@@ -6,14 +6,14 @@
 
 <form>
     Username:<br>
-    <input type="text" ng-model="eUser.username"><br>
+    <input type="text" ng-model="eUser.username" ng-value="user.username"required><br>
     Email:<br>
-    <input type="text" ng-model="eUser.email">
+    <input type="text" ng-model="eUser.email"ng-value="user.email"required>
     <br>
     Password:<br>
-    <input type="text" ng-model="eUser.password"><br>
+    <input type="text" ng-model="eUser.password"required><br>
     DOB:<br>
-    <input type="date" ng-model="eUser.user_DOB">
+    <input type="date" ng-model="eUser.user_DOB"ng-value="dInput" required>
     <br><br>
     <button ng-click="editAccount()">submit</button>
 </form>
