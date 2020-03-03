@@ -12,15 +12,24 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 
     }]);
 app.controller('myApps', function($scope, $http) {
-  console.log('test');
+  $scope.test = "blah";
   $http.get("/readgames")
   .then(function(response) {
     $scope.myWelcome = response.data;
   });
   $scope.login = function() {
-    $http.post('http://localhost:9000/login',$scope.user)
+    $http.post('/login',$scope.user)
     .then(function (response) {
-       window.location.href = "/";
+      if (response.data == "username") {
+        //show error
+        console.log(response.data);
+      }
+      else if (response.data == "password") {
+        //Show error
+        console.log(response.data);
+      }else{
+        window.location.href = "/";
+      }
     })
   }
   $scope.createAccount = function () {

@@ -12,8 +12,10 @@
     <script src="templates/list.js"></script>
     <title>Hello, world!</title>
   </head>
-  <body ng-app="myApp">    
-    <div ng-include="'templates/test.template.html'">
+  <body ng-app="myApp">
+    <div ng-controller="myApps">
+      <div ng-include="'templates/test.template.html'">
+    </div>
 
     </div>
   <div ng-view></div>
