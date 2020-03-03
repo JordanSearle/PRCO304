@@ -83,6 +83,7 @@ var server = app.listen(9000, function() {
       user.setDOB(req.body.user_DOB);
       user.addUser(function (err) {
         //do somehting with error.
+        console.log(err);
       })
       res.sendStatus(201);//Correct Status?
     })
@@ -95,8 +96,9 @@ var server = app.listen(9000, function() {
       user.setUserID(req.session.user);
       user.delUser(function (response) {
         //Do something here
-        res.sendStatus(201);
       })
+      req.session.destroy();
+      res.sendStatus(201);
     })
     app.put('/user',function (req,res) {
       //edit a user

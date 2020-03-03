@@ -20,11 +20,38 @@ app.controller('myApps', function($scope, $http) {
   .then(function(response) {
     $scope.myWelcome = response.data;
   });
+  $scope.logout = function () {
+    $http.get("/logout")
+    .then(function (res) {
+      window.location.href = "/";
+    })
+  }
 });
 app.controller('userControl', function($scope, $http) {
+
+  $scope.load = function () {
   $http.get("/user")
   .then(function(response) {
-    console.log(response.data);
     $scope.user = response.data;
   });
+    }
+  $scope.logout = function () {
+    $http.get("/logout")
+    .then(function (res) {
+      window.location.href = "/";
+    })
+  }
+  $scope.delete= function () {
+    $http.delete("/user")
+    .then(function (res) {
+      window.location.href = "/";
+    })
+  }
+  $scope.editAccount= function () {
+    $http.put("/user",$scope.eUser)
+    .then(function (res) {
+      $scope.load();
+    })
+  }
+  $scope.load();
 });

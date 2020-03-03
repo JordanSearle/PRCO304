@@ -7,10 +7,23 @@
   </tr>
 </table>
 <form>
-    First Name:<br>
+    Username:<br>
     <input type="text" ng-model="user.username"><br>
-    Last Name:<br>
+    Password:<br>
     <input type="text" ng-model="user.password">
     <br><br>
     <button ng-click="login()">submit</button>
+</form>
+<form>
+    Username:<br>
+    <input type="text" ng-model="nUser.username"><br>
+    Email:<br>
+    <input type="text" ng-model="nUser.email">
+    <br>
+    Password:<br>
+    <input type="text" ng-model="nUser.password"><br>
+    DOB:<br>
+    <input type="date" ng-model="nUser.user_DOB">
+    <br><br>
+    <button ng-click="createAccount()">submit</button>
 </form>

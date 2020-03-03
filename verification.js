@@ -34,7 +34,6 @@ module.exports.rootCheck = function rootCheck(app,res,data) {
     user.setUserID(data);
     //Checking if admin
     user.isAdmin(function (result) {
-      console.log(result);
       if (result) {
       app.use(express.static('admin'));
         res.status(200).sendFile("/", {
@@ -42,9 +41,7 @@ module.exports.rootCheck = function rootCheck(app,res,data) {
         });
       }
       else{
-        console.log('test');
         app.use(express.static('user'));
-        console.log('Setting as user');
           res.status(200).sendFile("/", {
             root: 'user'
           });

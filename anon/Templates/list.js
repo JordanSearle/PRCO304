@@ -23,4 +23,10 @@ app.controller('myApps', function($scope, $http) {
        window.location.href = "/";
     })
   }
+  $scope.createAccount = function () {
+    $http.post("/createuser",$scope.nUser)
+    .then(function (res) {
+      console.log(res);
+    })
+  }
 });
