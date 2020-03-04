@@ -52,7 +52,6 @@ var server = app.listen(9000, function() {
     })
     app.post('/login',function (req,res) {
       //Check the user login
-      console.log(req.body);
       var user = new classes.user();
       user.setUsername(req.body.username);
       user.setPassword(req.body.password);
