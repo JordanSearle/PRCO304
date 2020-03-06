@@ -12,7 +12,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 
     }]);
 app.controller('myApps', function($scope, $http) {
-  $scope.test = "blah";
+
   $http.get("/readgames")
   .then(function(response) {
     $scope.myWelcome = response.data;
@@ -39,5 +39,14 @@ app.controller('myApps', function($scope, $http) {
     .then(function (res) {
       console.log(res);
     })
+  }
+  $scope.nextGame = function () {
+
+  }
+  $scope.randGame = function () {
+
+  }
+  $scope.prevGame = function () {
+
   }
 });
