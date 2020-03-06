@@ -27,9 +27,18 @@ module.exports = {
        // thats it!
      });
   },
+  getGame: function (name, callback) {
+    var game = schemas.Game;
+    game.find({game_Name: { $regex: new RegExp("^" + name.toLowerCase(), "i") }}).populate('userID','username').limit(1).exec(
+      function (err, result) {
+        // Tada! random game
+        if(err)callback(err);
+        callback(result);
+      })
+  },
   nextGame: function (id,callback) {
     var game = schemas.Game;
-    game.find({_id: {$gt: id}}).sort({_id:1}).populate('userID','username').limit(1).exec(
+    game.find({game_Name: {$gt: id}}).sort({_id:1}).populate('userID','username').limit(1).exec(
       function (err, result) {
         // Tada! random game
         callback(result);
@@ -37,7 +46,7 @@ module.exports = {
   },
   prevGame: function (id,callback) {
     var game = schemas.Game;
-    game.find({_id: {$lt: id}}).sort({_id:-1}).populate('userID','username').limit(1).exec(
+    game.find({game_Name: {$lt: id}}).sort({_id:-1}).populate('userID','username').limit(1).exec(
       function (err, result) {
         // Tada! random game
         callback(result);

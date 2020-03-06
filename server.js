@@ -7,6 +7,7 @@ var db = require('./db');
 var verify = require('./verification');
 var classes = require('./classes');
 var session = require('express-session')
+var expressWs = require('express-ws')(app);
 //Express Setup
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
@@ -124,6 +125,16 @@ var server = app.listen(9000, function() {
       var user = new classes.user();
       user.setUserID(req.session.user);
       user.viewUser(function (result) {
+        res.send(result);
+      })
+    })
+    app.get('/game/:name',function (req,res) {
+      //Get game from ID and return
+      db.getGame(req.params.name,function (result,err) {
+        if(result.length ==0 ){
+          res.sendStatus(404);
+          return;
+        }
         res.send(result);
       })
     })
