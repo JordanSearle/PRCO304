@@ -26,7 +26,35 @@ module.exports = {
        if (err) callback(err);
        // thats it!
      });
-
+  },
+  nextGame: function (id,callback) {
+    var game = schemas.Game;
+    game.find({_id: {$gt: id}}).sort({_id:1}).populate('userID','username').limit(1).exec(
+      function (err, result) {
+        // Tada! random game
+        callback(result);
+      })
+  },
+  prevGame: function (id,callback) {
+    var game = schemas.Game;
+    game.find({_id: {$lt: id}}).sort({_id:-1}).populate('userID','username').limit(1).exec(
+      function (err, result) {
+        // Tada! random game
+        callback(result);
+      })
+  },
+  randomGame: function (callback) {
+    var game = schemas.Game;
+    game.count().exec(function (err, count) {
+      // Get a random entry
+      var random = Math.floor(Math.random() * count)
+      // Again query all users but only fetch one offset by our random #
+      game.findOne().populate('userID','username').skip(random).exec(
+        function (err, result) {
+          // Tada! random game
+          callback(result);
+        })
+    })
 
   }
 }

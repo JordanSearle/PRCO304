@@ -11,16 +11,29 @@
   </tbody>
 </table>
 
-<form>
+<form ng-submit="createAccount()">
     Username:<br>
-    <input type="text" ng-model="nUser.username"><br>
+    <input type="text" ng-model="nUser.username" required><br>
     Email:<br>
-    <input type="text" ng-model="nUser.email">
+    <input type="email" ng-model="nUser.email"required>
     <br>
     Password:<br>
-    <input type="text" ng-model="nUser.password"><br>
+    <input type="text" ng-model="nUser.password"required><br>
     DOB:<br>
-    <input type="date" ng-model="nUser.user_DOB">
+    <div class="input-group">
+      <div class="input-group-prepend ml-1">
+        <span class="input-group-text" id="">Day</span>
+      </div>
+      <input type="number" class="form-control" min="1" max="31" ng-model="user_DOB.day" required>
+      <div class="input-group-prepend ml-1">
+        <span class="input-group-text" id="">Month</span>
+      </div>
+      <input type="number" class="form-control"min="1" max="12"ng-model="user_DOB.month" required>
+      <div class="input-group-prepend ml-1">
+        <span class="input-group-text" id="">Year</span>
+      </div>
+      <input type="number" class="form-control"min="1901" max="2020"ng-model="user_DOB.year" required>
+    </div>
     <br><br>
-    <button ng-click="createAccount()">submit</button>
+    <input type="submit" value="submit">
 </form>

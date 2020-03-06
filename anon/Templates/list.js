@@ -33,6 +33,8 @@ app.controller('myApps', function($scope, $http) {
     })
   }
   $scope.createAccount = function () {
+    $scope.nUser.user_DOB = new Date($scope.user_DOB.year,$scope.user_DOB.month-1,$scope.user_DOB.day)
+    console.log($scope.nUser.user_DOB);
     $http.post("/createuser",$scope.nUser)
     .then(function (res) {
       console.log(res);
