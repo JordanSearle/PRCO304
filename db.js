@@ -38,19 +38,24 @@ module.exports = {
   },
   nextGame: function (id,callback) {
     var game = schemas.Game;
-    game.find({game_Name: {$gt: id}}).sort({_id:1}).populate('userID','username').limit(1).exec(
-      function (err, result) {
-        // Tada! random game
-        callback(result);
-      })
+    game.findOne({game_Name:id}).exec(function (err, res) {
+      game.find({_id: {$gt: res._id}}).sort({_id:1}).populate('userID','username').limit(1).exec(
+        function (err, result) {
+          // Tada! random game
+          callback(result);
+        })
+    })
   },
   prevGame: function (id,callback) {
     var game = schemas.Game;
-    game.find({game_Name: {$lt: id}}).sort({_id:-1}).populate('userID','username').limit(1).exec(
-      function (err, result) {
-        // Tada! random game
-        callback(result);
-      })
+    game.findOne({game_Name:id}).exec(function (err, res) {
+      game.find({_id: {$lt: res._id}}).sort({_id:-1}).populate('userID','username').limit(1).exec(
+        function (err, result) {
+          // Tada! random game
+          callback(result);
+        })
+    })
+
   },
   randomGame: function (callback) {
     var game = schemas.Game;

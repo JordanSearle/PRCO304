@@ -141,18 +141,18 @@ var server = app.listen(9000, function() {
     app.ws('/game/next',function (ws,req) {
       ws.on('message', function(msg) {
         //Get the next game
-        db.nextGame(msg,function (result) {
+        db.nextGame(JSON.parse(msg).name,function (result) {
           //Return result
-          ws.send(result);
+          ws.send(JSON.stringify(result));
         })
       });
     })
     app.ws('/game/prev',function (ws,req) {
       ws.on('message', function(msg) {
         //get the last game
-        db.lastGame(msg, function (result) {
+        db.prevGame(JSON.parse(msg).name, function (result) {
           //Return result
-          ws.send(result);
+          ws.send(JSON.stringify(result));
         })
       });
     })
@@ -161,7 +161,7 @@ var server = app.listen(9000, function() {
         //Get a random game
         db.randomGame(function (result) {
         //Return result
-          ws.send(result);
+          ws.send(JSON.stringify(result));
         })
 
       });

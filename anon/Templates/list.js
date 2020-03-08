@@ -41,12 +41,41 @@ app.controller('myApps', function($scope, $http) {
     })
   }
   $scope.nextGame = function () {
-
+    var ws = new WebSocket("ws://localhost:9000/game/next");
+    ws.onopen = function () {
+      ws.send(JSON.stringify({
+        'name': $scope.game.game_Name
+      }));
+      ws.onmessage = function (event) {
+        var result = JSON.parse(event.data)[0];
+        $scope.game = result;
+        $scope.$apply();
+      }
+    }
   }
   $scope.randGame = function () {
-
+    var ws = new WebSocket("ws://localhost:9000/game/random");
+    ws.onopen = function () {
+      ws.send(JSON.stringify({
+        'rand': "random"
+      }));
+    }
+    ws.onmessage = function (event) {
+      $scope.game = JSON.parse(event.data);
+      $scope.$apply();
+    }
   }
   $scope.prevGame = function () {
-
+    var ws = new WebSocket("ws://localhost:9000/game/prev");
+    ws.onopen = function () {
+      ws.send(JSON.stringify({
+        'name': $scope.game.game_Name
+      }));
+    }
+    ws.onmessage = function (event) {
+      var result = JSON.parse(event.data)[0];
+      $scope.game = result;
+      $scope.$apply();
+    }
   }
 });
