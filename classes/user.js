@@ -1,5 +1,5 @@
 var schemas = require("../schemas");
-class user{
+module.exports = class user{
     #userID;
     #username;
     #password;
@@ -12,42 +12,82 @@ class user{
       this.#email = email;
       this.#user_DOB = Date.parse(dob);
     }
-    validateDetails(){
+    validateDetails(callback){
       //Return true or false based on password and username values
       var user = schemas.User;
+      var thisUSR = this;
       user.findOne({
-        username: this.#username
+        username: thisUSR.getUsername()
       }, function(err, obj) {
         if (err) {
           console.log(err);
-          res.status(404).send(err);
         };
-        //If user doesn't exist
+        //If account doesn't exist
         if (obj === null) {
-          return "username";
+          callback({'status':"username",
+                    'uID':null
+        });
         }
         //If it find the item in the DB
         else {
           //if the username matches the password
-          if (obj.password == req.body.Password) {
+          if (obj.password == thisUSR.getPassword()) {
             //res.status(200).send(String(obj.userID));
             //Login Stuff and session processes here.
-            return true;
+            callback({'status':'true',
+                      'uID':obj._id
+          });
           }
           //If the password is incorrect
           else {
-            return "password";
+            callback({'status':"password",
+                      'uID':null
+                      });
           }
         }
       });
 
     }
-    addUser(){
+    addUser(callback){
       //Create new user
-
+      var user = new schemas.User({
+        username: this.#username,
+        password: this.#password,
+        email:this.#email,
+        user_DOB:this.#user_DOB,
+      })
+      user.save(function (err) {
+        if(err)callback(err);
+      })
     }
-    delUser(){
-      //delete user
+    editUser(callback){
+      //edit and save current user
+      var usr = this;
+      var username = this.#username;
+      var user = schemas.User;
+      user.findOne({'_id':this.#userID},function (err, result) {
+        result.username=username;
+        result.password=usr.getPassword();
+        result.email=usr.getEmail();
+        result.user_DOB=usr.getDOB();
+        result.save(function (err) {
+          if(err)callback(err);
+        });
+      })
+    }
+
+    delUser(callback){
+      //delete current user
+      var user = schemas.User;
+      user.deleteOne({'_id':this.#userID},function (err) {
+        if(err)callback(err);
+      })
+    }
+    viewUser(callback){
+      var user = schemas.User;
+      user.findOne({'_id':this.#userID}).select('-password').exec(function (err, result) {
+        callback(result);
+      })
     }
     addGame() {
       //add a new pending game
@@ -106,16 +146,3 @@ class user{
       this.#user_DOB = new Date(dob);
     }
   }
-
-class admin extends user {
-  #isAdmin;
-  constructor(userID,username,password,email,dob) {
-    super(userID,username,password,email,dob);
-    this.#isAdmin = true;
-  }
-  getIsAdmin(){
-    return this.#isAdmin;
-  }
-}
-module.exports.user = user;
-module.exports.admin = admin;

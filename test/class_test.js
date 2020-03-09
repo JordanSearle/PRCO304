@@ -1,9 +1,11 @@
-const user = require('../classes/user');
+const classes = require('../classes');
 const expect  = require("chai").expect;
+const mongoose = require('mongoose');
 var schemas = require("../schemas");
+var db = require('../db');
 
 describe('User Class Getters and Setters',function() {
-  var acc = new user.user("1","UserOne","password","email@email.com","04 Dec 1995 00:12:00 GMT");
+  var acc = new classes.user("1","UserOne","password","email@email.com","04 Dec 1995 00:12:00 GMT");
   context("Testing Getters", function(){
     it('Should return userID as "1"', function() {
       expect(acc.getUserID()).to.equal("1");
@@ -74,8 +76,9 @@ describe('User Class Getters and Setters',function() {
     })
   })
 })
+
 describe('Admin class getters and setters',function() {
-  var admin = new user.admin("A1","AdminOne","password","Admin@email.com","04 Dec 1995 00:12:00 GMT");
+  var admin = new classes.admin("A1","AdminOne","password","Admin@email.com","04 Dec 1995 00:12:00 GMT");
   context('Testing getters',function () {
     it('getUserID returns UserID as "A1"',function () {
       expect(admin.getUserID()).to.equal("A1");
@@ -91,9 +94,6 @@ describe('Admin class getters and setters',function() {
     })
     it('getDOB returns DOB as "Mon, 04 Dec 1995 00:12:00 GMT"',function () {
       expect(admin.getDOB()).to.equal("Mon, 04 Dec 1995 00:12:00 GMT");
-    })
-    it('getIsAdmin returns isAdmin as true',function () {
-      expect(admin.getIsAdmin()).to.equal(true);
     })
   })
 
