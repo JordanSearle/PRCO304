@@ -1,0 +1,12 @@
+<table class="w3-table w3-striped" >
+  <tr>
+    <th>Game Name:</th><th>Game Summary:</th><th>Game Rules:</th><th>Creator:</th>
+  </tr>
+  <tr ng-repeat="x in myWelcome">
+    <!--Summary is written as summery everywhere sorry-->
+    <td>{{ x.game_Name }}</td><td>{{ x.game_Summery }}</td><td>{{ x.game_Rules }}</td><td>{{ x.userID.username }}</td>
+  </tr>
+</table>
+<h1>{{user}}</h1>
+<a href="#!userdetails">Go to user details</a>
+<button type="button" name="button" ng-click="logout()">Sign Out</button>

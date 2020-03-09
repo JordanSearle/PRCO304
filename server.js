@@ -170,3 +170,26 @@ var server = app.listen(9000, function() {
 
       });
     })
+    //Admin functions
+    app.post('/newgame',function (req,res) {
+      //Check Admin and logged in
+      //Add game if true
+      db.saveGames(req.body.id,req.body.name,req.body.summery,req.body.rules,req.body.pCount,req.body.equipment,req.body.nsfw,function (response) {
+        if(response) console.log(response);
+      })
+      res.sendStatus(201);
+    })
+    app.put('/editgame',function (req,res) {
+      //Check Admin and logged in
+      //Add game if true
+      db.editGames(req.body.id,req.body.name,req.body.summery,req.body.rules,req.body.pCount,req.body.equipment,req.body.nsfw,function (response) {
+        if(response) console.log(response);
+      })
+      res.sendStatus(201);
+    })
+    app.delete('delGame',function (req,res) {
+      db.delGame(req.body.id,function (err) {
+        if(err)console.log(err);
+      })
+      req.sendStatus(201);
+    })

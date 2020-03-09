@@ -14,7 +14,7 @@ module.exports.admin = function isAdmin(app,res,data) {
   user.setUserID(data);
   //Checking if admin
   user.isAdmin(function (result) {
-    if (result==false) {
+    if (result) {
     app.use(express.static('admin'));
       res.status(200).sendFile("/", {
         root: 'admin'

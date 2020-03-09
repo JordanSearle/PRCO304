@@ -11,21 +11,17 @@ module.exports = {
       callback(game);
     })
   },
-  writeGames: function (id,name,summery,rules,pCount,equipment,nsfw,callback) {
-      const game = new schemas.Game({
-        //UserID needs to be set from the logged on user.
-        userID: mongoose.Types.ObjectId(id),
-        game_Name: name,
-        game_Summery:summery,
-        game_Rules: rules,
-        game_Player_Count: pCount,
-        game_Equipment: equipment,
-        game_IsNSFW:nsfw
-     })
-     game.save(function (err) {
-       if (err) callback(err);
-       // thats it!
-     });
+  saveGames: function (id,name,summery,rules,pCount,equipment,nsfw,callback) {
+    var game = new classes.game();
+    game.game_Name = name;
+    game.game_Summery = summery;
+    game.game_Rules = rules;
+    game.game_Player_Count = pCount;
+    game.game_equipment = equipment;
+    game.game_IsNSFW = nsfw;
+    game.saveGame(id,function (err) {
+      if(err)console.log(err);
+    })
   },
   getGame: function (name, callback) {
     var game = schemas.Game;
@@ -35,6 +31,26 @@ module.exports = {
         if(err)callback(err);
         callback(result);
       })
+  },
+  editGames: function (gameID,name,summery,rules,pCount,equipment,nsfw,callback) {
+    var game = new classes.game();
+    game.game_UID = gameID;
+    game.game_Name = name;
+    game.game_Summery = summery;
+    game.game_Rules = rules;
+    game.game_Player_Count = pCount;
+    game.game_equipment = equipment;
+    game.game_IsNSFW = nsfw;
+    game.updateGame(function (err) {
+      if(err)console.log(err);
+    })
+  },
+  delGame: function (gameID,callback) {
+    var game = new classes.game();
+    game.game_UID = gameID;
+    game.delGame(function (err) {
+      if(err)callback(err);
+    })
   },
   nextGame: function (id,callback) {
     var game = schemas.Game;
