@@ -159,8 +159,7 @@ describe('Testing Server functions', function() {
             expect(res).to.have.cookie('sessionid');
             //Testing returns correct user data
             agent.delete('/user')
-              .then(function (err, response) {
-                expect(err).to.be.null;
+              .then(function (response) {
                 expect(res).to.have.status(200);
               })
           })

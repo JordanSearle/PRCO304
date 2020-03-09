@@ -127,7 +127,7 @@ describe('testing websocket functions',function () {
     }
     ws.onopen = function () {
       ws.send(JSON.stringify({
-        'name': 'This is a newer Game'
+        'name': 'Drinkuisition'
       }));
     }
     ws.onmessage = function (event) {
@@ -139,7 +139,7 @@ describe('testing websocket functions',function () {
     var ws = new WebSocket("ws://localhost:9000/game/prev");
     ws.onopen = function () {
       ws.send(JSON.stringify({
-        'name': 'This is a newer Game'
+        'name': 'Drinkuisition'
       }));
     }
     ws.onmessage = function (event) {
