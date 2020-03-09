@@ -36,26 +36,6 @@ describe('Testing Server functions', function() {
                 })
         });
     })
-    context('testing POST HTTP request',function () {
-      it('/ POST test', function(done) {
-          chai.request('http://localhost:9000')
-              .post('/writegame')
-              .type('form')
-              .send({
-                  'name': '123',
-                  'summery': '123',
-                  'rules': '123',
-                  'pcount': '1-3',
-                  'equipment': ['123'],
-                  'nsfw':true
-              })
-              .end(function(err, res) {
-                  expect(err).to.be.null;
-                  expect(res).to.have.status(201);
-                  done();
-              })
-      });
-    })
     context('testing CRUD user',function () {
 
         it('testing creation of a new user',function (done) {

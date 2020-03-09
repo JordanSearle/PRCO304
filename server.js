@@ -44,13 +44,7 @@ var server = app.listen(9000, function() {
         res.send(result);
       })
     })
-    app.post('/writegame', function (req, res) {
-      var game = new classes.game('data','test game name','test game summery','test game rules','test game count', 'test equipment',false);
-      game.saveGame(new mongoose.Types.ObjectId,function (err) {
-        if(err)console.log(err);
-      })
-      res.sendStatus(201);
-    })
+
     app.post('/login',function (req,res) {
       //Check the user login
       var user = new classes.user();

@@ -17,7 +17,7 @@ describe('Game test',function () {
     game.game_IsNSFW = false;
   });
   after(function() {
-    games.deleteMany({'game_Name':'test game name'}).exec();
+    //games.deleteMany({'game_Name':'test game name'}).exec();
   })
   before(function () {
     games.deleteMany({'game_Name':'test game name'}).exec();
@@ -46,7 +46,9 @@ describe('Game test',function () {
     it('Updating game in DB',function(done) {
       this.timeout(3000);
       game.game_Rules = 'new game rules';
-      game.updateGame();
+      game.updateGame(function (err) {
+        expect(err).to.be.null;
+      });
       setTimeout(function(){
         games.findOne({'_id':game.game_UID},function (err, result) {
           expect(err).to.be.null;
@@ -67,12 +69,16 @@ describe('Game test',function () {
 
     it('Deleting game in DB',function (done) {
       this.timeout(500);
-      game.delGame();
+      game.delGame(function (err) {
+        expect(err).to.be.null;
+      });
       setTimeout(function(){
         games.countDocuments({'game_Name':'test game name'}, function (err, count) {
+          expect(count).to.equal(0);
+          expect(err).to.be.null;
+          done();
         });
-        done();
-      }, 50);
+      }, 10);
     })
   })
 })

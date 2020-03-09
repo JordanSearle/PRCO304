@@ -40,14 +40,16 @@ module.exports = class game {
   }
   delGame(callback){
     var uGame = schemas.Game;
-    uGame.deleteOne({'_id':this.game_UID}, function (err) {
-    if (err) return handleError(err);
+    console.log(this.game_Name);
+    uGame.deleteOne({'game_Name':this.game_Name}, function (err) {
+    if (err) callback(err);
   });
   }
   updateGame(callback){
     var game = this;
     var uGame = schemas.Game;
     uGame.findOne({'_id':this.game_UID},function (err, result) {
+      if(err)callback(err);
       //Set game Variables
       result.game_Name = game.game_Name;
       result.game_Summery = game.game_Summery;
