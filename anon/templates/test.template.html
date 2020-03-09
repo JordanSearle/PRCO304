@@ -27,17 +27,9 @@
           Account
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-          <form class="m-3">
-            <div class="form-group">
-              <label for="exampleInputEmail1">Username</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" ng-model="$parent.user.username" >
-            </div>
-            <div class="form-group">
-              <label for="exampleInputPassword1">Password</label>
-              <input type="password" class="form-control" id="exampleInputPassword1" ng-model="$parent.user.password">
-            </div>
-            <button type="submit" ng-click="login()"class="btn btn-primary btn-block">Submit</button>
-          </form>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">
+            Login or Create Account
+          </button>
         </div>
       </li>
     </ul>
@@ -49,32 +41,71 @@
   Launch demo modal
 </button>
 
-<!-- Modal -->
-<div class="modal fade text-center" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+<div class="modal fade text-center" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"> Game Name: {{game.game_Name}}</h5>
+      <div class="modal-header text-center">
+        <h5 class="modal-title" id="exampleModalLabel">Login or Create new Account</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <div class="row">
-          <div class="col">
-            <h4 class="text-left">About:</h4>
-            <h3>{{game.game_Summery}}</h3>
+          <div class="col-md-6 col-sm-12">
+            <h4>Login</h4>
+            <form ng-submit="login()">
+              <div class="input-group m-1">
+                <div class="input-group-prepend ml-1">
+                  <span class="input-group-text" id="">Username:</span>
+                </div>
+                <input type="text" class="form-control" ng-model="$parent.user.username" required>
+                </div>
+                <div class="input-group m-1">
+                <div class="input-group-prepend ml-1">
+                  <span class="input-group-text" id="">Password:</span>
+                </div>
+                <input type="password" class="form-control" ng-model="$parent.user.password" required>
+              </div>
+              <div class="input-group m-1">
+              <input class="btn btn-primary btn-block ml-1" type="submit" value="submit">
+              </div>
+            </form>
           </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <button ng-click="prevGame()" type="button" name="button">Prev</button>
-          </div>
-          <div class="col">
-            <button ng-click="randGame()" type="button" name="button">Random</button>
-          </div>
-          <div class="col">
-            <button ng-click="nextGame()" type="button" name="button">Next</button>
+          <div class="col-md-6 col-sm-12">
+            <h4>Create Account</h4>
+            <form ng-submit="createAccount()">
+              <div class="input-group m-1">
+                <div class="input-group-prepend ml-1">
+                  <span class="input-group-text" id="">Username:</span>
+                </div>
+                <input type="text" class="form-control" ng-model="$parent.nUser.username" required>
+                </div>
+                <div class="input-group m-1">
+                <div class="input-group-prepend ml-1">
+                  <span class="input-group-text" id="">Email:</span>
+                </div>
+                <input type="email" class="form-control" ng-model="$parent.nUser.email" required>
+                </div>
+                <div class="input-group m-1">
+                <div class="input-group-prepend ml-1">
+                  <span class="input-group-text" id="">Password:</span>
+                </div>
+                <input type="password" class="form-control" ng-model="$parent.nUser.password" required>
+              </div>
+              <div class="input-group m-1">
+                  <div class="input-group-prepend ml-1">
+                    <span class="input-group-text" id="">DOB:</span>
+                  </div>
+                  <input type="number" class="form-control" min="1" max="31" ng-model="$parent.user_DOB.day" placeholder="DD" required>
+                  <input type="number" class="form-control"min="1" max="12"ng-model="$parent.user_DOB.month" placeholder="MM"required>
+                  <input type="number" class="form-control"min="1901" max="2020"ng-model="$parent.user_DOB.year" placeholder="YYYY" required>
+                </div>
+                <div class="input-group m-1">
+                <input class="btn btn-primary btn-block ml-1" type="submit" value="submit">
+                </div>
+            </form>
           </div>
         </div>
       </div>

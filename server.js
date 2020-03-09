@@ -160,3 +160,13 @@ var server = app.listen(9000, function() {
 
       });
     })
+    app.ws('/game/load',function (ws,req) {
+      ws.on('message', function(msg) {
+        //Get a random game
+        db.getGame(JSON.parse(msg).name,function (result) {
+        //Return result
+          ws.send(JSON.stringify(result));
+        })
+
+      });
+    })

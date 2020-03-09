@@ -78,4 +78,20 @@ app.controller('myApps', function($scope, $http) {
       $scope.$apply();
     }
   }
+  $scope.loadGames = function (name) {
+    var ws = new WebSocket("ws://localhost:9000/game/load");
+    ws.onopen = function () {
+      ws.send(JSON.stringify({
+        'name': name
+      }));
+    }
+    ws.onmessage = function (event) {
+      var result = JSON.parse(event.data)[0];
+      $scope.game = result;
+      $scope.$apply();
+
+      console.log($scope.game);
+      $('#exampleModal').modal('show');
+    }
+  }
 });
