@@ -35,7 +35,6 @@ app.controller('userControl', function($scope, $http) {
   .then(function(response) {
     $scope.user = response.data;
     var test = new Date($scope.user.user_DOB).toISOString().substr(0, 10);
-    console.log(test);
     $scope.dInput = test
   });
     }

@@ -54,9 +54,9 @@ var server = app.listen(9000, function() {
         if (response.uID !=null) {
           //If the correct details have been entered
           req.session.user = response.uID;
-          app.use(express.static('user'));
+          app.use(express.static('admin'));
           res.status(200).sendFile("/", {
-            root: 'user'
+            root: 'admin'
           });
         }
         else{
@@ -174,7 +174,7 @@ var server = app.listen(9000, function() {
     app.post('/newgame',function (req,res) {
       //Check Admin and logged in
       //Add game if true
-      db.saveGames(req.body.id,req.body.name,req.body.summery,req.body.rules,req.body.pCount,req.body.equipment,req.body.nsfw,function (response) {
+      db.saveGames(req.session.user,req.body.name,req.body.summary,req.body.rules,req.body.pCount,req.body.equipment,req.body.nsfw,function (response) {
         if(response) console.log(response);
       })
       res.sendStatus(201);
