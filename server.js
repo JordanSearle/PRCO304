@@ -18,6 +18,7 @@ app.use(session({
     secret: 'tGUpeHR8VribHl8G3kU6',
     resave: false,
     saveUninitialized: false,
+    sameSite:true,
     cookie: {
         expires: 600000
     }
@@ -54,10 +55,7 @@ var server = app.listen(9000, function() {
         if (response.uID !=null) {
           //If the correct details have been entered
           req.session.user = response.uID;
-          app.use(express.static('admin'));
-          res.status(200).sendFile("/", {
-            root: 'admin'
-          });
+          verify.setRoot(app,res,response.uID);
         }
         else{
         res.status(201).send(response.status);
@@ -66,8 +64,12 @@ var server = app.listen(9000, function() {
     })
 
     app.get('/logout',function (req,res) {
+      req.session.cookie.expires = new Date(Date.now());
       req.session.destroy();
-      res.redirect('/');
+      res.cookie("sessionid", { expires: Date.now() });
+      res.status(200).sendFile("/", {
+        root: 'anon'
+      });
     })
     app.post('/createuser',function (req,res) {
       //create a new user

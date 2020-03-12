@@ -1,12 +1,46 @@
-<table class="w3-table w3-striped" >
-  <tr>
-    <th>Game Name:</th><th>Game Summary:</th><th>Game Rules:</th><th>Creator:</th>
-  </tr>
-  <tr ng-repeat="x in myWelcome">
-    <!--Summary is written as summery everywhere sorry-->
-    <td>{{ x.game_Name }}</td><td>{{ x.game_Summery }}</td><td>{{ x.game_Rules }}</td><td>{{ x.userID.username }}</td>
-  </tr>
-</table>
+
+  <div class="row">
+    <div class="col">Game Name:</div><div class="col">Game Summary:</div><div class="col">Game Rules:</div><div class="col">Creator:</div>
+  </div>
+  <a ng-repeat="x in myWelcome" href="#" ng-Click="loadGames(x.game_Name)" class="row"><div class="col-3 overflow-auto">{{ x.game_Name }}</div><div class="col-3 overflow-auto">{{ x.game_Summery }}</div><div class="col-3 overflow-auto">{{ x.game_Rules }}</div><div class="col-3 overflow-auto">{{ x.userID.username }}</div> </a>
+
+<!-- Modal -->
+<div class="modal fade text-center" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"> Game Name: {{game.game_Name}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col">
+            <h4 class="text-left">About:</h4>
+            <h3>{{game.game_Summery}}</h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <button ng-click="prevGame()" type="button" name="button">Prev</button>
+          </div>
+          <div class="col">
+            <button ng-click="randGame()" type="button" name="button">Random</button>
+          </div>
+          <div class="col">
+            <button ng-click="nextGame()" type="button" name="button">Next</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 New Game:
 <form class="" ng-submit="addGame()" method="post">
