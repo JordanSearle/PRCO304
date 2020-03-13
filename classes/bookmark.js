@@ -11,12 +11,25 @@ module.exports = class bookmark {
   }
   addBookmark(callback){
     //write to DB
+    var userID = this.userID;
+    var gameID = this.gameID;
+    var bm = schemas.Bookmark;
     var bookmark = new schemas.Bookmark({
       userID:mongoose.Types.ObjectId(this.userID),
       gameID:mongoose.Types.ObjectId(this.gameID)
     })
-    bookmark.save(function (err) {
-      if(err)callback(err);
+
+    bm.countDocuments({userID:this.userID,gameID:this.gameID}).exec(function (err,count) {
+      if (count == 1) {
+        bm.deleteOne({userID:userID,gameID:gameID},function (err) {
+          callback(err);
+        })
+      }
+      else{
+        bookmark.save(function (err) {
+          if(err)callback(err);
+        })
+      }
     })
   }
   viewBookmark(callback){

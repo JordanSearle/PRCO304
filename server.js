@@ -189,9 +189,18 @@ var server = app.listen(9000, function() {
       })
       res.sendStatus(201);
     })
-    app.delete('delGame',function (req,res) {
+    app.delete('/delGame',function (req,res) {
       db.delGame(req.body.id,function (err) {
         if(err)console.log(err);
       })
       req.sendStatus(201);
+    })
+    app.post('/game/bookmark',function (req,res) {
+      var bm = new classes.bookmark()
+      bm.userID = req.session.user;
+      bm.gameID = req.body.gameID;
+      bm.addBookmark(function (err) {
+        if(err)console.log(err);
+      })
+      res.sendStatus(201)
     })

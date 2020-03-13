@@ -17,7 +17,7 @@ describe('CRUD Bookmark class test',function () {
     bookmark.userID = '5e4bdab0e623ca4e5ca53955';
     bookmark.gameID = '5e4bdab0e623ca4e5ca53957';
   })
-  it('create  bookmark',function (done) {
+  it('create  bookmark',function () {
     bookmark.addBookmark(function (err) {
       expect(err).to.be.null;
     });
@@ -27,8 +27,6 @@ describe('CRUD Bookmark class test',function () {
         expect(count).to.equal(1);
       })
     }, 10);
-
-    done();
   })
   it('view bookmarks',function () {
     bookmark.viewBookmark(function (bookmark) {

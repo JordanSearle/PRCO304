@@ -1,10 +1,10 @@
 <table class="w3-table w3-striped" >
   <tr>
-    <th>Game Name:</th><th>Game Summary:</th><th>Game Rules:</th><th>Creator:</th>
+    <th>Game Name:</th><th>Game Summary:</th><th>Game Rules:</th><th>Creator:</th><th>Save</th>
   </tr>
   <tr ng-repeat="x in myWelcome">
     <!--Summary is written as summery everywhere sorry-->
-    <td>{{ x.game_Name }}</td><td>{{ x.game_Summery }}</td><td>{{ x.game_Rules }}</td><td>{{ x.userID.username }}</td>
+    <td>{{ x.game_Name }}</td><td>{{ x.game_Summery }}</td><td>{{ x.game_Rules }}</td><td>{{ x.userID.username }}</td><td><button type="button" ng-click="bookmark(x._id)" name="button">Save!</button></td>
   </tr>
 </table>
 <h1>{{user}}</h1>

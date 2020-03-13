@@ -26,6 +26,14 @@ app.controller('myApps', function($scope, $http) {
       window.location.href = "/";
     })
   }
+  $scope.bookmark = function (gameID) {
+    var t = JSON.stringify({gameID:gameID});
+    console.log(t);
+    $http.post('/game/bookmark',t)
+    .then(function (res) {
+      console.log(res);
+    })
+  }
 });
 app.controller('userControl', function($scope, $http) {
 
