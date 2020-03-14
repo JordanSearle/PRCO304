@@ -10,7 +10,7 @@ var user = new Schema({
 });
 var bookmark = new Schema({
   userID:{type: Schema.Types.ObjectId, ref: 'User', required: true},
-  gameID:{type: Schema.Types.ObjectId, ref: 'Game', required: true, unique: true},
+  gameID:{type: Schema.Types.ObjectId, ref: 'Game', required: true},
 });
 var tag = new Schema({
   bookmarkTag:{type: String, required: true, unique: true},

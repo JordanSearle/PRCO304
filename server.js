@@ -204,3 +204,20 @@ var server = app.listen(9000, function() {
       })
       res.sendStatus(201)
     })
+    app.delete('/game/bookmark',function (req,res) {
+      var bm = new classes.bookmark()
+      bm.userID = req.session.user;
+      bm.gameID = req.body.gameID;
+      bm.delBookmark(function (err) {
+        if(err)console.log(err);
+      })
+      res.sendStatus(200);
+    })
+    app.get('/game/bookmark/:gameID',function (req,res) {
+      var bm = new classes.bookmark()
+      bm.userID = req.session.user;
+      bm.gameID = req.params.gameID;
+      bm.viewBookmark(function (result) {
+        res.status(200).send(result);
+      })
+    })

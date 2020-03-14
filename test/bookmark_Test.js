@@ -3,45 +3,115 @@ const expect  = require("chai").expect;
 const mongoose = require('mongoose');
 var schemas = require("../schemas");
 var db = require('../db');
-
+var chaiHTTP = require('chai-http');
+var chai = require('chai');
+chai.use(require('chai-match'));
+chai.use(chaiHTTP);
+const server = 'http://localhost:9000'
 
 describe('CRUD Bookmark class test',function () {
+  this.timeout(1000);
   const bookmark = new classes.bookmark();
-    var bM = schemas.Bookmark;
+  const bM = schemas.Bookmark;
   after(function () {
-    bM.deleteOne({userID:'5e4bdab0e623ca4e5ca53955',gameID:'5e4bdab0e623ca4e5ca53957'},function (err) {
-      console.log(err);
-    })
+    bM.deleteOne({userID:bookmark.userID,gameID:bookmark.gameID});
   })
   beforeEach(function () {
-    bookmark.userID = '5e4bdab0e623ca4e5ca53955';
-    bookmark.gameID = '5e4bdab0e623ca4e5ca53957';
+    bookmark.userID = '5e4bdab0e623ca4e5ca53945';
+    bookmark.gameID = '5e4bdab0e623ca4e5ca53999';
   })
-  it('create  bookmark',function () {
+  it('create  bookmark',function (done) {
     bookmark.addBookmark(function (err) {
       expect(err).to.be.null;
     });
     setTimeout(function () {
-      bM.countDocuments({gameID:'5e4bdab0e623ca4e5ca53957'}).exec(function (err,count) {
+      bM.find({gameID:bookmark.gameID,userID:bookmark.userID}).exec(function (err,count) {
         expect(err).to.be.null;
-        expect(count).to.equal(1);
+        expect(count.length).to.equal(1);
+        done();
       })
-    }, 10);
+    }, 50);
   })
   it('view bookmarks',function () {
-    bookmark.viewBookmark(function (bookmark) {
-      expect(bookmark).to.not.be.null;
+    bookmark.viewBookmark(function (res) {
+      expect(res).to.not.be.null;
     })
   })
   it('delete bookmark',function () {
     bookmark.delBookmark(function (err) {
       expect(err).to.be.null;
     })
-    bM.countDocuments({gameID:'5e4bdab0e623ca4e5ca53957'}).exec(function (err,count) {
+    bM.countDocuments({gameID:bookmark.gameID}).exec(function (err,count) {
       expect(count).to.equal(0);
     })
   })
 })
 describe('CRUD Bookmark server test',function () {
-
+  const bM = schemas.Bookmark;const bookmark = new classes.bookmark();
+  bookmark.userID = '5e4bdab0e623ca4e5ca53955';
+  bookmark.gameID = '5e4bdab0e623ca4e5ca53999';
+  after(function () {
+    bM.deleteOne({userID:bookmark.userID,gameID:bookmark.gameID}).exec(function (err) {
+      console.log(err);
+    });
+  })
+  it('POST game/bookmark',function () {
+    var agent = chai.request.agent(server)
+    agent
+    .post('/login')
+    .type('form')
+    .send({
+      'username':'JTest',
+      'password':'12312jhsdf'
+    })
+    .then(function (res) {
+    agent.post('/game/bookmark')
+    .type('form')
+    .send({
+      'gameID':'5e4bdab0e623ca4e5ca53999'
+    })
+    .end(function (err,res) {
+      expect(err).to.be.null;
+      expect(res).to.have.status(201);
+    })
+  })
+})
+  it('get game/bookmark',function () {
+    var agent = chai.request.agent(server)
+    agent
+    .post('/login')
+    .type('form')
+    .send({
+      'username':'JTest',
+      'password':'12312jhsdf'
+    })
+    .then(function (res) {
+    agent.get('/game/bookmark/5e4bdab0e623ca4e5ca53999')
+    .end(function (err,res) {
+      expect(err).to.be.null;
+      expect(res).to.have.status(200);
+    })
+  })
+  })
+  it('Delete game/bookmark',function () {
+    var agent = chai.request.agent(server)
+    agent
+    .post('/login')
+    .type('form')
+    .send({
+      'username':'JTest',
+      'password':'12312jhsdf'
+    })
+    .then(function (res) {
+    agent.delete('/game/bookmark')
+    .type('form')
+    .send({
+      'gameID':'5e4bdab0e623ca4e5ca53999'
+    })
+    .end(function (err,res) {
+      expect(err).to.be.null;
+      expect(res).to.have.status(200);
+    })
+  })
+  })
 })
