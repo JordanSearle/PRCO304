@@ -2,7 +2,7 @@ var app = angular.module("myApp", ["ngRoute"]);
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $routeProvider
   .when("/", {
-    templateUrl : "/Template/list.template.html",
+    templateUrl : "/user/anon/templates/list.template.html",
     controller: "myApps"
   })
   .when("/userdetails", {
@@ -32,7 +32,6 @@ app.controller('myApps', function($scope, $http) {
   }
   $scope.addGame = function () {
     $scope.nGame.equipment = ['test','test1'];
-    console.log($scope.nGame);
     $http.post("/newgame",$scope.nGame)
     .then(function (res) {
       console.log(res);

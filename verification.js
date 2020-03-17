@@ -10,9 +10,9 @@ module.exports = function (app,res,data) {
 }
 module.exports.isLogged = function (app,res,data) {
   if (!isAdmin(data)) {
-    app.use(express.static('anon'));
+    app.use(express.static('Client/user/anon'));
       res.status(200).sendFile("/", {
-        root: 'anon'
+        root: '/Client/user/anon'
       });
   }
 }
@@ -23,15 +23,15 @@ module.exports.setRoot = function (app,res,data) {
   //Check if Admin
   user.isAdmin(function (result) {
     if (result) {
-      app.use(express.static('admin'));
+      app.use(express.static('Client'));
         res.status(200).sendFile("/", {
-          root: 'admin'
+          root: 'Client'
         });
     }
     else{
-      app.use(express.static('user'));
+      app.use(express.static('Client/user'));
         res.status(200).sendFile("/", {
-          root: 'user'
+          root: 'Client/user'
         });
     }
   })
@@ -40,9 +40,9 @@ module.exports.setRoot = function (app,res,data) {
 module.exports.rootCheck = function (app,res,data) {
     if (data==null) {
     res.status(200).sendFile("/", {
-      root: 'anon'
+      root: 'Client/user/anon'
     });
-    app.use(express.static('anon'));
+    app.use(express.static('Client/user/anon'));
   }
   else{
     var user = new classes.admin();
@@ -50,15 +50,15 @@ module.exports.rootCheck = function (app,res,data) {
     //Checking if admin
     user.isAdmin(function (result) {
       if (result) {
-      app.use(express.static('admin'));
+      app.use(express.static('Client'));
         res.status(200).sendFile("/", {
-          root: 'admin'
+          root: 'Client'
         });
       }
       else{
-        app.use(express.static('user'));
+        app.use(express.static('Client/user'));
           res.status(200).sendFile("/", {
-            root: 'user'
+            root: 'Client/user'
           });
       }
     })
