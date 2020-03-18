@@ -2,9 +2,9 @@ var express = require('express');
 var classes = require('./classes');
 module.exports = function (app,res,data) {
   if (!isLogged(data)) {
-    app.use(express.static('anon'));
+    app.use(express.static('Client/user/anon'));
       res.status(200).sendFile("/", {
-        root: 'anon'
+        root: 'Client/user/anon'
       });
   }
 }

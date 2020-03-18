@@ -40,8 +40,86 @@
 
 <div class="text-center">
   <h1>Select a Game to View</h1>
-  <a ng-repeat="x in myWelcome" href="#" ng-Click="loadGames(x.game_Name)" class="row"><div class="col-3 overflow-auto">{{ x.game_Name }}</div><div class="col-3 overflow-auto">{{ x.game_Summery }}</div><div class="col-3 overflow-auto">{{ x.game_Rules }}</div><div class="col-3 overflow-auto">{{ x.userID.username }}</div> </a>
+  <div ng-repeat="(k,v) in myWelcome track by $index">
+    <div class="row mb-4" ng-if="$index%3==0">
+      <div class="col">
+  <div class="card-out p-3 border bg-light" style="width:350px; height:320px;-webkit-box-shadow: inset 0px 0px 13px -4px rgba(0,0,0,0.5);">
+    <div class="card-in border rounded shadow p-1 bg-light" style="width:auto; height: auto;position:relative;">
+      <div class="card-t text-left p-3 mb-4"style="height:240px;">
+        <h1>{{myWelcome[k].game_Name}}</h1>
+        <hr>
+      </div>
+      <div class="card-foot p-2" style="position:relative;height:auto;">
+        <div class="row" style="position:absolute;bottom:0;">
+          <div class="col">
+            <div class="row mt-3">
+              <div class="col">
+                <p>18th Febuary 2020</p>
+                <i>{{myWelcome[k].userID.username}}</i>
+              </div>
+            </div>
+          </div>
+          <div class="col text-right">
+          <h1>4 STARS</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+      </div>
+      <div class="col" ng-if="myWelcome[k+1].game_Name !=null">
+        <div class="card-out p-3 border bg-light" style="width:350px; height:320px;-webkit-box-shadow: inset 0px 0px 13px -4px rgba(0,0,0,0.5);">
+          <div class="card-in border rounded shadow p-1 bg-light" style="width:auto; height: auto;position:relative;">
+            <div class="card-t text-left p-3 mb-4"style="height:240px;">
+              <h1>{{myWelcome[k+1].game_Name}}</h1>
+              <hr>
+            </div>
+            <div class="card-foot p-2" style="position:relative;height:auto;">
+              <div class="row" style="position:absolute;bottom:0;">
+                <div class="col">
+                  <div class="row mt-3">
+                    <div class="col">
+                      <p>18th Febuary 2020</p>
+                      <i>{{myWelcome[k+1].userID.username}}</i>
+                    </div>
+                  </div>
+                </div>
+                <div class="col text-right">
+                <h1>4 STARS</h1>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col" ng-if="myWelcome[k+2].game_Name !=null">
+        <div class="card-out p-3 border bg-light" style="width:350px; height:320px;-webkit-box-shadow: inset 0px 0px 13px -4px rgba(0,0,0,0.5);">
+          <div class="card-in border rounded shadow p-1 bg-light" style="width:auto; height: auto;position:relative;">
+            <div class="card-t text-left p-3 mb-4"style="height:240px;">
+              <h1>{{myWelcome[k+2].game_Name}}</h1>
+            </div>
+            <div class="card-foot p-2" style="position:relative;height:auto;">
+              <div class="row border-top m-1" style="position:absolute;bottom:0;width:auto;">
+                <div class="col">
+                  <div class="row mt-3">
+                    <div class="col text-left">
+                      <p>18th Febuary 2020</p>
+                      <i>{{myWelcome[k+2].userID.username}}</i>
+                    </div>
+                  </div>
+                </div>
+                <div class="col text-right">
+                <h1>4 STARS</h1>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
 
 
 <!-- Modal -->

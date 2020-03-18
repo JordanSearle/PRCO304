@@ -14,7 +14,7 @@ describe('CRUD Bookmark class test',function () {
   const bookmark = new classes.bookmark();
   const bM = schemas.Bookmark;
   after(function () {
-    bM.deleteOne({userID:bookmark.userID,gameID:bookmark.gameID});
+    //bM.deleteOne({userID:bookmark.userID,gameID:bookmark.gameID});
   })
   beforeEach(function () {
     bookmark.userID = '5e4bdab0e623ca4e5ca53945';

@@ -37,7 +37,7 @@ var server = app.listen(9000, function() {
   });
 
   app.get("/", function(req, res) {
-    //Checks if the user is logged in
+    //Checks if the user is logged in    
     verify.rootCheck(app,res,req.session.user);
   });
     app.get('/readgames', function (req, res) {
@@ -68,7 +68,7 @@ var server = app.listen(9000, function() {
       req.session.destroy();
       res.cookie("sessionid", { expires: Date.now() });
       res.status(200).sendFile("/", {
-        root: 'anon'
+        root: 'Client/user/anon'
       });
     })
     app.post('/createuser',function (req,res) {

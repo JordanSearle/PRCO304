@@ -118,7 +118,7 @@ describe('testing websocket functions',function () {
     var ws = new WebSocket("ws://localhost:9000/game/next");
     ws.onopen = function () {
       ws.send(JSON.stringify({
-        'name': 'New Gamess'
+        'name': 'This is a game title number 10'
       }));
     }
     ws.onmessage = function (event) {
@@ -127,7 +127,7 @@ describe('testing websocket functions',function () {
     }
     ws.onopen = function () {
       ws.send(JSON.stringify({
-        'name': 'Drinkuisition'
+        'name': 'This is a game title number 24'
       }));
     }
     ws.onmessage = function (event) {
@@ -139,7 +139,7 @@ describe('testing websocket functions',function () {
     var ws = new WebSocket("ws://localhost:9000/game/prev");
     ws.onopen = function () {
       ws.send(JSON.stringify({
-        'name': 'Drinkuisition'
+        'name': 'This is a game title number 10'
       }));
     }
     ws.onmessage = function (event) {
