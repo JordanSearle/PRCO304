@@ -15,11 +15,11 @@ module.exports = class bookmark {
     var gameID = this.gameID;
     var bm = schemas.Bookmark;
     var bookmark = new schemas.Bookmark({
-      userID:mongoose.Types.ObjectId(this.userID),
-      gameID:mongoose.Types.ObjectId(this.gameID)
+      userID:mongoose.Types.ObjectId(userID),
+      gameID:mongoose.Types.ObjectId(gameID)
     })
 
-    bm.countDocuments({userID:this.userID,gameID:this.gameID}).exec(function (err,count) {
+    bm.countDocuments({userID:userID,gameID:gameID}).exec(function (err,count) {
       if (count == 1) {
         bm.deleteOne({userID:userID,gameID:gameID},function (err) {
           callback(err);
