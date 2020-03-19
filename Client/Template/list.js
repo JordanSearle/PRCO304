@@ -2,7 +2,7 @@ var app = angular.module("myApp", ["ngRoute"]);
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $routeProvider
   .when("/", {
-    templateUrl : "/Template/list.template.html",
+    templateUrl : "/user/anon/templates/list.template.html",
     controller: "myApps"
   })
   .when("/userdetails", {
@@ -16,14 +16,25 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 
     }]);
 app.controller('myApps', function($scope, $http) {
-  $http.get("/readgames")
-  .then(function(response) {
-    $scope.myWelcome = response.data;
-  });
+    $http.get("/readgames")
+      .then(function(response) {
+      $scope.myWelcome = response.data;
+    });
+    $http.get("/user")
+      .then(function(response) {
+        $scope.user = response.data.username;
+    });
   $scope.logout = function () {
     $http.get("/logout")
     .then(function (res) {
       window.location.href = "/";
+    })
+  }
+  $scope.addGame = function () {
+    $scope.nGame.equipment = ['test','test1'];
+    $http.post("/newgame",$scope.nGame)
+    .then(function (res) {
+      console.log(res);
     })
   }
 });
@@ -35,7 +46,6 @@ app.controller('userControl', function($scope, $http) {
   .then(function(response) {
     $scope.user = response.data;
     var test = new Date($scope.user.user_DOB).toISOString().substr(0, 10);
-    console.log(test);
     $scope.dInput = test
   });
     }

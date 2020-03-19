@@ -1,3 +1,4 @@
+
 var app = angular.module("myApp", ["ngRoute"]);
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $routeProvider
@@ -12,7 +13,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 
     }]);
 app.controller('myApps', function($scope, $http) {
-
+  $("#selector").flatpickr({defaultDate:new Date(1997, 0, 10)});
   $http.get("/readgames")
   .then(function(response) {
     $scope.myWelcome = response.data;
@@ -33,8 +34,6 @@ app.controller('myApps', function($scope, $http) {
     })
   }
   $scope.createAccount = function () {
-    $scope.nUser.user_DOB = new Date($scope.user_DOB.year,$scope.user_DOB.month-1,$scope.user_DOB.day)
-    console.log($scope.nUser.user_DOB);
     $http.post("/createuser",$scope.nUser)
     .then(function (res) {
       console.log(res);
@@ -79,6 +78,7 @@ app.controller('myApps', function($scope, $http) {
     }
   }
   $scope.loadGames = function (name) {
+    console.log(name);
     var ws = new WebSocket("ws://localhost:9000/game/load");
     ws.onopen = function () {
       ws.send(JSON.stringify({

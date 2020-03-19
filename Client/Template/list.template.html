@@ -40,3 +40,14 @@
     </div>
   </div>
 </div>
+
+
+New Game:
+<form class="" ng-submit="addGame()" method="post">
+  Name: <input type="text" ng-model="nGame.name" placeholder="Game Name"><br>
+  Summary: <textarea ng-model="nGame.summary" placeholder="Game Summary"></textarea><br>
+  Rules: <textarea ng-model="nGame.rules" placeholder="Game Rules"></textarea><br>
+  Player Count: <input type="text" ng-model="nGame.pCount" placeholder="Game Player Count"><br>
+  18+: <input type="checkbox" ng-model="nGame.nsfw"><br>
+  <input type="submit" value="Submit">
+</form>

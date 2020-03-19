@@ -40,7 +40,6 @@ module.exports = class game {
   }
   delGame(callback){
     var uGame = schemas.Game;
-    console.log(this.game_Name);
     uGame.deleteOne({'game_Name':this.game_Name}, function (err) {
     if (err) callback(err);
   });

@@ -18,6 +18,7 @@ app.use(session({
     secret: 'tGUpeHR8VribHl8G3kU6',
     resave: false,
     saveUninitialized: false,
+    sameSite:true,
     cookie: {
         expires: 600000
     }
@@ -36,7 +37,7 @@ var server = app.listen(9000, function() {
   });
 
   app.get("/", function(req, res) {
-    //Checks if the user is logged in
+    //Checks if the user is logged in    
     verify.rootCheck(app,res,req.session.user);
   });
     app.get('/readgames', function (req, res) {
@@ -54,10 +55,7 @@ var server = app.listen(9000, function() {
         if (response.uID !=null) {
           //If the correct details have been entered
           req.session.user = response.uID;
-          app.use(express.static('user'));
-          res.status(200).sendFile("/", {
-            root: 'user'
-          });
+          verify.setRoot(app,res,response.uID);
         }
         else{
         res.status(201).send(response.status);
@@ -66,8 +64,12 @@ var server = app.listen(9000, function() {
     })
 
     app.get('/logout',function (req,res) {
+      req.session.cookie.expires = new Date(Date.now());
       req.session.destroy();
-      res.redirect('/');
+      res.cookie("sessionid", { expires: Date.now() });
+      res.status(200).sendFile("/", {
+        root: 'Client/user/anon'
+      });
     })
     app.post('/createuser',function (req,res) {
       //create a new user
@@ -169,4 +171,53 @@ var server = app.listen(9000, function() {
         })
 
       });
+    })
+    //Admin functions
+    app.post('/newgame',function (req,res) {
+      //Check Admin and logged in
+      //Add game if true
+      db.saveGames(req.session.user,req.body.name,req.body.summary,req.body.rules,req.body.pCount,req.body.equipment,req.body.nsfw,function (response) {
+        if(response) console.log(response);
+      })
+      res.sendStatus(201);
+    })
+    app.put('/editgame',function (req,res) {
+      //Check Admin and logged in
+      //Add game if true
+      db.editGames(req.body.id,req.body.name,req.body.summery,req.body.rules,req.body.pCount,req.body.equipment,req.body.nsfw,function (response) {
+        if(response) console.log(response);
+      })
+      res.sendStatus(201);
+    })
+    app.delete('/delGame',function (req,res) {
+      db.delGame(req.body.id,function (err) {
+        if(err)console.log(err);
+      })
+      req.sendStatus(201);
+    })
+    app.post('/game/bookmark',function (req,res) {
+      var bm = new classes.bookmark()
+      bm.userID = req.session.user;
+      bm.gameID = req.body.gameID;
+      bm.addBookmark(function (err) {
+        if(err)console.log(err);
+      })
+      res.sendStatus(201)
+    })
+    app.delete('/game/bookmark',function (req,res) {
+      var bm = new classes.bookmark()
+      bm.userID = req.session.user;
+      bm.gameID = req.body.gameID;
+      bm.delBookmark(function (err) {
+        if(err)console.log(err);
+      })
+      res.sendStatus(200);
+    })
+    app.get('/game/bookmark/:gameID',function (req,res) {
+      var bm = new classes.bookmark()
+      bm.userID = req.session.user;
+      bm.gameID = req.params.gameID;
+      bm.viewBookmark(function (result) {
+        res.status(200).send(result);
+      })
     })

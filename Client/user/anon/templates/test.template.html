@@ -36,10 +36,6 @@
   </div>
 </nav>
 
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" ng-click="randGame()" data-toggle="modal" data-target="#exampleModal">
-  Launch demo modal
-</button>
 
 
 <div class="modal fade text-center" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -98,9 +94,7 @@
                   <div class="input-group-prepend ml-1">
                     <span class="input-group-text" id="">DOB:</span>
                   </div>
-                  <input type="number" class="form-control" min="1" max="31" ng-model="$parent.user_DOB.day" placeholder="DD" required>
-                  <input type="number" class="form-control"min="1" max="12"ng-model="$parent.user_DOB.month" placeholder="MM"required>
-                  <input type="number" class="form-control"min="1901" max="2020"ng-model="$parent.user_DOB.year" placeholder="YYYY" required>
+                    <input type="date" class="form-control"ng-model="$parent.nUser.user_DOB" id="selector" placeholder="Select a Date">
                 </div>
                 <div class="input-group m-1">
                 <input class="btn btn-primary btn-block ml-1" type="submit" value="submit">
