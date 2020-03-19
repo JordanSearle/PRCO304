@@ -37,7 +37,7 @@ var server = app.listen(9000, function() {
   });
 
   app.get("/", function(req, res) {
-    //Checks if the user is logged in    
+    //Checks if the user is logged in
     verify.rootCheck(app,res,req.session.user);
   });
     app.get('/readgames', function (req, res) {

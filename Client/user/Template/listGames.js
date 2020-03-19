@@ -1,21 +1,21 @@
+
 var app = angular.module("user", ["ngRoute"]);
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $routeProvider
   .when("/", {
-    templateUrl : "/anon/templates/list.template.html",
+    templateUrl : "anon/templates/list.template.html",
     controller: "gameControl"
   }).when("/userdetails", {
     templateUrl : "/Template/curruser.template.html",
     controller: "userControl"
   })
   $locationProvider.html5Mode({
-                enabled: false,
+                enabled: true,
                 requireBase: false
          });
 
     }]);
 app.controller('gameControl', function($scope, $http) {
-
   $http.get("/readgames")
   .then(function(response) {
     $scope.myWelcome = response.data;
@@ -71,6 +71,12 @@ app.controller('gameControl', function($scope, $http) {
       $scope.$apply();
       $('#exampleModal').modal('show');
     }
+  }
+  $scope.bookmark = function (gameID) {
+    $http.post('/game/bookmark',JSON.stringify({'gameID':gameID}))
+    .then(function (res) {
+      console.log(res);
+    })
   }
 });
 
