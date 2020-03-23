@@ -38,7 +38,13 @@ var server = app.listen(9000, function() {
 
   app.get("/", function(req, res) {
     //Checks if the user is logged in
-    verify.rootCheck(app,res,req.session.user);
+    verify(app,res,req.session.user,function (logged) {
+      if (logged) {
+        verify.setRoot(app,res,req.session.user,function (logged){
+          
+        })
+      }
+    });
   });
     app.get('/readgames', function (req, res) {
       db.readGames(function (result) {
@@ -56,6 +62,7 @@ var server = app.listen(9000, function() {
           //If the correct details have been entered
           req.session.user = response.uID;
           verify.setRoot(app,res,response.uID);
+          console.log('test');
         }
         else{
         res.status(201).send(response.status);
@@ -67,9 +74,7 @@ var server = app.listen(9000, function() {
       req.session.cookie.expires = new Date(Date.now());
       req.session.destroy();
       res.cookie("sessionid", { expires: Date.now() });
-      res.status(200).sendFile("/", {
-        root: 'Client/user/anon'
-      });
+      res.redirect('/');
     })
     app.post('/createuser',function (req,res) {
       //create a new user
@@ -87,42 +92,55 @@ var server = app.listen(9000, function() {
     app.delete('/user',function (req,res) {
       //Delete a User
       //Verifies the user is logged in or not. not logged in will redirect to default index page
-      verify(app,res,req.session.user);
-      //Delete a user
-      var user = new classes.user();
-      user.setUserID(req.session.user);
-      user.delUser(function (response) {
-        //Do something here
-      })
-      req.session.destroy();
-      res.sendStatus(201);
+      verify(app,res,req.session.user,function (logged) {
+        if (logged) {
+          //Logged in so do shit.
+          //Delete a user
+          var user = new classes.user();
+          user.setUserID(req.session.user);
+          user.delUser(function (response) {
+            //Do something here
+          })
+          req.session.destroy();
+          res.sendStatus(201);
+        }
+      });
+
     })
     app.put('/user',function (req,res) {
       //edit a user
       //Verifies the user is logged in or not. not logged in will redirect to default index page
-      verify(app,res,req.session.user);
-      //Delete a user
-      var user = new classes.user();
-      user.setUserID(req.session.user);
-      user.setUsername(req.body.username);
-      user.setEmail(req.body.email);
-      user.setPassword(req.body.password);
-      user.setDOB(req.body.user_DOB);
-      user.editUser(function(err) {
+      verify(app,res,req.session.user,function (logged) {
+        if (logged) {
+          //Delete a user
+          var user = new classes.user();
+          user.setUserID(req.session.user);
+          user.setUsername(req.body.username);
+          user.setEmail(req.body.email);
+          user.setPassword(req.body.password);
+          user.setDOB(req.body.user_DOB);
+          user.editUser(function(err) {
 
+          });
+          res.sendStatus(200);
+        }
       });
-      res.sendStatus(200);
+
     })
     app.get('/user',function (req,res) {
       //view user
       //Verifies the user is logged in or not. not logged in will redirect to default index page
-      verify(app,res,req.session.user);
-      //will return the user's data
-      var user = new classes.user();
-      user.setUserID(req.session.user);
-      user.viewUser(function (result) {
-        res.send(result);
-      })
+      verify(app,res,req.session.user,function (logged) {
+        if (logged) {
+          //will return the user's data
+          var user = new classes.user();
+          user.setUserID(req.session.user);
+          user.viewUser(function (result) {
+            res.send(result);
+          })
+        }
+      });
+
     })
     app.get('/game/:name',function (req,res) {
       //Get game from ID and return
@@ -196,28 +214,42 @@ var server = app.listen(9000, function() {
       req.sendStatus(201);
     })
     app.post('/game/bookmark',function (req,res) {
-      var bm = new classes.bookmark()
-      bm.userID = req.session.user;
-      bm.gameID = req.body.gameID;
-      bm.addBookmark(function (err) {
-        if(err)console.log(err);
-      })
-      res.sendStatus(201)
+      verify(app,res,req.session.user,function (logged) {
+        if (logged) {
+          var bm = new classes.bookmark()
+          bm.userID = req.session.user;
+          bm.gameID = req.body.gameID;
+          bm.addBookmark(function (err) {
+            if(err)console.log(err);
+          })
+          res.sendStatus(201)
+        }
+      });
     })
     app.delete('/game/bookmark',function (req,res) {
-      var bm = new classes.bookmark()
-      bm.userID = req.session.user;
-      bm.gameID = req.body.gameID;
-      bm.delBookmark(function (err) {
-        if(err)console.log(err);
-      })
-      res.sendStatus(200);
+      verify(app,res,req.session.user,function (logged) {
+        if (logged) {
+          var bm = new classes.bookmark()
+          bm.userID = req.session.user;
+          bm.gameID = req.body.gameID;
+          bm.delBookmark(function (err) {
+            if(err)console.log(err);
+          })
+          res.sendStatus(200);
+        }
+      });
+
     })
     app.get('/game/bookmark/:gameID',function (req,res) {
-      var bm = new classes.bookmark()
-      bm.userID = req.session.user;
-      bm.gameID = req.params.gameID;
-      bm.viewBookmark(function (result) {
-        res.status(200).send(result);
-      })
+      verify(app,res,req.session.user,function (logged) {
+        if (logged) {
+          var bm = new classes.bookmark()
+          bm.userID = req.session.user;
+          bm.gameID = req.params.gameID;
+          bm.viewBookmark(function (result) {
+            res.status(200).send(result);
+          })
+        }
+      });
+
     })

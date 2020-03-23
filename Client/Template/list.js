@@ -69,3 +69,13 @@ app.controller('userControl', function($scope, $http) {
   }
   $scope.load();
 });
+function nav() {
+  if ($('#mySidebar').width() != 250) {
+    $('#mySidebar').width('250px');
+    $(".main").css( { marginLeft : "250px"} );
+  }
+  else{
+    $('#mySidebar').width('0px');
+    $(".main").css( { marginLeft : "0px"} );
+  }
+}
