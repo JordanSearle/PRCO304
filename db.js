@@ -93,6 +93,12 @@ module.exports = {
           callback(result);
         })
     })
-
+  },
+  listBookmarks: function (id,callback) {
+    var bm = schemas.Bookmark;
+    bm.find({userID:id}).populate('gameID').exec(function (err,res) {
+      if(err)callback(err);
+      callback(res);
+    })
   }
 }

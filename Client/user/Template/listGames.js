@@ -1,24 +1,25 @@
 
 var app = angular.module("user", ["ngRoute"]);
-app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+app.config(['$routeProvider', function($routeProvider) {
   $routeProvider
   .when("/", {
     templateUrl : "anon/templates/list.template.html",
     controller: "gameControl"
   }).when("/userdetails", {
     templateUrl : "/Template/curruser.template.html",
-    controller: "userControl"
+    controller: "userControl",
+    base:'#!'
   })
-  $locationProvider.html5Mode({
-                enabled: true,
-                requireBase: false
-         });
 
     }]);
 app.controller('gameControl', function($scope, $http) {
   $http.get("/readgames")
   .then(function(response) {
     $scope.myWelcome = response.data;
+  });
+  $http.get("/user")
+  .then(function(response) {
+    $scope.user = response.data;
   });
   $scope.nextGame = function () {
     var ws = new WebSocket("ws://localhost:9000/game/next");
@@ -72,17 +73,14 @@ app.controller('gameControl', function($scope, $http) {
       $('#exampleModal').modal('show');
     }
   }
-  $scope.bookmark = function (gameID) {
-    $http.post('/game/bookmark',JSON.stringify({'gameID':gameID}))
+  $scope.bookmark = function (id) {
+    $http.post('/game/bookmark',JSON.stringify({'gameID':id}))
     .then(function (res) {
       console.log(res);
     })
   }
 });
-
-app.controller('userControl', function($scope, $http) {
-
-  $scope.load = function () {
+app.controller('userLoad',function ($scope,$http) {
   $http.get("/user")
   .then(function(response) {
     $scope.user = response.data;
@@ -90,9 +88,31 @@ app.controller('userControl', function($scope, $http) {
     $("#selector").flatpickr({defaultDate:new Date($scope.user.user_DOB)});
     $scope.dInput = test
   });
+  $scope.logout = function () {
+    $http.get("/logout")
+    .then(function (res) {
+      window.location.href = "/";
+    })
+  }
+})
 
+app.controller('userControl', function($scope, $http) {
+
+  $scope.load = function () {
+    $http.get("/user")
+    .then(function(response) {
+      $scope.user = response.data;
+      var test = new Date($scope.user.user_DOB).toISOString().substr(0, 10);
+      $("#selector").flatpickr({defaultDate:new Date($scope.user.user_DOB)});
+      $scope.dInput = test
+    });
+    $http.get('/user/bookmarks')
+    .then(function (res) {
+      $scope.bookmarks = res.data;
+    })
     }
   $scope.logout = function () {
+    console.log('log');
     $http.get("/logout")
     .then(function (res) {
       window.location.href = "/";
@@ -110,8 +130,17 @@ app.controller('userControl', function($scope, $http) {
       $scope.load();
     })
   }
+  $scope.delBookmark = function (id) {
+    $http.delete('/game/bookmark',{data: {gameID:id}, headers: {'Content-Type': 'application/json;charset=utf-8'}})
+    .then(function (res) {
+      console.log(res);
+      $scope.load();
+    })
+  }
   $scope.load();
 });
+
+//Navbar functions (will be moved to own file)
 function nav() {
   if ($('#mySidebar').width() != 250) {
     $('#mySidebar').width('250px');

@@ -62,7 +62,6 @@ var server = app.listen(9000, function() {
           //If the correct details have been entered
           req.session.user = response.uID;
           verify.setRoot(app,res,response.uID);
-          console.log('test');
         }
         else{
         res.status(201).send(response.status);
@@ -252,6 +251,9 @@ var server = app.listen(9000, function() {
         }
       });
     })
-    app.get('/game/bookmarks',function (req,res) {
+    app.get('/user/bookmarks',function (req,res) {
       //Get all bookmarks by user return
+      db.listBookmarks(req.session.user,function (result) {
+        res.send(result);
+      })
     })

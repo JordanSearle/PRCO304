@@ -8,7 +8,7 @@
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a class="nav-link btn btn-dark" onclick="nav()" href="#" id="navbarDropdownBlog" >
+          <a class="nav-link btn btn-dark" onclick="nav()"  id="navbarDropdownBlog" >
             <span class="navbar-toggler-icon"></span>
           </a>
         </li>
@@ -22,11 +22,11 @@
     <h2 class="pb-0">Welcome</h2>
     <h2 class="pt-0">{{user.username}}</h2>
   </div>
-  <a href="#">Games</a>
-  <a href="#">bookmarks</a>
-  <a href="#">request</a>
+  <a href="/">Games</a>
+  <a href="#!bookmarks">bookmarks</a>
+  <a href="#!request">request</a>
   <div class="sidebar-footer">
     <a href="#!userdetails">Edit Account</a>
-    <a href="#"ng-click="logout()">Log Out</a>
+    <a ng-click="logout()">Log Out</a>
   </div>
 </div>

@@ -1,3 +1,4 @@
+<div class="container">
 
 <h1>User Details:</h1>
 <h1>Username: {{user.username}}</h1>
@@ -15,9 +16,17 @@
     DOB:<br>
     <input type="date" class="form-control"ng-model="$parent.nUser.user_DOB" id="selector" ng-model="eUser.user_DOB"ng-value="dInput" required>
     <br><br>
-    <button ng-click="editAccount()">submit</button>
+    <button ng-click="editAccount()">submit</button><br>
 </form>
+<hr>
+<h1>Bookmarks</h1>
+<div class="row m-1 p-1" ng-repeat="b in bookmarks">
+  <div class="col">
+    {{b.gameID.game_Name}}
+  </div>
+  <div class="col">
+    <button type="button" class="btn btn-danger"name="button" ng-click="delBookmark(b.gameID)">Delete</button>
+  </div>
+</div>
 
-<a href="/">Go Back</a>
-<button type="button" name="button" ng-click="logout()">Sign Out</button>
-<button type="button" name="button" ng-click="delete()">Delete Account</button>
+</div>

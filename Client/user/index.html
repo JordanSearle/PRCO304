@@ -79,12 +79,15 @@
     </style>
   </head>
   <body ng-app="user">
-    <div ng-controller="userControl">
+    <div ng-controller="userLoad">
       <div ng-include="'Template/userNav.template.html'">
     </div>
 
     </div>
-  <div class="main" ng-view></div>
+    <div class="main">
+
+    <div  ng-view></div>
+    </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
