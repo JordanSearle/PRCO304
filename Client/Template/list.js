@@ -9,6 +9,18 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     templateUrl : "/Template/user.template.html",
     controller: "userControl"
   })
+  .when("/user", {
+    templateUrl : "/Template/user.template.html",
+    controller: "userControl"
+  })
+  .when("/games", {
+    templateUrl : "/Template/user.template.html",
+    controller: "userControl"
+  })
+  .when("/request", {
+    templateUrl : "/Template/user.template.html",
+    controller: "userControl"
+  })
   $locationProvider.html5Mode({
                 enabled: false,
                 requireBase: false

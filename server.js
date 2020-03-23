@@ -41,7 +41,7 @@ var server = app.listen(9000, function() {
     verify(app,res,req.session.user,function (logged) {
       if (logged) {
         verify.setRoot(app,res,req.session.user,function (logged){
-          
+
         })
       }
     });
@@ -251,5 +251,7 @@ var server = app.listen(9000, function() {
           })
         }
       });
-
+    })
+    app.get('/game/bookmarks',function (req,res) {
+      //Get all bookmarks by user return
     })
