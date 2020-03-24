@@ -6,9 +6,13 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     templateUrl : "/Templates/list.template.html",
     controller: "myApps"
   })
+  .when('/games/:param',{
+    templateUrl:'/Templates/game.template.html',
+    controller:"gameControl"
+  })
   $locationProvider.html5Mode({
-                enabled: true,
-                requireBase: false
+                enabled: false,
+                requireBase: true
          });
 
     }]);
@@ -95,3 +99,14 @@ app.controller('myApps', function($scope, $http) {
     }
   }
 });
+app.controller('gameControl',function ($scope,$http,$routeParams) {
+  $('#exampleModal').modal('hide');
+  $('.modal-backdrop').remove();
+  $scope.load = function () {
+    $http.get('/game/'+$routeParams.param)
+    .then(function (res) {
+      $scope.game = res.data[0];
+    })
+  }
+  $scope.load();
+})
