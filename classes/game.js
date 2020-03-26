@@ -77,8 +77,6 @@ module.exports = class game {
   calculateRating(callback){
     this.game_Rating = 0;
     var uGame = schemas.Game;
-      uGame.findOne({'_id':this.game_UID},(err, result) => {
-        //Set game Variables
         uGame.findOne({'_id':this.game_UID},(err, result) => {
           //Set game Variables
           var arr = []
@@ -86,7 +84,6 @@ module.exports = class game {
             arr.push(item.value)
           });
           this.game_Rating = (arr.reduce((a, b) => a + b, 0)/arr.length);
-        })
       })
   }
   delRating(userID,value,callback){
