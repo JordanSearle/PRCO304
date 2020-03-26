@@ -209,6 +209,51 @@ var server = app.listen(9000, function() {
 
       });
     })
+    app.post('/game/bookmark',function (req,res) {
+      verify(app,res,req.session.user,function (logged) {
+        if (logged) {
+          var bm = new classes.bookmark()
+          bm.userID = req.session.user;
+          bm.gameID = req.body.gameID;
+          bm.addBookmark(function (err) {
+            if(err)console.log(err);
+          })
+          res.sendStatus(201)
+        }
+      });
+    })
+    app.delete('/game/bookmark',function (req,res) {
+      verify(app,res,req.session.user,function (logged) {
+        if (logged) {
+          var bm = new classes.bookmark()
+          bm.userID = req.session.user;
+          bm.gameID = req.body.gameID;
+          bm.delBookmark(function (err) {
+            if(err)console.log(err);
+          })
+          res.sendStatus(200);
+        }
+      });
+
+    })
+    app.get('/game/bookmark/:gameID',function (req,res) {
+      verify(app,res,req.session.user,function (logged) {
+        if (logged) {
+          var bm = new classes.bookmark()
+          bm.userID = req.session.user;
+          bm.gameID = req.params.gameID;
+          bm.viewBookmark(function (result) {
+            res.status(200).send(result);
+          })
+        }
+      });
+    })
+    app.get('/user/bookmarks',function (req,res) {
+      //Get all bookmarks by user return
+      db.listBookmarks(req.session.user,function (result) {
+        res.send(result);
+      })
+    })
   //Admin functions
     app.post('/newgame',function (req,res) {
       //Check Admin and logged in
@@ -234,7 +279,6 @@ var server = app.listen(9000, function() {
     })
     app.get('/users',function (req,res) {
       db.getUsers(function (result) {
-        console.log(result);
         res.send(result);
       })
     })
