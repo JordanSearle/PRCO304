@@ -7,9 +7,6 @@ var db = require('../db');
 describe('Game rating tests',function () {
   gm = new classes.game();
   game = schemas.Game;
-  before(function () {
-
-  })
   beforeEach(function () {
     gm.game_Name = 'rating test';
     gm.game_Summery = 'rating test';

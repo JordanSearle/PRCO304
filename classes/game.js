@@ -68,22 +68,20 @@ module.exports = class game {
       //Set game Variables
       result.rating.push({userID:userID,value:value});
       result.save();
-    })/*.then(()=> {
-      this.calculateRating(function (err) {
-        if(err)console.log(err);
-      })
-    })*/
+    })
   }
-  calculateRating(callback){
+  calculateRating(){
     this.game_Rating = 0;
     var uGame = schemas.Game;
         uGame.findOne({'_id':this.game_UID},(err, result) => {
           //Set game Variables
           var arr = []
-          result.rating.forEach((item, i) => {
-            arr.push(item.value)
-          });
-          this.game_Rating = (arr.reduce((a, b) => a + b, 0)/arr.length);
+          if (result.rating.length > 0) {
+            result.rating.forEach((item, i) => {
+              arr.push(item.value)
+            });
+            this.game_Rating = (arr.reduce((a, b) => a + b, 0)/arr.length);
+          }
       })
   }
   delRating(userID,value,callback){
