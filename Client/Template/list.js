@@ -82,18 +82,24 @@ app.controller('userControl', function($scope, $http) {
   $scope.load();
 });
 app.controller('user',function ($scope,$http) {
+  $scope.load = function () {
+    $http.get('/users').then(function (res) {
+      $scope.userList = res.data;
+    })
+  }
   $scope.addUser = function () {
-    $http.post('/user',$scope.newUser)
+    $http.post('/users',$scope.newUser)
     .then(function (res) {
-      console.log(res);
+      $scope.load();
     })
   }
   $scope.delUser =function (id) {
-    $http.delete('/user/'+id)
+    $http.delete('/users/'+id)
     .then(function (res) {
-      console.log(res);
+      $scope.load();
     })
   }
+  $scope.load();
 })
 function nav() {
   if ($('#mySidebar').width() == 0) {

@@ -100,5 +100,12 @@ module.exports = {
       if(err)callback(err);
       callback(res);
     })
+  },
+  getUsers: function (callback) {
+    var user = schemas.User;
+    user.find().select('-password -user_DOB').exec(function (err,result) {
+      if(err)console.log(err);
+      callback(result);
+    })
   }
 }
