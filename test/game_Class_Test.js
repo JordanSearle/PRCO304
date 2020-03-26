@@ -17,7 +17,9 @@ describe('Game test',function () {
     game.game_IsNSFW = false;
   });
   after(function() {
-    //games.deleteMany({'game_Name':'test game name'}).exec();
+    games.deleteMany({'game_Name':'test game name'}).exec(function (err) {
+      if(err)console.log(err);
+    });
   })
   before(function () {
     games.deleteMany({'game_Name':'test game name'}).exec();

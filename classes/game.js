@@ -11,7 +11,7 @@ module.exports = class game {
     this.game_Player_Count = count;
     this.game_Equipment = equipment;
     this.game_IsNSFW = nsfw;
-
+    this.game_Rating = 0;
   }
   game_UID;
   game_Name;
@@ -20,6 +20,7 @@ module.exports = class game {
   game_Player_Count;
   game_Equipment;
   game_IsNSFW;
+  game_Rating;
   saveGame(id,callback){
       const game = new schemas.Game({
         //UserID needs to be set from the logged on user.
@@ -31,7 +32,6 @@ module.exports = class game {
         game_Player_Count: this.game_Player_Count,
         game_Equipment: this.game_Equipment,
         game_IsNSFW:this.game_IsNSFW
-
      })
      this.game_UID = game._id;
      game.save(function (err) {
@@ -60,13 +60,46 @@ module.exports = class game {
     })
   }
   //Rating function, not important right now.
-  calculateRating(){
-
+  addRating(userID,value,callback){
+    var game = this;
+    var uGame = schemas.Game;
+    uGame.findOne({'_id':this.game_UID},(err, result)=> {
+      if(err)callback(err);
+      //Set game Variables
+      result.rating.push({userID:userID,value:value});
+      result.save();
+    })/*.then(()=> {
+      this.calculateRating(function (err) {
+        if(err)console.log(err);
+      })
+    })*/
   }
-  addRating(){
-
+  calculateRating(callback){
+    this.game_Rating = 0;
+    var uGame = schemas.Game;
+      uGame.findOne({'_id':this.game_UID},(err, result) => {
+        //Set game Variables
+        uGame.findOne({'_id':this.game_UID},(err, result) => {
+          //Set game Variables
+          var arr = []
+          result.rating.forEach((item, i) => {
+            arr.push(item.value)
+          });
+          this.game_Rating = (arr.reduce((a, b) => a + b, 0)/arr.length);
+        })
+      })
   }
-  delRating(){
-
+  delRating(userID,value,callback){
+    var uGame = schemas.Game;
+    uGame.findOne({'_id':this.game_UID},(err, result) => {
+      if(err)callback(err);
+      //Set game Variables
+      result.rating.pull({userID:userID,value:value});
+      result.save();
+    }).then(()=> {
+      this.calculateRating(function (err) {
+        if(err)console.log(err);
+      })
+    })
   }
 }
