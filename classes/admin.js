@@ -17,14 +17,14 @@ module.exports = class admin extends user {
       }
     })
   }
-  addUser(callback){
+  addUser(isAdmin,callback){
     //Create new user
     var user = new schemas.User({
       username: this.getUsername(),
       password: this.getPassword(),
       email:this.getEmail(),
       user_DOB:this.getDOB(),
-      isAdmin:true
+      isAdmin:isAdmin
     })
     user.save(function (err) {
       if(err)callback(err);

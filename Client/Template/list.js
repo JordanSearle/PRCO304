@@ -6,12 +6,12 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     controller: "myApps"
   })
   .when("/userdetails", {
-    templateUrl : "/Template/user.template.html",
+    templateUrl : "/Template/account.template.html",
     controller: "userControl"
   })
   .when("/user", {
     templateUrl : "/Template/user.template.html",
-    controller: "userControl"
+    controller: "user"
   })
   .when("/games", {
     templateUrl : "/Template/user.template.html",
@@ -81,10 +81,24 @@ app.controller('userControl', function($scope, $http) {
   }
   $scope.load();
 });
+app.controller('user',function ($scope,$http) {
+  $scope.addUser = function () {
+    $http.post('/user',$scope.newUser)
+    .then(function (res) {
+      console.log(res);
+    })
+  }
+  $scope.delUser =function (id) {
+    $http.delete('/user/'+id)
+    .then(function (res) {
+      console.log(res);
+    })
+  }
+})
 function nav() {
-  if ($('#mySidebar').width() != 250) {
-    $('#mySidebar').width('250px');
-    $(".main").css( { marginLeft : "250px"} );
+  if ($('#mySidebar').width() == 0) {
+    $('#mySidebar').width('25%');
+    $(".main").css( { marginLeft : "25%"} );
   }
   else{
     $('#mySidebar').width('0px');
