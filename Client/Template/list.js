@@ -162,7 +162,7 @@ app.controller('gameControl', function($scope, $http) {
     $http.get("/readgames")
       .then(function(response) {
       $scope.myWelcome = response.data;
-    });    
+    });
   }
   $scope.addGame = function () {
     $scope.nGame.equipment = ['test','test1'];
@@ -177,6 +177,7 @@ app.controller('gameControl', function($scope, $http) {
       game.game_Summery = $data.game_Summery;
       game.game_Rules = $data.game_Rules;
       game.game_IsNSFW = $data.game_IsNSFW
+      game.game_Player_Count = $data.game_Player_Count
       $http.put('/editgame',game).then(function (res) {
         console.log(res);
       })
