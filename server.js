@@ -46,7 +46,7 @@ var server = app.listen(9000, function() {
       }
     });
   });
-    app.get('/readgames', function (req, res) {
+  app.get('/readgames', function (req, res) {
       db.readGames(function (result) {
         res.send(result);
       })

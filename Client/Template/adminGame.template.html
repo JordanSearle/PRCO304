@@ -1,0 +1,73 @@
+<div class="p-3 mt-3">
+  <div class="row">
+    <div class="col-12 col-lg-6">
+      <div class="mb-3 rounded shadow bg-white  p-3">
+      <h1>This will be a panel for game stats</h1>
+      </div>
+    </div>
+    <div class="col-12 col-lg-6">
+      <div class="mb-3 rounded shadow bg-white  p-3">
+      <h1>This will be a panel for game stats</h1>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="mb-3 rounded shadow bg-white  p-3">
+
+          <h1>Manage Games</h1>
+
+          <table class="table table-bordered table-hover table-condensed">
+            <tr style="font-weight: bold">
+              <td style="width:20%">Name</td>
+              <td style="width:20%">Summary</td>
+              <td style="width:20%">Rules</td>
+              <td style="width:20%">Added By</td>
+              <td style="width:20%">Edit</td>
+            </tr>
+            <tr ng-repeat="user in myWelcome">
+              <td>
+                <!-- editable username (text with validation) -->
+                <span editable-text="user.game_Name" e-name="name" e-form="rowform" >
+                  {{ user.game_Name || 'empty' }}
+                </span>
+              </td>
+              <td>
+                <!-- editable status (select-local) -->
+                <span editable-textarea="user.game_Summery" e-name="summery" e-form="rowform" >
+                  {{ user.game_Summery|| 'empty'  }}
+                </span>
+              </td>
+              <td>
+                <!-- editable group (select-remote) -->
+                <span editable-textarea="user.game_Rules" e-name="rules" e-form="rowform" >
+                  {{ user.game_Rules|| 'empty'  }}
+                </span>
+              </td>
+              <td>
+                  {{ user.userID.username|| 'empty'  }}
+              </td>
+              <td style="white-space: nowrap">
+                <!-- form -->
+                <form editable-form name="rowform" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == user">
+                  <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
+                    save
+                  </button>
+                  <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
+                    cancel
+                  </button>
+                </form>
+                <div class="buttons" ng-show="!rowform.$visible">
+                  <button type="button" class="btn btn-primary" ng-click="rowform.$show()">edit</button>
+                  <button type="button" class="btn btn-danger" ng-click="removeUser($index)">del</button>
+                </div>
+              </td>
+            </tr>
+          </table>
+
+
+
+    </div>
+  </div>
+  </div>
+</div>

@@ -22,7 +22,7 @@ var game = new Schema({
   game_Player_Count:{type: String, required: true},
   game_Equipment:{type:[]},
   game_IsNSFW:{type:Boolean, required:true},
-  rating:[{_id: false, userID:{ type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate:{  select: 'username'}, required:true,unique:true}, value:{type:Number,required:true}}]
+  rating:[{_id: false, u:{ type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate:{  select: 'username'}, required:true,unique:true}}]
 });
 var rating = new Schema({
   gameID:{type: Schema.Types.ObjectId, ref: 'Game', required: true},

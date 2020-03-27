@@ -60,13 +60,13 @@ module.exports = class game {
     })
   }
   //Rating function, not important right now.
-  addRating(userID,value,callback){
+  addRating(userID,callback){
     var game = this;
     var uGame = schemas.Game;
     uGame.findOne({'_id':this.game_UID},(err, result)=> {
       if(err)callback(err);
       //Set game Variables
-      result.rating.push({userID:userID,value:value});
+      result.rating.push({u:userID});
       result.save();
     })
   }
@@ -75,21 +75,17 @@ module.exports = class game {
     var uGame = schemas.Game;
         uGame.findOne({'_id':this.game_UID},(err, result) => {
           //Set game Variables
-          var arr = []
           if (result.rating.length > 0) {
-            result.rating.forEach((item, i) => {
-              arr.push(item.value)
-            });
-            this.game_Rating = (arr.reduce((a, b) => a + b, 0)/arr.length);
+            this.game_Rating = result.rating.length;
           }
       })
   }
-  delRating(userID,value,callback){
+  delRating(userID,callback){
     var uGame = schemas.Game;
     uGame.findOne({'_id':this.game_UID},(err, result) => {
       if(err)callback(err);
       //Set game Variables
-      result.rating.pull({userID:userID,value:value});
+      result.rating.pull({u:userID});
       result.save();
     }).then(()=> {
       this.calculateRating(function (err) {

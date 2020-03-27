@@ -1,4 +1,7 @@
-var app = angular.module("myApp", ["ngRoute"]);
+var app = angular.module("myApp", ["ngRoute","xeditable"]);
+app.run(['editableOptions', function(editableOptions) {
+  editableOptions.theme = 'bs4'; // bootstrap3 theme. Can be also 'bs4', 'bs2', 'default'
+}]);
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $routeProvider
   .when("/", {
@@ -14,8 +17,8 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     controller: "user"
   })
   .when("/games", {
-    templateUrl : "/Template/user.template.html",
-    controller: "userControl"
+    templateUrl : "/Template/adminGame.template.html",
+    controller: "gameControl"
   })
   .when("/request", {
     templateUrl : "/Template/user.template.html",
@@ -48,6 +51,59 @@ app.controller('myApps', function($scope, $http) {
     .then(function (res) {
       console.log(res);
     })
+  }
+
+  $scope.nextGame = function () {
+    var ws = new WebSocket("ws://localhost:9000/game/next");
+    ws.onopen = function () {
+      ws.send(JSON.stringify({
+        'name': $scope.game.game_Name
+      }));
+      ws.onmessage = function (event) {
+        var result = JSON.parse(event.data)[0];
+        $scope.game = result;
+        $scope.$apply();
+      }
+    }
+  }
+  $scope.randGame = function () {
+    var ws = new WebSocket("ws://localhost:9000/game/random");
+    ws.onopen = function () {
+      ws.send(JSON.stringify({
+        'rand': "random"
+      }));
+    }
+    ws.onmessage = function (event) {
+      $scope.game = JSON.parse(event.data);
+      $scope.$apply();
+    }
+  }
+  $scope.prevGame = function () {
+    var ws = new WebSocket("ws://localhost:9000/game/prev");
+    ws.onopen = function () {
+      ws.send(JSON.stringify({
+        'name': $scope.game.game_Name
+      }));
+    }
+    ws.onmessage = function (event) {
+      var result = JSON.parse(event.data)[0];
+      $scope.game = result;
+      $scope.$apply();
+    }
+  }
+  $scope.loadGames = function (name) {
+    var ws = new WebSocket("ws://localhost:9000/game/load");
+    ws.onopen = function () {
+      ws.send(JSON.stringify({
+        'name': name
+      }));
+    }
+    ws.onmessage = function (event) {
+      var result = JSON.parse(event.data)[0];
+      $scope.game = result;
+      $scope.$apply();
+      $('#exampleModal').modal('show');
+    }
   }
 });
 app.controller('userControl', function($scope, $http) {
@@ -101,13 +157,36 @@ app.controller('user',function ($scope,$http) {
   }
   $scope.load();
 })
+app.controller('gameControl', function($scope, $http) {
+    $http.get("/readgames")
+      .then(function(response) {
+      $scope.myWelcome = response.data;
+    });
+  $scope.addGame = function () {
+    $scope.nGame.equipment = ['test','test1'];
+    $http.post("/newgame",$scope.nGame)
+    .then(function (res) {
+      console.log(res);
+    })
+  }
+
+
+  $scope.users = [
+   {id: 1, name: 'awesome user1', status: 2, group: 4, groupName: 'admin'},
+   {id: 2, name: 'awesome user2', status: undefined, group: 3, groupName: 'vip'},
+   {id: 3, name: 'awesome user3', status: 2, group: null}
+ ];
+
+ $scope.statuses = [
+   {value: 1, text: 'status1'},
+   {value: 2, text: 'status2'},
+   {value: 3, text: 'status3'},
+   {value: 4, text: 'status4'}
+ ];
+
+ $scope.groups = [];
+
+
+})
 function nav() {
-  if ($('#mySidebar').width() == 0) {
-    $('#mySidebar').width('25%');
-    $(".main").css( { marginLeft : "25%"} );
-  }
-  else{
-    $('#mySidebar').width('0px');
-    $(".main").css( { marginLeft : "0px"} );
-  }
 }
