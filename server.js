@@ -258,7 +258,7 @@ var server = app.listen(9000, function() {
     app.post('/newgame',function (req,res) {
       //Check Admin and logged in
       //Add game if true
-      db.saveGames(req.session.user,req.body.name,req.body.summary,req.body.rules,req.body.pCount,req.body.equipment,req.body.nsfw,function (response) {
+      db.saveGames(req.session.user,req.body.game_Name,req.body.game_Summery,req.body.game_Rules,req.body.game_Player_Count,req.body.game_Equipment,req.body.game_IsNSFW,function (response) {
         if(response) console.log(response);
       })
       res.sendStatus(201);
@@ -266,16 +266,26 @@ var server = app.listen(9000, function() {
     app.put('/editgame',function (req,res) {
       //Check Admin and logged in
       //Add game if true
-      db.editGames(req.body.id,req.body.name,req.body.summery,req.body.rules,req.body.pCount,req.body.equipment,req.body.nsfw,function (response) {
-        if(response) console.log(response);
+      var game = new classes.game();
+      game.game_UID = req.body._id;
+      game.game_Name = req.body.game_Name;
+      game.game_Rules = req.body.game_Rules;
+      game.game_Summery = req.body.game_Summery;
+      game.game_IsNSFW = req.body.game_IsNSFW;
+      game.game_Equipment = req.body.game_Equipment;
+      game.game_Player_Count = req.body.game_Player_Count;
+      game.updateGame(function (err) {
+        if(err)console.log(err);
       })
       res.sendStatus(201);
     })
     app.delete('/delGame',function (req,res) {
-      db.delGame(req.body.id,function (err) {
-        if(err)console.log(err);
-      })
-      req.sendStatus(201);
+      var game = new classes.game();
+      game.game_UID = req.body.id;
+        game.delGame(function (err) {
+          if(err)callback(err);
+        })
+      res.sendStatus(201);
     })
     app.get('/users',function (req,res) {
       db.getUsers(function (result) {

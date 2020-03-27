@@ -5,7 +5,7 @@ var mongoose = require("mongoose");
 module.exports = {
   readGames: function (callback) {
     var games = schemas.Game;
-    games.find().populate('userID').
+    games.find().populate('userID','username').
     exec(function (err, game) {
       if (err) return err;
       callback(game);

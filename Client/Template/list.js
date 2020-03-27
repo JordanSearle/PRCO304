@@ -158,10 +158,12 @@ app.controller('user',function ($scope,$http) {
   $scope.load();
 })
 app.controller('gameControl', function($scope, $http) {
+  $scope.load = function () {
     $http.get("/readgames")
       .then(function(response) {
       $scope.myWelcome = response.data;
-    });
+    });    
+  }
   $scope.addGame = function () {
     $scope.nGame.equipment = ['test','test1'];
     $http.post("/newgame",$scope.nGame)
@@ -169,23 +171,45 @@ app.controller('gameControl', function($scope, $http) {
       console.log(res);
     })
   }
-
-
-  $scope.users = [
-   {id: 1, name: 'awesome user1', status: 2, group: 4, groupName: 'admin'},
-   {id: 2, name: 'awesome user2', status: undefined, group: 3, groupName: 'vip'},
-   {id: 3, name: 'awesome user3', status: 2, group: null}
- ];
-
- $scope.statuses = [
-   {value: 1, text: 'status1'},
-   {value: 2, text: 'status2'},
-   {value: 3, text: 'status3'},
-   {value: 4, text: 'status4'}
- ];
-
- $scope.groups = [];
-
+  $scope.editGame = function ($data,game) {
+    if (game.userID != null) {
+      game.game_Name = $data.game_Name;
+      game.game_Summery = $data.game_Summery;
+      game.game_Rules = $data.game_Rules;
+      game.game_IsNSFW = $data.game_IsNSFW
+      $http.put('/editgame',game).then(function (res) {
+        console.log(res);
+      })
+    }
+    else {
+      game.game_Name = $data.game_Name;
+      game.game_Summery = $data.game_Summery;
+      game.game_Rules = $data.game_Rules;
+      game.game_IsNSFW = $data.game_IsNSFW;
+      game.game_Equipment = [];
+      game.game_Player_Count = '1 to 8 Players';
+      $http.post('/newgame',game).then(function (res) {
+        console.log(res);
+      })
+    }
+  }
+  $scope.addGame = function() {
+    $scope.inserted = {
+      game_Name: '',
+      game_Summery: '',
+      game_Rules: '',
+      game_IsNSFW: false,
+      game_userID: null,
+    };
+    $scope.myWelcome.push($scope.inserted);
+  };
+  $scope.removeGame = function (id) {
+    $http.delete('/delgame',{data: {id:id}, headers: {'Content-Type': 'application/json;charset=utf-8'}}).then(function (res) {
+      console.log(res);
+    })
+    $scope.load();
+  }
+$scope.load();
 
 })
 function nav() {
