@@ -61,14 +61,6 @@ describe('Game test',function () {
       }, 50);
     })
 
-    it('Testing unique DB values',function (done) {
-      this.timeout(3000);
-      game.saveGame(new mongoose.Types.ObjectId,function (err) {
-        expect(err).to.not.be.null;
-        done();
-      })
-    })
-
     it('Deleting game in DB',function (done) {
       this.timeout(500);
       game.delGame(function (err) {

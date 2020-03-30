@@ -7,8 +7,10 @@ app.config(['$routeProvider', function($routeProvider) {
     controller: "gameControl"
   }).when("/userdetails", {
     templateUrl : "/Template/curruser.template.html",
-    controller: "userControl",
-    base:'#!'
+    controller: "userControl"
+  }).when('/bookmarks',{
+    templateUrl:"/Template/bookmarks.template.html",
+    controller:"bookmarkControl"
   })
 
     }]);
@@ -95,7 +97,6 @@ app.controller('userLoad',function ($scope,$http) {
     })
   }
 })
-
 app.controller('userControl', function($scope, $http) {
 
   $scope.load = function () {
@@ -139,7 +140,27 @@ app.controller('userControl', function($scope, $http) {
   }
   $scope.load();
 });
-
+app.controller('bookmarkControl',function ($scope,$http) {
+  $scope.load = function () {
+    $http.get('/user/bookmarks').then(function (res) {
+      $scope.bookmarks = res.data;
+    })
+  }
+  $scope.load();
+  $scope.saveTag = function (id,tag) {
+    $scope.data = {gameID:id,tagName:$scope.tag.name};
+    $http.post('/user/bookmarks/tag',$scope.data).then(function (res) {
+      console.log(res);
+      $scope.load();
+    })
+  }
+  $scope.delTag = function (id,tag) {
+    $http.delete('/user/bookmarks/tag',{data: {gameID:id,tagName:tag}, headers: {'Content-Type': 'application/json;charset=utf-8'}}).then(function (res) {
+      console.log(res);
+      $scope.load();
+    })
+  }
+})
 //Navbar functions (will be moved to own file)
 function nav() {
   if ($('#mySidebar').width() != 250) {

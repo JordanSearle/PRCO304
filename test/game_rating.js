@@ -7,6 +7,27 @@ var db = require('../db');
 describe('Game rating tests',function () {
   gm = new classes.game();
   game = schemas.Game;
+  before(function () {
+    var gm = new schemas.Game({
+      _id:mongoose.Types.ObjectId('5e7ceb51e920465eec76cdc2'),
+      game_Name:'rating test',
+      game_Summery:'rating test',
+      game_Rules:'rating test',
+      game_Player_Count:'1-2',
+      game_Equipment:['test1','test3'],
+      game_IsNSFW:false,
+      userID:mongoose.Types.ObjectId('5e4bdab0e623ca4e5ca53945')
+    })
+    gm.save(function (err) {
+      if(err)console.log(err);
+    })
+  })
+  after(function () {
+      var gm = schemas.Game
+      gm.deleteMany({'game_Name':'rating test'}).exec(function (err,result) {
+        if(err)console.log(result);
+      })
+  })
   beforeEach(function () {
     gm.game_Name = 'rating test';
     gm.game_Summery = 'rating test';

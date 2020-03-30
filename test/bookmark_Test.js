@@ -63,8 +63,8 @@ describe('CRUD Bookmark server test',function () {
     .post('/login')
     .type('form')
     .send({
-      'username':'JTest',
-      'password':'12312jhsdf'
+      'username':'UserOne',
+      'password':'password'
     })
     .then(function (res) {
     agent.post('/game/bookmark')
@@ -84,8 +84,8 @@ describe('CRUD Bookmark server test',function () {
     .post('/login')
     .type('form')
     .send({
-      'username':'JTest',
-      'password':'12312jhsdf'
+      'username':'UserOne',
+      'password':'password'
     })
     .then(function (res) {
     agent.get('/game/bookmark/5e4bdab0e623ca4e5ca53999')
@@ -101,8 +101,8 @@ describe('CRUD Bookmark server test',function () {
     .post('/login')
     .type('form')
     .send({
-      'username':'JTest',
-      'password':'12312jhsdf'
+      'username':'UserOne',
+      'password':'password'
     })
     .then(function (res) {
     agent.delete('/game/bookmark')

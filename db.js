@@ -96,7 +96,7 @@ module.exports = {
   },
   listBookmarks: function (id,callback) {
     var bm = schemas.Bookmark;
-    bm.find({userID:id}).populate('gameID').exec(function (err,res) {
+    bm.find({userID:id}).populate('gameID','game_Name game_Summery').select('-userID').exec(function (err,res) {
       if(err)callback(err);
       callback(res);
     })

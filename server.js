@@ -8,6 +8,9 @@ var verify = require('./verification');
 var classes = require('./classes');
 var session = require('express-session')
 var expressWs = require('express-ws')(app);
+
+const schemas = require('./schemas.js');
+
 //Express Setup
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
@@ -253,6 +256,24 @@ var server = app.listen(9000, function() {
       db.listBookmarks(req.session.user,function (result) {
         res.send(result);
       })
+    })
+    app.post('/user/bookmarks/tag',function (req,res) {
+      var bm = new classes.bookmark();
+      bm.gameID = req.body.gameID;
+      bm.userID = req.session.user
+      bm.addTag(req.body.tagName,function (err) {
+        if(err)console.log(err);
+      })
+      res.send('ok');
+    })
+    app.delete('/user/bookmarks/tag',function (req,res) {
+      var bm = new classes.bookmark();
+      bm.gameID = req.body.gameID;
+      bm.userID = req.session.user;
+      bm.delTag(req.body.tagName,function (err) {
+        if(err)console.log(err);
+      })
+      res.send('ok');
     })
   //Admin functions
     app.post('/newgame',function (req,res) {
