@@ -2,7 +2,7 @@
   <div class="col-lg-4 border p-2 rounded m-1" ng-repeat="b in bookmarks">
     <div class="row">
       <div class="col-12">
-        {{b.gameID.game_Name}}
+        {{b.gameID.game_Name}}<a class="btn btn-danger btn-sm  rounded-circle text-light" ng-click="delBookmark(b.gameID._id)">X</a>
         <hr>
       </div>
     </div>

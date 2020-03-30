@@ -160,6 +160,12 @@ app.controller('bookmarkControl',function ($scope,$http) {
       $scope.load();
     })
   }
+  $scope.delBookmark = function (id) {
+    $http.delete('/game/bookmark',{data: {gameID:id}, headers: {'Content-Type': 'application/json;charset=utf-8'}}).then(function (res) {
+      console.log(res);
+      $scope.load();
+    })
+  }
 })
 //Navbar functions (will be moved to own file)
 function nav() {
