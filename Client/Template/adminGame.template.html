@@ -17,17 +17,17 @@
 
           <h1>Manage Games</h1>
 
-          <button type="button" class="btn btn-default" ng-click="addGame()">Add Game</button>
-          <table class="table table-bordered table-hover table-condensed">
+          <button type="button" class="btn btn-success" ng-click="addGame()">Add Game +</button>
+          <table class="table table-bordered table-hover table-condensed mt-1">
             <tr style="font-weight: bold">
               <td style="width:20%;">Name</td>
               <td style="width:25%;">Summary</td>
               <td style="width:25%;">Rules</td>
-              <td style="width:25%;">Player Count</td>
+              <td style="width:20%;">Player Count</td>
               <td style="width:5%;" data-toggle="tooltip" data-placement="top" title="Not Safe For Work (18+)?">NSFW</td>
-              <td style="width:20%;">Edit</td>
+              <td style="width:5%;">Edit</td>
             </tr>
-            <tr ng-repeat="game in myWelcome">
+            <tr ng-repeat="game in games">
               <td>
                 <!-- editable gamename (text with validation) -->
                 <span editable-text="game.game_Name" e-name="game_Name" e-form="rowform" >

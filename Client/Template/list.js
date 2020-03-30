@@ -161,7 +161,7 @@ app.controller('gameControl', function($scope, $http) {
   $scope.load = function () {
     $http.get("/readgames")
       .then(function(response) {
-      $scope.myWelcome = response.data;
+      $scope.games = response.data;
     });
   }
   $scope.addGame = function () {
@@ -202,7 +202,7 @@ app.controller('gameControl', function($scope, $http) {
       game_IsNSFW: false,
       game_userID: null,
     };
-    $scope.myWelcome.push($scope.inserted);
+    $scope.games.push($scope.inserted);
   };
   $scope.removeGame = function (id) {
     $http.delete('/delgame',{data: {id:id}, headers: {'Content-Type': 'application/json;charset=utf-8'}}).then(function (res) {
