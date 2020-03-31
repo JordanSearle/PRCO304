@@ -139,7 +139,7 @@ describe('TAG CRUDS',function () {
       expect(err).to.be.null;
     });
     setTimeout(function () {
-      bM.findOne().exec(function (err,res) {
+      bM.findOne({userID:bookmark.userID,gameID:bookmark.gameID}).exec(function (err,res) {
         expect(err).to.be.null;
         expect(res.tags.length).to.be.above(0);
         expect(res.tags[0].name).to.equal(tagname);
@@ -154,7 +154,7 @@ describe('TAG CRUDS',function () {
       expect(err).to.be.null;
     });
     setTimeout(function () {
-      bM.findOne().exec(function (err,res) {
+      bM.findOne({userID:bookmark.userID,gameID:bookmark.gameID}).exec(function (err,res) {
         expect(err).to.be.null;
         expect(res.tags.length).to.be.equal(0);
         done();

@@ -212,6 +212,16 @@ var server = app.listen(9000, function() {
 
       });
     })
+    app.ws('/game/like',function (ws,req) {
+          ws.on('message', function(msg) {
+            var t = JSON.parse(msg).gameID;
+            var gm = new classes.game();
+            gm.rate(t,req.session.user,function (err) {
+              if(err)console.log(err);
+            })
+            ws.send(JSON.stringify('done'));
+          });
+    })
     app.post('/game/bookmark',function (req,res) {
       verify(app,res,req.session.user,function (logged) {
         if (logged) {

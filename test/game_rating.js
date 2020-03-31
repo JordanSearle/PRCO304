@@ -16,6 +16,8 @@ describe('Game rating tests',function () {
       game_Player_Count:'1-2',
       game_Equipment:['test1','test3'],
       game_IsNSFW:false,
+      rating:[],
+      ratingCount:0,
       userID:mongoose.Types.ObjectId('5e4bdab0e623ca4e5ca53945')
     })
     gm.save(function (err) {
@@ -25,45 +27,35 @@ describe('Game rating tests',function () {
   after(function () {
       var gm = schemas.Game
       gm.deleteMany({'game_Name':'rating test'}).exec(function (err,result) {
-        if(err)console.log(result);
+        if(err)console.log(err);
       })
   })
-  beforeEach(function () {
-    gm.game_Name = 'rating test';
-    gm.game_Summery = 'rating test';
-    gm.game_Rules = 'rating test';
-    gm.game_Player_Count = '1-2';
-    gm.game_Equipment = ['test1','test3'];
-    gm.game_IsNSFW = false;
-    gm.game_UID = '5e7ceb51e920465eec76cdc2';
-  })
-  it('testing adding a rating to the game',function (done) {
-    gm.addRating(mongoose.Types.ObjectId('5e4bdab0e611ca4e5ca53945'),5,function (err) {
+  it('testing rating function',function (done) {
+    gm.rate('5e7ceb51e920465eec76cdc2','5e4bdab0e611ca4e5ca53945',function (err) {
+      //not going to be called unless there is an err
       expect(err).to.be.null;
     })
     setTimeout(function () {
       game.findOne({'game_Name':'rating test'}).exec(function (err,res) {
         expect(err).to.be.null;
+        expect(res.ratingCount).to.equal(1);
+        expect(res.rating[0].toString()).to.equal('5e4bdab0e611ca4e5ca53945');
+        done();
       })
-      done();
     }, 5);
   })
-  it('testing game rating calculation',function (done) {
-    gm.calculateRating()
-    setTimeout(function () {
-      done();
-    }, 10);
-  })
-  it('testing deleting a rating to the game',function (done) {
-    gm.delRating(mongoose.Types.ObjectId('5e4bdab0e611ca4e5ca53945'),5,function (res) {
+  it('Testing rating remove',function (done) {
+    gm.rate('5e7ceb51e920465eec76cdc2','5e4bdab0e611ca4e5ca53945',function (err) {
+      //not going to be called unless there is an err
       expect(err).to.be.null;
     })
     setTimeout(function () {
       game.findOne({'game_Name':'rating test'}).exec(function (err,res) {
         expect(err).to.be.null;
+        expect(res.ratingCount).to.equal(0);
         expect(res.rating.length).to.equal(0);
+        done();
       })
-      done();
-    }, 10);
+    }, 20);
   })
 })

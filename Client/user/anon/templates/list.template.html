@@ -20,10 +20,13 @@ I need to focus on the design of the cards though.</h2>
           <div class="card-footer">
             <div class="row">
               <div class="col">
-                <p class="font-weight-light">Added by:<i> {{myWelcome[k].userID.username}}</i></p>
+                <p class="font-weight-light">Added by: <u data-toggle="tooltip" data-placement="top" title="User has been Deleted" ng-if="myWelcome[k].userID.username == null">Deleted</u><i>{{myWelcome[k].userID.username}}</i></p>
               </div>
               <div class="col text-right">
-                Rating: <i>{{myWelcome[k].rating.length}}</i>
+                Likes: <i>{{myWelcome[k].ratingCount}}</i>
+              </div>
+              <div class="col text-right" ng-if="user.username!=null">
+                <button type="button" class="btn btn-primary" name="button" ng-click="like(myWelcome[k]._id)">LIKE</button>
               </div>
             </div>
           </div>
@@ -38,10 +41,13 @@ I need to focus on the design of the cards though.</h2>
           <div class="card-footer">
             <div class="row">
               <div class="col">
-                <p class="font-weight-light">Added by:<i> {{myWelcome[k+1].userID.username}}</i></p>
+                <p class="font-weight-light">Added by: <u data-toggle="tooltip" data-placement="top" title="User has been Deleted" ng-if="myWelcome[k+1].userID.username == null">Deleted</u><i>{{myWelcome[k+1].userID.username}}</i></p>
               </div>
               <div class="col text-right">
-                Rating: <i>{{myWelcome[k+1].rating.length}}</i>
+                Likes: <i>{{myWelcome[k+1].ratingCount}}</i>
+              </div>
+              <div class="col text-right" ng-if="user.username!=null">
+                <button type="button" class="btn btn-primary" name="button" ng-click="like(myWelcome[k+1]._id)">LIKE</button>
               </div>
             </div>
           </div>
@@ -56,10 +62,13 @@ I need to focus on the design of the cards though.</h2>
           <div class="card-footer">
             <div class="row">
               <div class="col">
-                <p class="font-weight-light">Added by:<i> {{myWelcome[k+2].userID.username}}</i></p>
+                <p class="font-weight-light">Added by:  <u data-toggle="tooltip" data-placement="top" title="User has been Deleted" ng-if="myWelcome[k+2].userID.username == null">Deleted</u><i>{{myWelcome[k+2].userID.username}}</i></p>
               </div>
               <div class="col text-right">
-                Rating: <i>{{myWelcome[k+2].rating.length}}</i>
+                Likes: <i>{{myWelcome[k+2].ratingCount}}</i>
+              </div>
+              <div class="col text-right" ng-if="user.username!=null">
+                <button type="button" class="btn btn-primary" name="button" ng-click="like(myWelcome[k+2]._id)">LIKE</button>
               </div>
             </div>
           </div>

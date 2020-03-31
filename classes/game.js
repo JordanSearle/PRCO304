@@ -41,7 +41,6 @@ module.exports = class game {
   delGame(callback){
     var uGame = schemas.Game;
     uGame.deleteOne({_id:this.game_UID}, function (err,result) {
-      console.log(result);
       if (err) callback(err);
     });
   }
@@ -61,37 +60,38 @@ module.exports = class game {
     })
   }
   //Rating function, not important right now.
-  addRating(userID,callback){
-    var game = this;
-    var uGame = schemas.Game;
-    uGame.findOne({'_id':this.game_UID},(err, result)=> {
+  rate(gameID,userID,callback){
+    var gm = schemas.Game;
+    gm.find({
+      _id:mongoose.Types.ObjectId(gameID),
+    },{
+      rating:{
+        "$elemMatch":{"$eq":mongoose.Types.ObjectId(userID)}
+      }
+    }).exec(function (err,res) {
       if(err)callback(err);
-      //Set game Variables
-      result.rating.push({u:userID});
-      result.save();
+      if(res[0].rating.length == 0){
+        gm.updateOne({
+          _id:mongoose.Types.ObjectId(gameID),
+           "rating": { "$ne": mongoose.Types.ObjectId(userID)}
+        },{
+          "$inc": { "ratingCount": 1 },
+          "$push":{"rating":  mongoose.Types.ObjectId(userID)}
+        }).exec(function (err) {
+          if(err)callback(err);
+        })
+      }
+      else(
+        gm.updateOne({
+          _id:mongoose.Types.ObjectId(gameID),
+           "rating": mongoose.Types.ObjectId(userID)
+        },{
+          "$inc": { "ratingCount": -1 },
+          "$pull":{"rating":  mongoose.Types.ObjectId(userID)}
+        }).exec(function (err,res) {
+          if(err)callback(err);
+        })
+      )
     })
-  }
-  calculateRating(){
-    this.game_Rating = 0;
-    var uGame = schemas.Game;
-        uGame.findOne({'_id':this.game_UID},(err, result) => {
-          //Set game Variables
-          if (result.rating.length > 0) {
-            this.game_Rating = result.rating.length;
-          }
-      })
-  }
-  delRating(userID,callback){
-    var uGame = schemas.Game;
-    uGame.findOne({'_id':this.game_UID},(err, result) => {
-      if(err)callback(err);
-      //Set game Variables
-      result.rating.pull({u:userID});
-      result.save();
-    }).then(()=> {
-      this.calculateRating(function (err) {
-        if(err)console.log(err);
-      })
-    })
-  }
+  }  
 }

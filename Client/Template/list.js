@@ -23,7 +23,10 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
   .when("/request", {
     templateUrl : "/Template/user.template.html",
     controller: "userControl"
-  })
+  }).
+    otherwise({
+      redirectTo: '/'
+    });
   $locationProvider.html5Mode({
                 enabled: false,
                 requireBase: false

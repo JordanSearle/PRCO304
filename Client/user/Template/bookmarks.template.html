@@ -1,35 +1,50 @@
 <div class="row" >
-  <div class="col-lg-4 border p-2 rounded m-1" ng-repeat="b in bookmarks">
-    <div class="row">
-      <div class="col-12">
-        {{b.gameID.game_Name}}<a class="btn btn-danger btn-sm  rounded-circle text-light" ng-click="delBookmark(b.gameID._id)">X</a>
-        <hr>
+  <div class="col-lg-3" ng-repeat="b in bookmarks">
+    <div class="mb-4 border p-2 rounded">
+      <div class="row">
+        <div class="col-12">
+          <div class="modal-header text-center mb-2">
+            <h5 class="modal-title" id="exampleModalLabel">{{b.gameID.game_Name}}</h5>
+            <button type="button" class="btn btn-outline-danger" ng-click="delBookmark(b.gameID._id)">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <p>EVENTS:</p>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-5 m-1" ng-repeat="t in b.tags">
-        <button type="button" class="btn btn-outline-primary btn-block" name="button"ng-if="t != null">{{t.name}} <a class="btn btn-danger btn-sm  rounded-circle text-light" ng-click="delTag(b.gameID._id,t.name)">X</a></button>
-      </div>
-      <div class="col" ng-if="b.tags.length == 0">
-        <p>NO EVENTS TO SHOW</p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col"  ng-show="addTag">
-        <form ng-submit="saveTag(b.gameID._id)">
-          <div class="input-group mt-3">
-          <input type="text" class="form-control" ng-model="$parent.tag.name" required>
+      <div class="row">
+        <div class="col-sm-auto m-1" ng-repeat="t in b.tags|unique: t">
+          <div class="input-group mb-3">
+             <label class="input-group-text" for="inputGroupSelect01">{{t.name}}</label>
             <div class="input-group-append">
-              <input type="submit" value="Save" class="btn btn-success">
+              <button class="btn btn-outline-danger" type="button" id="button-addon2"  ng-click="delTag(b.gameID._id,t.name)"><span aria-hidden="true">&times;</span></button>
             </div>
           </div>
-        </form>
+        </div>
+        <div class="col" ng-if="b.tags.length == 0">
+          <p>Click <u>ADD</u> to tag this game in an event</p>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col">
-        <hr>
-        <button type="button" class="btn btn-success" name="button" ng-click="addTag = !addTag">Add +</button>
+      <div class="row">
+        <div class="col"  ng-show="addTag">
+          <form ng-submit="saveTag(b.gameID._id)">
+            <div class="input-group mt-3">
+            <input list="{{b.gameID._id}}" ng-model="$parent.tag.name" placeholder="Select or Add new"/>
+            <datalist name="{{b.gameID._id}}" id="{{b.gameID._id}}">
+                <option ng-repeat="x1 in dropdowns|unique: x1" value="{{x1}}">
+            </datalist>
+              <div class="input-group-append">
+                <input type="submit" value="Save" class="btn btn-success">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <hr>
+          <button type="button" class="btn btn-success" name="button" ng-click="addTag = !addTag">Add +</button>
+        </div>
       </div>
     </div>
   </div>

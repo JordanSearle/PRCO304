@@ -1,5 +1,5 @@
 
-var app = angular.module("user", ["ngRoute"]);
+var app = angular.module("user", ["ngRoute",'ui.filters']);
 app.config(['$routeProvider', function($routeProvider) {
   $routeProvider
   .when("/", {
@@ -15,10 +15,13 @@ app.config(['$routeProvider', function($routeProvider) {
 
     }]);
 app.controller('gameControl', function($scope, $http) {
-  $http.get("/readgames")
-  .then(function(response) {
-    $scope.myWelcome = response.data;
-  });
+  $scope.load = function () {
+    $http.get("/readgames")
+    .then(function(response) {
+      $scope.myWelcome = response.data;
+    });
+  }
+  $scope.load();
   $http.get("/user")
   .then(function(response) {
     $scope.user = response.data;
@@ -79,7 +82,21 @@ app.controller('gameControl', function($scope, $http) {
     $http.post('/game/bookmark',JSON.stringify({'gameID':id}))
     .then(function (res) {
       console.log(res);
+      $('body').removeClass('modal-open');
+      $('.modal-backdrop').remove();
     })
+  }
+  $scope.like = function (id) {
+    var ws = new WebSocket("ws://localhost:9000/game/like");
+    ws.onopen = function () {
+      ws.send(JSON.stringify({
+        'gameID': id
+      }));
+    }
+    ws.onmessage = function (event) {
+      console.log(event);
+      $scope.load();
+    }
   }
 });
 app.controller('userLoad',function ($scope,$http) {
@@ -131,19 +148,18 @@ app.controller('userControl', function($scope, $http) {
       $scope.load();
     })
   }
-  $scope.delBookmark = function (id) {
-    $http.delete('/game/bookmark',{data: {gameID:id}, headers: {'Content-Type': 'application/json;charset=utf-8'}})
-    .then(function (res) {
-      console.log(res);
-      $scope.load();
-    })
-  }
   $scope.load();
 });
 app.controller('bookmarkControl',function ($scope,$http) {
   $scope.load = function () {
     $http.get('/user/bookmarks').then(function (res) {
       $scope.bookmarks = res.data;
+      $scope.dropdowns = [];
+      $scope.bookmarks.forEach((item, i) => {
+          item.tags.forEach((items, i) => {
+            $scope.dropdowns.push(items.name);
+          });
+      });
     })
   }
   $scope.load();
