@@ -37,13 +37,12 @@ describe('Game rating tests',function () {
     })
     setTimeout(function () {
       game.findOne({'game_Name':'rating test'}).exec(function (err,res) {
-        console.log(res);
         expect(err).to.be.null;
         expect(res.ratingCount).to.equal(1);
         expect(res.rating[0].toString()).to.equal('5e4bdab0e611ca4e5ca53945');
         done();
       })
-    }, 5);
+    }, 15);
   })
   it('Testing rating remove',function (done) {
     gm.rate('5e7ceb51e920465eec76cdc2','5e4bdab0e611ca4e5ca53945',function (err) {

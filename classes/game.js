@@ -71,17 +71,18 @@ module.exports = class game {
     }).exec(function (err,res) {
       if(err)callback(err);
       if(res[0].rating.length == 0){
-        gm.updateOne({
+        var game = schemas.Game;
+        game.updateOne({
           _id:mongoose.Types.ObjectId(gameID),
            "rating": { "$ne": mongoose.Types.ObjectId(userID)}
         },{
           "$inc": { "ratingCount": 1 },
           "$push":{"rating":  mongoose.Types.ObjectId(userID)}
-        }).exec(function (err) {
+        }).exec(function (err,res) {
           if(err)callback(err);
         })
       }
-      else(
+      else{
         gm.updateOne({
           _id:mongoose.Types.ObjectId(gameID),
            "rating": mongoose.Types.ObjectId(userID)
@@ -91,7 +92,7 @@ module.exports = class game {
         }).exec(function (err,res) {
           if(err)callback(err);
         })
-      )
+      }
     })
   }
   addPending(id,callback){
@@ -137,7 +138,6 @@ module.exports = class game {
     pending.findOne({'game_Name':this.game_Name},(err, result) =>{
       if(err)callback(err);
       //Set game Variables
-      console.log(result);
       var game = new schemas.Game({
           _id: result._id,
         userID:  result.userID,

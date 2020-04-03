@@ -37,11 +37,25 @@ describe('Testing, user pending functions',function () {
   game.game_Player_Count= 'Pending game name';
   game.game_Equipment= ['Pending game name'];
   game.game_IsNSFW=false;
+
   it('User saving the game',function (done) {
     game.addPending(new mongoose.Types.ObjectId,function (err) {
       if(err)console.log(err);
     })
-    done();
+
+    setTimeout(function () {
+      var pn = schemas.Pending;
+      pn.findOne({game_Name: 'Pending game name'}).exec(function (err,res) {
+        expect(err).to.be.null;
+        expect(res).to.not.be.null;
+        expect(res).to.have.property('game_Name','Pending game name');
+        expect(res).to.have.property('game_Summery','Pending game name');
+        expect(res).to.have.property('game_Rules','Pending game name');
+        expect(res).to.have.property('game_Player_Count','Pending game name');
+        expect(res).to.have.property('game_IsNSFW',false);
+        done();
+      })
+    }, 15);
   })
   it('User suggesting a game edit',function (done) {
     game.editPending(new mongoose.Types.ObjectId,function (err) {
@@ -115,8 +129,19 @@ describe('Testing, admin approving a pendin request functions',function () {
 
   it('Approving a pending request',function (done) {
     game.approvePending(function (res) {
-      console.log(res);
     });
-    done();
+    setTimeout(function () {
+      var pend = schemas.Game;
+      pend.findOne({game_Name: 'Pending game name'}).exec(function (err,res) {
+        expect(err).to.be.null;
+        expect(res).to.not.be.null;
+        expect(res).to.have.property('game_Name','Pending game name');
+        expect(res).to.have.property('game_Summery','Pending game name');
+        expect(res).to.have.property('game_Rules','Pending game name');
+        expect(res).to.have.property('game_Player_Count','Pending game name');
+        expect(res).to.have.property('game_IsNSFW',false);
+        done();
+      })
+    }, 15);
   })
 })
