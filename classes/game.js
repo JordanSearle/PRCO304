@@ -93,5 +93,64 @@ module.exports = class game {
         })
       )
     })
-  }  
+  }
+  addPending(id,callback){
+    const game = new schemas.Pending({
+      //UserID needs to be set from the logged on user.
+      _id: new mongoose.Types.ObjectId,
+      userID:  mongoose.Types.ObjectId(id),
+      game_Name: this.game_Name,
+      game_Summery:this.game_Summery,
+      game_Rules: this.game_Rules,
+      game_Player_Count: this.game_Player_Count,
+      game_Equipment: this.game_Equipment,
+      game_IsNSFW:this.game_IsNSFW,
+      pending:true
+   })
+   this.game_UID = game._id;
+   game.save(function (err) {
+     if(err)callback(err);
+   });
+  }
+  editPending(id,callback){
+    var uGame = schemas.Game;
+    uGame.findOne({'game_Name':this.game_Name},(err, result) =>{
+      if(err)callback(err);
+      //Set game Variables
+      const game = new schemas.Pending({
+        _id: result._id,
+        userID:  result.userID,
+        game_Name: result.game_Name,
+        game_Summery:result.game_Summery,
+        game_Rules: result.game_Rules,
+        game_Player_Count: result.game_Player_Count,
+        game_Equipment: result.game_Equipment,
+        game_IsNSFW:result.game_IsNSFW
+      })
+       game.save(function (err) {
+         if(err)callback(err);
+       });
+    })
+  }
+  approvePending(callback){
+    var pending = schemas.Pending;
+    pending.findOne({'game_Name':this.game_Name},(err, result) =>{
+      if(err)callback(err);
+      //Set game Variables
+      console.log(result);
+      var game = new schemas.Game({
+          _id: result._id,
+        userID:  result.userID,
+        game_Name: result.game_Name,
+        game_Summery:result.game_Summery,
+        game_Rules: result.game_Rules,
+        game_Player_Count: result.game_Player_Count,
+        game_Equipment: result.game_Equipment,
+        game_IsNSFW:result.game_IsNSFW
+      })
+      game.save(function (err) {
+        if(err)callback(err);
+      })
+    })
+  }
 }
