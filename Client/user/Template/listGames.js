@@ -201,6 +201,7 @@ app.controller('requestControl',function ($scope,$http) {
     })
   }
   $scope.load();
+
 })
 //Navbar functions (will be moved to own file)
 function nav() {

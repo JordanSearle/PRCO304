@@ -14,19 +14,14 @@
             </div>
             <input type="text" class="form-control" ng-model="$parent.nGame.game_Name" required>
             </div>
-            <p>Please add a short summary that would describe the game </p>
-            <div class="input-group mb-1">
-            <div class="input-group-prepend ">
-              <span class="input-group-text" id="">Summary:</span>
+            <div class="form-group mb-1">
+              <label for="exampleFormControlTextarea1">Please add a short summary that would describe the game </label>
+              <textarea class="form-control" id="exampleFormControlTextarea1" ng-model="$parent.nGame.game_Summery" rows="3"></textarea>
             </div>
-            <input type="text" class="form-control" ng-model="$parent.nGame.game_Summery" required>
+            <div class="form-group mb-1">
+              <label for="gameRules">Game Rules: <i>Add each rule to a new line, don't number them</i></label>
+              <textarea class="form-control" id="gameRules" rows="3" ng-list="&#10;" ng-change="change()" ng-trim="false" ng-model="$parent.nGame.game_Rules"></textarea>
             </div>
-            <div class="input-group mb-1">
-            <div class="input-group-prepend ">
-              <span class="input-group-text" id="">Rules:</span>
-            </div>
-            <input type="password" class="form-control" ng-model="$parent.nGame.game_Rules" required>
-          </div>
           <div class="input-group mb-1">
             <div class="input-group-prepend">
               <label class="input-group-text" for="inputGroupSelect01">Is this game 18+?</label>
@@ -48,6 +43,18 @@
             <input class="btn btn-success btn-block " type="submit" value="Submit Game!">
             </div>
         </form>
+      </div>
+      <div class="col-6">
+        <h2>New game template:</h2>
+        <h5>Name: </h5>
+        <code>{{$parent.nGame.game_Name}}</code>
+        <h5>Summary: </h5><code>{{$parent.nGame.game_Summery}}</code>
+        <h5>Rules: </h5>
+        <code><ol>
+          <li ng-repeat="item in $parent.nGame.game_Rules track by $index">{{item}}</li>
+        </ol></code>
+        <h5>18+: </h5><code>{{$parent.nGame.game_IsNSFW}}</code>
+        <h5>Player Count: </h5><code>{{$parent.nGame.game_Player_Count}}</code>
       </div>
     </div>
 
