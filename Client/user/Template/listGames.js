@@ -187,14 +187,21 @@ app.controller('bookmarkControl',function ($scope,$http) {
   }
 })
 app.controller('requestControl',function ($scope,$http) {
+  var ruleMDE = new SimpleMDE({ element: document.getElementById("ruleInput"),toolbar: ["ordered-list", "|", "preview"],forceSync:true});
+  var summaryMDE = new SimpleMDE({ element: document.getElementById("summaryInput"),forceSync:true  });
+
   $scope.addRequest = function () {
     $scope.nGame.game_Equipment = ['item'];
+    $scope.nGame.game_Rules = ruleMDE.value();
+    $scope.nGame.game_Summery = summaryMDE.value();
+    console.log($scope.nGame);
     $http.post('/pending',$scope.nGame).then(function (res) {
       console.log(res);
     })
     $scope.load();
   }
   $scope.load = function () {
+
     $http.get('/user/pending').then(function (res) {
       $scope.pList = res.data;
       console.log(res);

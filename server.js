@@ -353,6 +353,7 @@ var server = app.listen(9000, function() {
         if (logged) {
           //Create a new pending request
           var game = new classes.game();
+          console.log(req.body);
           game.game_Name = req.body.game_Name;
           game.game_Rules = req.body.game_Rules;
           game.game_Summery = req.body.game_Summery;
