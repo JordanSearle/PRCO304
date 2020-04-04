@@ -188,7 +188,7 @@ app.controller('bookmarkControl',function ($scope,$http) {
 })
 app.controller('requestControl',function ($scope,$http) {
   var ruleMDE = new SimpleMDE({ element: document.getElementById("ruleInput"),toolbar: ["ordered-list", "|", "preview"],forceSync:true});
-  var summaryMDE = new SimpleMDE({ element: document.getElementById("summaryInput"),forceSync:true  });
+  var summaryMDE = new SimpleMDE({ element: document.getElementById("summaryInput"),toolbar: ["bold", "italic", "heading", "|", "unordered-list","ordered-list","|","preview"],forceSync:true  });
 
   $scope.addRequest = function () {
     $scope.nGame.game_Equipment = ['item'];
@@ -199,6 +199,12 @@ app.controller('requestControl',function ($scope,$http) {
       console.log(res);
     })
     $scope.load();
+  }
+  $scope.change = function () {
+    $scope.nGame.game_Rules = ruleMDE.value();
+    $scope.nGame.game_Summery = summaryMDE.value();
+    console.log(  $scope.nGame);
+    $scope.$apply();
   }
   $scope.load = function () {
 

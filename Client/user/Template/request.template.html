@@ -16,7 +16,7 @@
             </div>
             <div class="form-group mb-1">
               <label for="exampleFormControlTextarea1">Please add a short summary that would describe the game </label>
-              <textarea class="form-control" id="summaryInput" ng-model="$parent.nGame.game_Summery" ></textarea>
+              <textarea class="form-control" id="summaryInput" ng-model="$parent.nGame.game_Summery" ng-change="change()" ></textarea>
             </div>
             <div class="form-group mb-1">
               <label for="gameRules">Game Rules: <i>Add each rule to a new line, don't number them</i></label>
