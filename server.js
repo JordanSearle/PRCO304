@@ -414,15 +414,29 @@ var server = app.listen(9000, function() {
         }
       })
     })
-    app.put('/pending/:id',function (req,res) {
+    app.post('/pending/save',function (req,res) {
       //Approve a pending request
       var game = new classes.game();
-      game.approvePending(req.params.id,function (err,res) {
-        if(err){
+      game.game_Name = req.body.game_Name;
+      game.approvePending(function (err,result) {
+        if(err!=null){
           res.status(400).send(err);
         }
         else{
           res.sendStatus(200);
+        }
+      })
+    })
+    app.put('/pending/:name',function (req,res) {
+      //edit a pending request
+      var game = new classes.game();
+      game.game_Name = req.params.game_Name;
+      game.approvePending(function (err,result) {
+        if(err){
+          res.status(400).send(err);
+        }
+        else{
+          res.sendstatus(200);
         }
       })
     })

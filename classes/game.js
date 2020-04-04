@@ -136,21 +136,28 @@ module.exports = class game {
   approvePending(callback){
     var pending = schemas.Pending;
     pending.findOne({'game_Name':this.game_Name},(err, result) =>{
+      console.log(this.game_Name);
       //Set game Variables
-      var game = new schemas.Game({
-          _id: result._id,
-        userID:  result.userID,
-        game_Name: result.game_Name,
-        game_Summery:result.game_Summery,
-        game_Rules: result.game_Rules,
-        game_Player_Count: result.game_Player_Count,
-        game_Equipment: result.game_Equipment,
-        game_IsNSFW:result.game_IsNSFW
-      })
-      game.save(function (err,res) {
-        result.remove();
-        callback(err,res);
-      })
+      console.log(result);
+      if (err == null&&result !=null) {
+        var game = new schemas.Game({
+            _id: result._id,
+          userID:  result.userID,
+          game_Name: result.game_Name,
+          game_Summery:result.game_Summery,
+          game_Rules: result.game_Rules,
+          game_Player_Count: result.game_Player_Count,
+          game_Equipment: result.game_Equipment,
+          game_IsNSFW:result.game_IsNSFW
+        })
+        game.save( (err,res) => {
+          result.remove();
+          callback(err,res);
+        })
+      }
+      else{
+        callback(err);
+      }
     })
   }
   denyPending(id,callback){

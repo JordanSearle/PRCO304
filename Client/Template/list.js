@@ -21,8 +21,8 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     controller: "gameControl"
   })
   .when("/request", {
-    templateUrl : "/Template/user.template.html",
-    controller: "userControl"
+    templateUrl : "/Template/request.template.html",
+    controller: "requestControl"
   }).
     otherwise({
       redirectTo: '/'
@@ -215,6 +215,41 @@ app.controller('gameControl', function($scope, $http) {
   }
 $scope.load();
 
+})
+app.controller('requestControl',function ($scope,$http) {
+  $scope.load = function () {
+    $http.get("/pending")
+      .then(function(response) {
+      $scope.games = response.data;
+    });
+  }
+  $scope.approveGame = function () {
+
+  }
+  $scope.editGame = function ($data,game) {
+    console.log($data._id);
+      $http.post('/pending/save',$data).then(function (res) {
+        console.log(res);
+        $scope.load();
+      })
+  }
+  $scope.addGame = function() {
+    $scope.inserted = {
+      game_Name: '',
+      game_Summery: '',
+      game_Rules: '',
+      game_IsNSFW: false,
+      game_userID: null,
+    };
+    $scope.games.push($scope.inserted);
+  };
+  $scope.removeGame = function (id) {
+    $http.delete('/delgame',{data: {id:id}, headers: {'Content-Type': 'application/json;charset=utf-8'}}).then(function (res) {
+      console.log(res);
+    })
+    $scope.load();
+  }
+$scope.load();
 })
 function nav() {
 }
