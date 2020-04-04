@@ -33,14 +33,12 @@ var rating = new Schema({
 var pending = new Schema({
   _id: mongoose.Schema.Types.ObjectId,
   userID:{type: Schema.Types.ObjectId, ref: 'User', required: true},
-  game_Name:{type: String, required: true, unique: true},
+  game_Name:{type: String, required: true, },
   game_Summery:{type: String, required: true},
   game_Rules:{type: String, required: true},
   game_Player_Count:{type: String, required: true},
   game_Equipment:{type:[]},
-  game_IsNSFW:{type:Boolean, required:true},
-  ratingCount:{type:Number,default:0},
-  rating:[]
+  game_IsNSFW:{type:Boolean, required:true}
 });
 module.exports.User = mongoose.model('User', user);
 module.exports.Bookmark = mongoose.model('Bookmark', bookmark);

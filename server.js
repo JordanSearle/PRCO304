@@ -23,7 +23,7 @@ app.use(session({
     saveUninitialized: false,
     sameSite:true,
     cookie: {
-        expires: 600000
+        expires: 6000000
     }
 }));
 //Server Start...
@@ -346,30 +346,94 @@ var server = app.listen(9000, function() {
       })
       res.sendStatus(201);
     })
+
     app.post('/pending',function (req,res) {
-      //Create a new pending request
-      var game = new classes.game();
-      game.game_Name = req.body.game_Name;
-      game.game_Rules = req.body.game_Rules;
-      game.game_Summery = req.body.game_Summery;
-      game.game_IsNSFW = req.body.game_IsNSFW;
-      game.game_Equipment = req.body.game_Equipment;
-      game.game_Player_Count = req.body.game_Player_Count;
-      game.addPending(req.body._id,function (err) {
-        if(err)console.log(err);
-      })
-      res.sendStatus(201);
+      //check if logged on user
+      verify(app,res,req.session.user,function (logged) {
+        if (logged) {
+          //Create a new pending request
+          var game = new classes.game();
+          game.game_Name = req.body.game_Name;
+          game.game_Rules = req.body.game_Rules;
+          game.game_Summery = req.body.game_Summery;
+          game.game_IsNSFW = req.body.game_IsNSFW;
+          game.game_Equipment = req.body.game_Equipment;
+          game.game_Player_Count = req.body.game_Player_Count;
+          game.addPending(req.session.user,function (err) {
+            if(err)console.log(err);
+          })
+          res.sendStatus(201);
+        }
+      });
+
+    })
+    app.put('/pending',function (req,res) {
+      //Make a pending request for game edit (may be moved to /game functions)
     })
     app.delete('/pending/:id',function (req,res) {
+      //Check if admin
+
       //Deny a pending request
       var game = new classes.game();
+      //Check if correct ID
+      game.denyPending(req.params.id,function (err,result) {
+        if(err){
+          console.log(err);
+          res.status(400).send(err);
+        }
+        else{
+          res.sendStatus(200);
+        }
+      })
     })
     app.get('/pending',function (req,res) {
+      //Check if admin
+
       //get all pending request
+      var game = schemas.Pending;
+      game.find().exec(function (err,result) {
+        if(err){
+          console.log(err);
+          res.status(400).send(err);
+        }
+        else{
+          res.status(200).send(result);
+        }
+      })
     })
     app.get('/pending/:id',function (req,res) {
       //Get specific pending request
+      var game = schemas.Pending;
+      game.findOne({_id:req.params.id}).exec(function (err,result) {
+        if(err){
+          res.status(400).send(err);
+        }
+        else{
+          res.status(200).send(result);
+        }
+      })
     })
     app.put('/pending/:id',function (req,res) {
       //Approve a pending request
+      var game = new classes.game();
+      game.approvePending(req.params.id,function (err,res) {
+        if(err){
+          res.status(400).send(err);
+        }
+        else{
+          res.sendStatus(200);
+        }
+      })
+    })
+    app.get('/user/pending',function (req,res) {
+      var game = schemas.Pending;
+      game.find({userID:req.session.user}).exec(function (err,result) {
+        if(err){
+          console.log(err);
+          res.status(400).send(err);
+        }
+        else{
+          res.status(200).send(result);
+        }
+      })
     })

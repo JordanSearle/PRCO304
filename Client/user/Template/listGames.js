@@ -11,6 +11,9 @@ app.config(['$routeProvider', function($routeProvider) {
   }).when('/bookmarks',{
     templateUrl:"/Template/bookmarks.template.html",
     controller:"bookmarkControl"
+  }).when('/request',{
+    templateUrl:"/Template/request.template.html",
+    controller:"requestControl"
   })
 
     }]);
@@ -182,6 +185,22 @@ app.controller('bookmarkControl',function ($scope,$http) {
       $scope.load();
     })
   }
+})
+app.controller('requestControl',function ($scope,$http) {
+  $scope.addRequest = function () {
+    $scope.nGame.game_Equipment = ['item'];
+    $http.post('/pending',$scope.nGame).then(function (res) {
+      console.log(res);
+    })
+    $scope.load();
+  }
+  $scope.load = function () {
+    $http.get('/user/pending').then(function (res) {
+      $scope.pList = res.data;
+      console.log(res);
+    })
+  }
+  $scope.load();
 })
 //Navbar functions (will be moved to own file)
 function nav() {

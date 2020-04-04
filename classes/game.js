@@ -153,9 +153,9 @@ module.exports = class game {
       })
     })
   }
-  denyPending(callback){
+  denyPending(id,callback){
       var pending = schemas.Pending;
-      pending.deleteOne({'game_Name':this.game_Name},(err,result)=>{
+      pending.deleteOne({'_id':id},(err,result)=>{
         callback(err,result)
       })
   }
