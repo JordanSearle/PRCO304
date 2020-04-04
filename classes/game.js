@@ -136,7 +136,6 @@ module.exports = class game {
   approvePending(callback){
     var pending = schemas.Pending;
     pending.findOne({'game_Name':this.game_Name},(err, result) =>{
-      if(err)callback(err);
       //Set game Variables
       var game = new schemas.Game({
           _id: result._id,
@@ -148,9 +147,16 @@ module.exports = class game {
         game_Equipment: result.game_Equipment,
         game_IsNSFW:result.game_IsNSFW
       })
-      game.save(function (err) {
-        if(err)callback(err);
+      game.save(function (err,res) {
+        result.remove();
+        callback(err,res);
       })
     })
+  }
+  denyPending(callback){
+      var pending = schemas.Pending;
+      pending.deleteOne({'game_Name':this.game_Name},(err,result)=>{
+        callback(err,result)
+      })
   }
 }

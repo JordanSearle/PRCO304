@@ -346,3 +346,30 @@ var server = app.listen(9000, function() {
       })
       res.sendStatus(201);
     })
+    app.post('/pending',function (req,res) {
+      //Create a new pending request
+      var game = new classes.game();
+      game.game_Name = req.body.game_Name;
+      game.game_Rules = req.body.game_Rules;
+      game.game_Summery = req.body.game_Summery;
+      game.game_IsNSFW = req.body.game_IsNSFW;
+      game.game_Equipment = req.body.game_Equipment;
+      game.game_Player_Count = req.body.game_Player_Count;
+      game.addPending(req.body._id,function (err) {
+        if(err)console.log(err);
+      })
+      res.sendStatus(201);
+    })
+    app.delete('/pending/:id',function (req,res) {
+      //Deny a pending request
+      var game = new classes.game();
+    })
+    app.get('/pending',function (req,res) {
+      //get all pending request
+    })
+    app.get('/pending/:id',function (req,res) {
+      //Get specific pending request
+    })
+    app.put('/pending/:id',function (req,res) {
+      //Approve a pending request
+    })

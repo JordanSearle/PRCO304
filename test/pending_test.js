@@ -76,7 +76,7 @@ describe('Testing, user pending functions',function () {
     }, 15);
   })
 })
-describe('Testing, admin approving a pendin request functions',function () {
+describe('Testing, admin approving or denying a pending request functions',function () {
   afterEach(function (done) {
     var game = schemas.Pending;
     game.deleteMany({game_Name:'Pending game name'}, function (err,result) {
@@ -93,13 +93,6 @@ describe('Testing, admin approving a pendin request functions',function () {
     });
   })
   beforeEach(function (done) {
-    var uGame = schemas.Game;
-    uGame.deleteMany({game_Name:'Pending game name'}, function (err,result) {
-      if (err) callback(err);
-      done();
-    });
-  })
-  before(function (done) {
     const games = new schemas.Pending({
       //UserID needs to be set from the logged on user.
       _id: new mongoose.Types.ObjectId,
@@ -113,9 +106,14 @@ describe('Testing, admin approving a pendin request functions',function () {
    })
    games.save(function (err) {
      if(err)console.log(err);
-     done();
    });
+    var uGame = schemas.Game;
+    uGame.deleteMany({game_Name:'Pending game name'}, function (err,result) {
+      if (err) callback(err);
+      done();
+    });
   })
+
 
   var game = new classes.game();
   game.game_UID= new mongoose.Types.ObjectId;
@@ -128,9 +126,8 @@ describe('Testing, admin approving a pendin request functions',function () {
   game.game_IsNSFW=false;
 
   it('Approving a pending request',function (done) {
-    game.approvePending(function (res) {
-    });
-    setTimeout(function () {
+    game.approvePending(function (err,res) {
+      expect(err).to.be.null;
       var pend = schemas.Game;
       pend.findOne({game_Name: 'Pending game name'}).exec(function (err,res) {
         expect(err).to.be.null;
@@ -140,8 +137,24 @@ describe('Testing, admin approving a pendin request functions',function () {
         expect(res).to.have.property('game_Rules','Pending game name');
         expect(res).to.have.property('game_Player_Count','Pending game name');
         expect(res).to.have.property('game_IsNSFW',false);
+      })
+      var games = schemas.Pending;
+      games.findOne({game_Name: 'Pending game name'}).exec(function (err,res) {
+        expect(err).to.be.null;
+        expect(res).to.be.null;
         done();
       })
-    }, 15);
+    });
+  })
+  it('deny a pending request',function (done) {
+    game.denyPending(function (err,result) {
+      expect(err).to.be.null;
+      var games = schemas.Pending;
+      games.findOne({game_Name: 'Pending game name'}).exec(function (err,res) {
+        expect(err).to.be.null;
+        expect(res).to.be.null;
+        done();
+      })
+    })
   })
 })
