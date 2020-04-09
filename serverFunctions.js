@@ -1,4 +1,7 @@
 var classes = require('./classes');
+const mongoose = require('mongoose');
+var schemas = require("./schemas");
+var objectId = require('mongoose').Types.ObjectId;
 // Export the functions for each server operation, e.g Post game and get game
 module.exports = {
 //Unregistered User functions
@@ -26,6 +29,25 @@ module.exports = {
   },
   delUser: function (req,res) {
     //This is the app.delete /user and /users/userID functions, both are being moved into the same function using abstract factory pattern.
+    var fac = new factory();
+    fac.create(req.session.user,function (result) {
+      if (result == false) {
+        //Redirect
+        res.redirect('/');
+      }
+      else{
+        result.setUserID(req.params.userID);
+        result.delUser(function (err,res) {
+          if(err){
+            res.status(500).send(err);
+          }
+          else{
+            res.redirect('/');
+          }
+        })
+      }
+    });
+
   },
   editUser: function (req,res) {
     //This is the app.put /user and /users/userID functions, both are being moved into the same function using abstract factory pattern.
@@ -76,19 +98,52 @@ module.exports = {
     //This is the app.post /pending/save function
   }
 }
- function controllerFactory() {
-   this.create = async function (id) {
-     var promise = new Promise((resolve,reject) => {
-         var user;
-         //check if ID exist
-         if (typeof id === 'undefined') { id = undefined; }
-         else {
-         //Check if admin: true = admin, false = non but logged in, undefined = not logged on.
-           var model = id;
-         }
 
+   class controllerFactory{
+     userID;
+     constructor(id){
+       this.userID = id;
+     }
+     async temp (id) {
+       var levelPromise = new Promise((resolve,reject)=>{
+         //Read form database
+         var user = schemas.User;
+         var searchID;
+         if (typeof id === 'undefined'||!objectId.isValid(id)) { searchID = null; }
+         else{
+           searchID = objectId(id)
+         }
+         user.findOne({_id:searchID},function (err,result) {
+           //check for err and if exist (return undefined if not)
+           if(result === null){resolve(undefined)}
+           else{
+             //check if admin (return true if so)
+             var choiceobj = result.toObject();
+            if (choiceobj.hasOwnProperty('isAdmin')){
+              if (choiceobj.isAdmin == true) {
+                resolve(true);
+              }else{
+                //else (return false)
+                resolve(false);
+              }
+            }
+            else{
+              //else (return false)
+              resolve(false);
+            }
+           }
+         })
+
+
+       })
+         let model = await levelPromise;
+         return(model);
+     }
+     create(id,callback){
+       this.temp(id).then(function (result) {
+         var user;
          //Switch to correct user
-         switch(model) {
+         switch(result) {
              case false:
              //logged on user level
                  user = new classes.user();
@@ -99,15 +154,13 @@ module.exports = {
                  break;
              default:
                //Default user level if undefined
-               user = 'test';
+               user = false;
                  break;
          }
-         resolve(user);
-     });
-     let result = await promise;
-     return(result);
+         callback(user);
+       })
+     }
    }
 
-}
 //For testing
 module.exports.factory = controllerFactory;

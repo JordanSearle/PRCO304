@@ -56,8 +56,8 @@ module.exports = class user{
         email:this.#email,
         user_DOB:this.#user_DOB,
       })
-      user.save(function (err) {
-        if(err)callback(err);
+      user.save(function (err,res) {
+        callback(err,res)
       })
     }
     editUser(callback){
@@ -79,8 +79,8 @@ module.exports = class user{
     delUser(callback){
       //delete current user
       var user = schemas.User;
-      user.deleteOne({'_id':this.#userID},function (err) {
-        if(err)callback(err);
+      user.deleteOne({'_id':this.#userID},function (err,res) {
+        callback(err,res)
       })
     }
     viewUser(callback){

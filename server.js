@@ -26,6 +26,7 @@ app.use(session({
 var server =  app.listen(9000, function() {
     // Connect to Mongoose.
     mongoose.connect(uri, {
+      useCreateIndex: true,
       useNewUrlParser: true,
       useUnifiedTopology: true
     }).then((test) => {
