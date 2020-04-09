@@ -165,26 +165,6 @@ app.get('/readgames', function (req, res) {
     });
 
   })
-  app.get('/game/:name',function (req,res) {
-    //Get game from ID and return
-    db.getGame(req.params.name,function (result,err) {
-      if(result.length ==0 ){
-        res.sendStatus(404);
-        return;
-      }
-      res.send(result);
-    })
-  })
-  app.ws('/game/load',function (ws,req) {
-    ws.on('message', function(msg) {
-      //Get a random game
-      db.getGame(JSON.parse(msg).name,function (result) {
-      //Return result
-        ws.send(JSON.stringify(result));
-      })
-
-    });
-  })
   app.ws('/game/like',function (ws,req) {
         ws.on('message', function(msg) {
           var t = JSON.parse(msg).gameID;
