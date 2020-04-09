@@ -76,24 +76,38 @@ module.exports = {
     //This is the app.post /pending/save function
   }
 }
-function controllerFactory() {
-    this.createUser = function (model) {
-        var user;
+ function controllerFactory() {
+   this.create = async function (id) {
+     var promise = new Promise((resolve,reject) => {
+         var user;
+         //check if ID exist
+         if (typeof id === 'undefined') { id = undefined; }
+         else {
+         //Check if admin: true = admin, false = non but logged in, undefined = not logged on.
+           var model = id;
+         }
 
-        switch(model) {
-            case false:
-            //logged on user level
-                user = new classes.user();
-                break;
-            case true:
-            //Admin user level
-                user = new classes.admin();
-                break;
-            default:
-              //Default user level
-                break;
-        }
+         //Switch to correct user
+         switch(model) {
+             case false:
+             //logged on user level
+                 user = new classes.user();
+                 break;
+             case true:
+             //Admin user level
+                 user = new classes.admin();
+                 break;
+             default:
+               //Default user level if undefined
+               user = 'test';
+                 break;
+         }
+         resolve(user);
+     });
+     let result = await promise;
+     return(result);
+   }
 
-        return user;
-    }
 }
+//For testing
+module.exports.factory = controllerFactory;
