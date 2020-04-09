@@ -2,25 +2,17 @@ const server = require('./server').server;
 const app = require('./server').app;
 var mongoose = require("mongoose");
 var bodyParser = require('body-parser');
-const uri = 'mongodb://localhost:27017/PRCO304';
 var db = require('./db');
 var verify = require('./verification');
 var classes = require('./classes');
 var session = require('express-session')
-var expressWs = require('express-ws')(app);
 
 const schemas = require('./schemas.js');
-
+var serverFunctions = require('./serverFunctions');
 
 app.get("/", function(req, res) {
   //Checks if the user is logged in
-  verify(app,res,req.session.user,function (logged) {
-    if (logged) {
-      verify.setRoot(app,res,req.session.user,function (logged){
-
-      })
-    }
-  });
+  serverFunctions.default(req,res);
 });
 app.get('/readgames', function (req, res) {
     db.readGames(function (result) {
@@ -29,69 +21,25 @@ app.get('/readgames', function (req, res) {
   })
 //Anon Functions
   app.post('/login',function (req,res) {
-    //Check the user login
-    var user = new classes.user();
-    user.setUsername(req.body.username);
-    user.setPassword(req.body.password);
-    user.validateDetails(function (response) {
-      if (response.uID !=null) {
-        //If the correct details have been entered
-        req.session.user = response.uID;
-        verify.setRoot(app,res,response.uID);
-      }
-      else{
-      res.status(201).send(response.status);
-      }
-    })
+    serverFunctions.login(req,res);
   })
   app.get('/game/:name',function (req,res) {
     //Get game from ID and return
-    db.getGame(req.params.name,function (result,err) {
-      if(result.length ==0 ){
-        res.sendStatus(404);
-        return;
-      }
-      res.send(result);
-    })
+    serverFunctions.getGame(req,res);
   })
   app.ws('/game/next',function (ws,req) {
-    ws.on('message', function(msg) {
-      //Get the next game
-      db.nextGame(JSON.parse(msg).name,function (result) {
-        //Return result
-        ws.send(JSON.stringify(result));
-      })
-    });
+    serverFunctions.nextGame(ws,req);
   })
   app.ws('/game/prev',function (ws,req) {
-    ws.on('message', function(msg) {
-      //get the last game
-      db.prevGame(JSON.parse(msg).name, function (result) {
-        //Return result
-        ws.send(JSON.stringify(result));
-      })
-    });
+    serverFunctions.prevGame(ws,req);
   })
   app.ws('/game/random',function (ws,req) {
-    ws.on('message', function(msg) {
-      //Get a random game
-      db.randomGame(function (result) {
-      //Return result
-        ws.send(JSON.stringify(result));
-      })
-
-    });
+    serverFunctions.randomGame(ws,req);
   })
   app.ws('/game/load',function (ws,req) {
-    ws.on('message', function(msg) {
-      //Get a random game
-      db.getGame(JSON.parse(msg).name,function (result) {
-      //Return result
-        ws.send(JSON.stringify(result));
-      })
-
-    });
+    serverFunctions.loadGame(ws,req);
   })
+
   app.post('/createuser',function (req,res) {
     //create a new user
     var user = new classes.user();
@@ -107,10 +55,7 @@ app.get('/readgames', function (req, res) {
   })
 //Logged in User Functions
   app.get('/logout',function (req,res) {
-    req.session.cookie.expires = new Date(Date.now());
-    req.session.destroy();
-    res.cookie("sessionid", { expires: Date.now() });
-    res.redirect('/');
+    serverFunctions.logout(req,res);
   })
   app.delete('/user',function (req,res) {
     //Delete a User

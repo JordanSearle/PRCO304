@@ -1,31 +1,102 @@
 var classes = require('./classes');
 const mongoose = require('mongoose');
 var schemas = require("./schemas");
+var verify = require('./verification');
 var objectId = require('mongoose').Types.ObjectId;
+const server = require('./server').server;
+const app = require('./server').app;
+var db = require('./db');
 // Export the functions for each server operation, e.g Post game and get game
 module.exports = {
 //Unregistered User functions
   default: function (req,res) {
     // This it the app.get '/' function
+    verify(app,res,req.session.user,function (logged) {
+      if (logged) {
+        verify.setRoot(app,res,req.session.user,function (logged){
+
+        })
+      }
+    });
   },
   login: function (req,res) {
     // This it the app.post /login
+    var user = new classes.user();
+    user.setUsername(req.body.username);
+    user.setPassword(req.body.password);
+    user.validateDetails(function (response) {
+      if (response.uID !=null) {
+        //If the correct details have been entered
+        req.session.user = response.uID;
+        verify.setRoot(app,res,response.uID);
+      }
+      else{
+      res.status(201).send(response.status);
+      }
+    })
   },
   user: function (req,res) {
     // This is the app.post /createuser and Admin /user functions, both are being moved into the same function using abstract factory pattern.
   },
+  getGame: function (req,res) {
+    //This is the app.get /game/:name
+    db.getGame(req.params.name,function (result,err) {
+      if(result.length ==0 ){
+        res.sendStatus(404);
+        return;
+      }
+      res.send(result);
+    })
+  },
   nextGame: function (ws,req) {
-    //This is the app.get /game/next
+    //This is the app.ws /game/next
+    ws.on('message', function(msg) {
+      //Get the next game
+      db.nextGame(JSON.parse(msg).name,function (result) {
+        //Return result
+        ws.send(JSON.stringify(result));
+      })
+    });
   },
   prevGame: function (ws,req) {
-    //This is the app.get /game/prev
+    //This is the app.ws /game/prev
+    ws.on('message', function(msg) {
+      //get the last game
+      db.prevGame(JSON.parse(msg).name, function (result) {
+        //Return result
+        ws.send(JSON.stringify(result));
+      })
+    });
   },
   randomGame: function (ws,req) {
-    //This is the app.get /game/random
+    //This is the app.ws /game/random
+    ws.on('message', function(msg) {
+      //Get a random game
+      db.randomGame(function (result) {
+      //Return result
+        ws.send(JSON.stringify(result));
+      })
+
+    });
+  },
+  loadGame:function (ws,req) {
+      //This is the app.ws /game/laod
+    ws.on('message', function(msg) {
+      //Get a random game
+      db.getGame(JSON.parse(msg).name,function (result) {
+      //Return result
+        ws.send(JSON.stringify(result));
+      })
+
+    });
   },
   //Logged on user and Admin Functions
   logout: function (req,res) {
     //This is the app.get /logout function
+    req.session.cookie.expires = new Date(Date.now());
+    req.session.destroy();
+    res.cookie("sessionid", { expires: Date.now() });
+    res.redirect('/');
   },
   delUser: function (req,res) {
     //This is the app.delete /user and /users/userID functions, both are being moved into the same function using abstract factory pattern.

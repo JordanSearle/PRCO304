@@ -2,10 +2,11 @@ var express = require('express');
 var app = express();
 var mongoose = require("mongoose");
 var bodyParser = require('body-parser');
-const uri = 'mongodb://localhost:27017/PRCO304';
+var session = require('express-session')
+var expressWs = require('express-ws')(app);
 var session = require('express-session')
 
-const schemas = require('./schemas.js');
+const uri = 'mongodb://localhost:27017/PRCO304';
 
 //Express Setup
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
