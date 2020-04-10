@@ -175,7 +175,7 @@ var server = app.listen(9000, function() {
       });
 
     })
-    app.get('/user/:userID',function (req,res) {
+    app.get('/user',function (req,res) {
       //view user
       //Verifies the user is logged in or not. not logged in will redirect to default index page
       verify(req,res,req.session.user,function (logged) {
@@ -190,19 +190,19 @@ var server = app.listen(9000, function() {
       });
 
     })
-    app.get('/user',function (req,res) {
+    app.get('/users',function (req,res) {
       db.getUsers(function (result) {
         res.send(result);
       })
     })
 
-    app.get('/user/:userID/bookmarks',function (req,res) {
+    app.get('/user/bookmarks',function (req,res) {
       //Get all bookmarks by user return
       db.listBookmarks(req.session.user,function (result) {
         res.send(result);
       })
     })
-    app.post('/user/:userID/bookmarks/tag',function (req,res) {
+    app.post('/user/bookmarks/tag',function (req,res) {
       var bm = new classes.bookmark();
       bm.gameID = req.body.gameID;
       bm.userID = req.session.user
@@ -211,7 +211,7 @@ var server = app.listen(9000, function() {
       })
       res.send('ok');
     })
-    app.delete('/user/:userID/bookmarks/tag',function (req,res) {
+    app.delete('/user/bookmarks/tag',function (req,res) {
       var bm = new classes.bookmark();
       bm.gameID = req.body.gameID;
       bm.userID = req.session.user;

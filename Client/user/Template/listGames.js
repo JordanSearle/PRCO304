@@ -19,7 +19,7 @@ app.config(['$routeProvider', function($routeProvider) {
     }]);
 app.controller('gameControl', function($scope, $http) {
   $scope.load = function () {
-    $http.get("/readgames")
+    $http.get("/game")
     .then(function(response) {
       $scope.myWelcome = response.data;
     });

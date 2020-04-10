@@ -18,7 +18,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     }]);
 app.controller('myApps', function($scope, $http) {
   $("#selector").flatpickr({defaultDate:new Date(1997, 0, 10)});
-  $http.get("/readgames")
+  $http.get("/game")
   .then(function(response) {
     $scope.myWelcome = response.data;
   });
@@ -38,7 +38,7 @@ app.controller('myApps', function($scope, $http) {
     })
   }
   $scope.createAccount = function () {
-    $http.post("/createuser",$scope.nUser)
+    $http.post("/user",$scope.nUser)
     .then(function (res) {
       console.log(res);
     })
