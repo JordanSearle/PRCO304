@@ -76,12 +76,19 @@ module.exports = class user{
       })
     }
 
-    delUser(callback){
+    delUser(userID,callback){
       //delete current user
-      var user = schemas.User;
-      user.deleteOne({'_id':this.#userID},function (err,res) {
-        callback(err,res)
-      })
+      if (this.getUserID()&& userID && this.getUserID() == userID) {
+        var user = schemas.User;
+        user.deleteOne({'_id':this.#userID},function (err,res) {
+          callback(err,res)
+        })
+      }
+      else{
+        var err = 'request not valid',res = false;
+        callback(err,res);
+      }
+
     }
     viewUser(callback){
       var user = schemas.User;

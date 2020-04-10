@@ -3,17 +3,18 @@ const mongoose = require('mongoose');
 var schemas = require("./schemas");
 var verify = require('./verification');
 var objectId = require('mongoose').Types.ObjectId;
-const server = require('./server').server;
-const app = require('./server').app;
 var db = require('./db');
+var session = require('express-session')
+var express = require('express');
+var app = express();
 // Export the functions for each server operation, e.g Post game and get game
 module.exports = {
 //Unregistered User functions
   default: function (req,res) {
     // This it the app.get '/' function
-    verify(app,res,req.session.user,function (logged) {
+    verify(req,res,req.session.user,function (logged) {
       if (logged) {
-        verify.setRoot(app,res,req.session.user,function (logged){
+        verify.setRoot(req,res,req.session.user,function (logged){
 
         })
       }
@@ -28,7 +29,7 @@ module.exports = {
       if (response.uID !=null) {
         //If the correct details have been entered
         req.session.user = response.uID;
-        verify.setRoot(app,res,response.uID);
+        verify.setRoot(req,res,req.session.user,response.uID);
       }
       else{
       res.status(201).send(response.status);
@@ -90,6 +91,11 @@ module.exports = {
 
     });
   },
+  getGames:function (req,res) {
+    db.readGames(function (result) {
+      res.send(result);
+    })
+  }
   //Logged on user and Admin Functions
   logout: function (req,res) {
     //This is the app.get /logout function
@@ -107,8 +113,8 @@ module.exports = {
         res.redirect('/');
       }
       else{
-        result.setUserID(req.params.userID);
-        result.delUser(function (err,res) {
+        result.setUserID(req.session.userID);
+        result.delUser(req.params.userID,function (err,response) {
           if(err){
             res.status(500).send(err);
           }
