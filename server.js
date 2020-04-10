@@ -45,69 +45,18 @@ var server = app.listen(9000, function() {
     console.log('%s Listening on port %s', new Date(), port);
   });
 
-
-  app.get("/", serverFunctions.default);
-  app.get('/game', serverFunctions.getGames)
-  //Anon Functions
-    app.post('/login',      serverFunctions.login)
-    app.get('/game/:name',  serverFunctions.getGame)
+//Default and error handing
+    app.get("/", serverFunctions.default);
+    app.get('/logout',serverFunctions.logout)
+    app.post('/login',serverFunctions.login)
+  // /game/ functions
+    app.get('/game',serverFunctions.getGames)
+    app.get('/game/:name',serverFunctions.getGame)
     //Websocket Functions
     app.ws('/game/next',serverFunctions.nextGame)
     app.ws('/game/prev',serverFunctions.prevGame)
     app.ws('/game/random',serverFunctions.randomGame)
     app.ws('/game/load',serverFunctions.loadGame)
-
-    app.post('/createuser',function (req,res) {
-      //create a new user
-      var user = new classes.user();
-      user.setUsername(req.body.username);
-      user.setPassword(req.body.password);
-      user.setEmail(req.body.email);
-      user.setDOB(req.body.user_DOB);
-      user.addUser(function (err) {
-        //do somehting with error.
-        console.log(err);
-      })
-      res.sendStatus(201);//Correct Status?
-    })
-  //Logged in User Functions
-    app.get('/logout',serverFunctions.logout)
-    app.delete('/user/:userID',serverFunctions.delUser)
-    app.put('/user',function (req,res) {
-      //edit a user
-      //Verifies the user is logged in or not. not logged in will redirect to default index page
-      verify(req,res,req.session.user,function (logged) {
-        if (logged) {
-          //Delete a user
-          var user = new classes.user();
-          user.setUserID(req.session.user);
-          user.setUsername(req.body.username);
-          user.setEmail(req.body.email);
-          user.setPassword(req.body.password);
-          user.setDOB(req.body.user_DOB);
-          user.editUser(function(err) {
-
-          });
-          res.sendStatus(200);
-        }
-      });
-
-    })
-    app.get('/user',function (req,res) {
-      //view user
-      //Verifies the user is logged in or not. not logged in will redirect to default index page
-      verify(req,res,req.session.user,function (logged) {
-        if (logged) {
-          //will return the user's data
-          var user = new classes.user();
-          user.setUserID(req.session.user);
-          user.viewUser(function (result) {
-            res.send(result);
-          })
-        }
-      });
-
-    })
     app.ws('/game/like',function (ws,req) {
           ws.on('message', function(msg) {
             var t = JSON.parse(msg).gameID;
@@ -118,6 +67,7 @@ var server = app.listen(9000, function() {
             ws.send(JSON.stringify('done'));
           });
     })
+    //User functions
     app.post('/game/bookmark',function (req,res) {
       verify(req,res,req.session.user,function (logged) {
         if (logged) {
@@ -157,32 +107,8 @@ var server = app.listen(9000, function() {
         }
       });
     })
-    app.get('/user/bookmarks',function (req,res) {
-      //Get all bookmarks by user return
-      db.listBookmarks(req.session.user,function (result) {
-        res.send(result);
-      })
-    })
-    app.post('/user/bookmarks/tag',function (req,res) {
-      var bm = new classes.bookmark();
-      bm.gameID = req.body.gameID;
-      bm.userID = req.session.user
-      bm.addTag(req.body.tagName,function (err) {
-        if(err)console.log(err);
-      })
-      res.send('ok');
-    })
-    app.delete('/user/bookmarks/tag',function (req,res) {
-      var bm = new classes.bookmark();
-      bm.gameID = req.body.gameID;
-      bm.userID = req.session.user;
-      bm.delTag(req.body.tagName,function (err) {
-        if(err)console.log(err);
-      })
-      res.send('ok');
-    })
-  //Admin functions
-    app.post('/newgame',function (req,res) {
+    //Admin Functions
+    app.post('/game',function (req,res) {
       //Check Admin and logged in
       //Add game if true
       db.saveGames(req.session.user,req.body.game_Name,req.body.game_Summery,req.body.game_Rules,req.body.game_Player_Count,req.body.game_Equipment,req.body.game_IsNSFW,function (response) {
@@ -190,7 +116,7 @@ var server = app.listen(9000, function() {
       })
       res.sendStatus(201);
     })
-    app.put('/editgame',function (req,res) {
+    app.put('/game/:gameID',function (req,res) {
       //Check Admin and logged in
       //Add game if true
       var game = new classes.game();
@@ -206,7 +132,7 @@ var server = app.listen(9000, function() {
       })
       res.sendStatus(201);
     })
-    app.delete('/delGame',function (req,res) {
+    app.delete('/game/:gameID',function (req,res) {
       var game = new classes.game();
       game.game_UID = req.body.id;
         game.delGame(function (err) {
@@ -214,13 +140,9 @@ var server = app.listen(9000, function() {
         })
       res.sendStatus(201);
     })
-    app.get('/users',function (req,res) {
-      db.getUsers(function (result) {
-        res.send(result);
-      })
-    })
-    app.post('/users',function (req,res) {
-      //Check if admin
+// /user/ functions
+    app.post('/user',function (req,res) {
+      //create a new user
       var user = new classes.user();
       user.setUsername(req.body.username);
       user.setPassword(req.body.password);
@@ -232,16 +154,78 @@ var server = app.listen(9000, function() {
       })
       res.sendStatus(201);//Correct Status?
     })
-    app.delete('/users/:userID',function (req,res) {
-      //Check if admin
-      var user = new classes.user();
-      user.setUserID(req.params.userID);
-      user.delUser(function (response) {
-        //Do something here
-        console.log(response);
-      })
-      res.sendStatus(201);
+    app.delete('/user/:userID',serverFunctions.delUser)
+    app.put('/user/:userID',function (req,res) {
+      //edit a user
+      //Verifies the user is logged in or not. not logged in will redirect to default index page
+      verify(req,res,req.session.user,function (logged) {
+        if (logged) {
+          //Delete a user
+          var user = new classes.user();
+          user.setUserID(req.session.user);
+          user.setUsername(req.body.username);
+          user.setEmail(req.body.email);
+          user.setPassword(req.body.password);
+          user.setDOB(req.body.user_DOB);
+          user.editUser(function(err) {
+
+          });
+          res.sendStatus(200);
+        }
+      });
+
     })
+    app.get('/user/:userID',function (req,res) {
+      //view user
+      //Verifies the user is logged in or not. not logged in will redirect to default index page
+      verify(req,res,req.session.user,function (logged) {
+        if (logged) {
+          //will return the user's data
+          var user = new classes.user();
+          user.setUserID(req.session.user);
+          user.viewUser(function (result) {
+            res.send(result);
+          })
+        }
+      });
+
+    })
+    app.get('/user',function (req,res) {
+      db.getUsers(function (result) {
+        res.send(result);
+      })
+    })
+
+    app.get('/user/:userID/bookmarks',function (req,res) {
+      //Get all bookmarks by user return
+      db.listBookmarks(req.session.user,function (result) {
+        res.send(result);
+      })
+    })
+    app.post('/user/:userID/bookmarks/tag',function (req,res) {
+      var bm = new classes.bookmark();
+      bm.gameID = req.body.gameID;
+      bm.userID = req.session.user
+      bm.addTag(req.body.tagName,function (err) {
+        if(err)console.log(err);
+      })
+      res.send('ok');
+    })
+    app.delete('/user/:userID/bookmarks/tag',function (req,res) {
+      var bm = new classes.bookmark();
+      bm.gameID = req.body.gameID;
+      bm.userID = req.session.user;
+      bm.delTag(req.body.tagName,function (err) {
+        if(err)console.log(err);
+      })
+      res.send('ok');
+    })
+
+//redundant functiopns that need merging into above functions
+
+
+
+
 
     app.post('/pending',function (req,res) {
       //check if logged on user

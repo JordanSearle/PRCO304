@@ -95,7 +95,7 @@ module.exports = {
     db.readGames(function (result) {
       res.send(result);
     })
-  }
+  },
   //Logged on user and Admin Functions
   logout: function (req,res) {
     //This is the app.get /logout function
