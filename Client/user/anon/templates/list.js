@@ -21,6 +21,7 @@ app.controller('myApps', function($scope, $http) {
   $http.get("/game")
   .then(function(response) {
     $scope.myWelcome = response.data;
+    $scope.test = response.data;
   });
   $scope.login = function() {
     $http.post('/login',$scope.user)
