@@ -94,7 +94,7 @@ I need to focus on the design of the cards though.</h2>
             <h4 class="text-left">About:</h4>
             <h3>{{game.game_Summery}}</h3>
             <a href="#"ng-click="bookmark(game._id)"ng-if="user.username!=null">Bookmark game!</a>
-            <a onclick="$('#exampleModal').modal('hide');" href="/#!games/{{game.game_Name}}">View More</a>
+            <a onclick="$('#exampleModal').modal('hide');" ng-click="load(game.game_Name)" >View More</a>
           </div>
         </div>
       </div>

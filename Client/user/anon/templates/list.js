@@ -83,7 +83,6 @@ app.controller('myApps', function($scope, $http) {
     }
   }
   $scope.loadGames = function (name) {
-    console.log(name);
     var ws = new WebSocket("ws://localhost:9000/game/load");
     ws.onopen = function () {
       ws.send(JSON.stringify({
@@ -99,12 +98,28 @@ app.controller('myApps', function($scope, $http) {
       $('#exampleModal').modal('show');
     }
   }
+  $scope.load = function (name) {
+    $scope.selGame = name;
+
+    $scope.loadGame();
+  }
+  $scope.loadGame = function () {
+    $scope.myWelcome.forEach((item, i) => {
+      if ($scope.selGame == item.game_Name) {
+        $scope.selected = encodeURIComponent($scope.selGame);
+        console.log($scope.selected);
+        window.location.href = "#!/games/"+$scope.selected;
+      }
+    });
+
+  }
 });
 app.controller('gameControl',function ($scope,$http,$routeParams) {
   $('#exampleModal').modal('hide');
   $('.modal-backdrop').remove();
   $scope.load = function () {
-    $http.get('/game/'+$routeParams.param)
+    console.log(encodeURIComponent($routeParams.param));
+    $http.get('/game/'+encodeURIComponent($routeParams.param))
     .then(function (res) {
       $scope.game = res.data[0];
     })

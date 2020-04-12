@@ -41,12 +41,15 @@ module.exports = {
   },
   getGame: function (req,res) {
     //This is the app.get /game/:name
-    db.getGame(req.params.name,function (result,err) {
+    db.getGame(req.params.name,function (result,err) {      
+        console.log(req.params.name);
       if(result.length ==0 ){
         res.sendStatus(404);
         return;
       }
-      res.send(result);
+      else {
+        res.send(result);
+      }
     })
   },
   nextGame: function (ws,req) {

@@ -11,12 +11,17 @@
           <li class="nav-item"><a  class="btn btn-dark" href="/">Home</a></li>
           <li class="nav-item"><a class="nav-link disabled text-light">live Search: </a></li>
           <li class="nav-item">
-              <input type="text" class="form-control" list="text_editors" ng-model="myValue" ng-change="gameSearch()">
-              <datalist id="text_editors" ng-c>
-                <select multiple size=8>
-                  <option ng-repeat="a in test track by $index">{{a.game_Name}}</option>
+            <div class="input-group">
+              <input type="text" class="form-control" list="text_editors" ng-model="$parent.selGame" >
+              <datalist id="text_editors">
+                <select multiple size=5 >
+                  <option ng-repeat="a in test track by $index" >{{a.game_Name}}</option>
                 </select>
               </datalist>
+              <div class="input-group-append">
+                <button class="btn btn-dark" type="button" name="button" ng-click="loadGame()">Go!</button>
+              </div>
+            </div>
           </li>
         </ul>
         <ul class="navbar-nav ml-auto">
