@@ -65,20 +65,20 @@ var server = app.listen(9000, function() {
     //Admin Functions
     app.post('/game',serverFunctions.newGame)
     app.put('/game/:gameID',serverFunctions.editGame)
-    app.delete('/game/:gameID',serverFunctions.delGame)
+    app.delete('/game',serverFunctions.delGame)
 // /user/ functions
     app.post('/user',serverFunctions.user)
-    app.delete('/user/:userID',serverFunctions.delUser)
+    app.delete('/user',serverFunctions.delUser)
     app.put('/user/:userID',serverFunctions.editUser)
     app.get('/user',serverFunctions.getUser)
-    
+
     app.get('/users',function (req,res) {
       db.getUsers(function (result) {
         res.send(result);
       })
     })
 
-    app.get('/user/bookmarks',serverFunctions.getBookmark)
+    app.get('/user/bookmarks',serverFunctions.getBookmarks)
     app.post('/user/bookmarks/tag',serverFunctions.tagBookmark)
     app.delete('/user/bookmarks/tag',serverFunctions.untagBookmark)
 

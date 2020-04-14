@@ -7,16 +7,16 @@
 
 <form>
     Username:<br>
-    <input type="text" ng-model="eUser.username" ng-value="user.username"required><br>
+    <input type="text" ng-model="eUser.username" ng-value="user.username"><br>
     Email:<br>
-    <input type="text" ng-model="eUser.email"ng-value="user.email"required>
+    <input type="text" ng-model="eUser.email"ng-value="user.email">
     <br>
     Password:<br>
-    <input type="text" ng-model="eUser.password"required><br>
+    <input type="password" ng-model="eUser.password"><br>
     DOB:<br>
-    <input type="date" class="form-control"ng-model="$parent.nUser.user_DOB" id="selector" ng-model="eUser.user_DOB"ng-value="dInput" required>
+    <input type="date" class="form-control"ng-model="$parent.nUser.user_DOB" id="selector" ng-model="eUser.user_DOB"ng-value="dInput" >
     <br><br>
-    <button ng-click="editAccount()">submit</button><br>
+    <button ng-click="editAccount()">submit</button><button ng-click="delete()">Delete Account</button>
 </form>
 <hr>
 <h1>Bookmarks</h1>

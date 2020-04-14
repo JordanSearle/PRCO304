@@ -153,7 +153,8 @@ app.controller('user',function ($scope,$http) {
     })
   }
   $scope.delUser =function (id) {
-    $http.delete('/users/'+id)
+    console.log(id);
+    $http.delete('/user',{data: {userID:id}, headers: {'Content-Type': 'application/json;charset=utf-8'}})
     .then(function (res) {
       $scope.load();
     })
@@ -162,7 +163,7 @@ app.controller('user',function ($scope,$http) {
 })
 app.controller('gameControl', function($scope, $http) {
   $scope.load = function () {
-    $http.get("/readgames")
+    $http.get("/game")
       .then(function(response) {
       $scope.games = response.data;
     });
@@ -208,7 +209,7 @@ app.controller('gameControl', function($scope, $http) {
     $scope.games.push($scope.inserted);
   };
   $scope.removeGame = function (id) {
-    $http.delete('/delgame',{data: {id:id}, headers: {'Content-Type': 'application/json;charset=utf-8'}}).then(function (res) {
+    $http.delete('/game',{data: {id:id}, headers: {'Content-Type': 'application/json;charset=utf-8'}}).then(function (res) {
       console.log(res);
     })
     $scope.load();

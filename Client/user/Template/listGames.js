@@ -140,16 +140,31 @@ app.controller('userControl', function($scope, $http) {
     })
   }
   $scope.delete= function () {
-    $http.delete("/user")
+    $http.delete("/user",{data: {userID:$scope.user._id}, headers: {'Content-Type': 'application/json;charset=utf-8'}})
     .then(function (res) {
       $scope.logout();
     })
   }
   $scope.editAccount= function () {
-    $http.put("/user",$scope.eUser)
-    .then(function (res) {
-      $scope.load();
-    })
+    if ($scope.eUser) {
+      $scope.editUser = $scope.user;
+      if ($scope.eUser.hasOwnProperty('username')) {
+        $scope.editUser.username = $scope.eUser.username
+      }
+      if ($scope.eUser.hasOwnProperty('email')) {
+        $scope.editUser.email = $scope.eUser.email
+      }
+      if ($scope.eUser.hasOwnProperty('password')) {
+        $scope.editUser.password = $scope.eUser.password
+      }
+      if ($scope.eUser.hasOwnProperty('user_DOB')) {
+        $scope.editUser.user_DOB = $scope.eUser.user_DOB
+      }
+      $http.put("/user/"+$scope.user.userID,$scope.editUser)
+      .then(function (res) {
+        $scope.load();
+      })
+    }
   }
   $scope.load();
 });
@@ -158,11 +173,13 @@ app.controller('bookmarkControl',function ($scope,$http) {
     $http.get('/user/bookmarks').then(function (res) {
       $scope.bookmarks = res.data;
       $scope.dropdowns = [];
-      $scope.bookmarks.forEach((item, i) => {
-          item.tags.forEach((items, i) => {
-            $scope.dropdowns.push(items.name);
-          });
-      });
+      if ($scope.bookmarks.length < 0) {
+        $scope.bookmarks.forEach((item, i) => {
+            item.tags.forEach((items, i) => {
+              $scope.dropdowns.push(items.name);
+            });
+        });
+      }
     })
   }
   $scope.load();

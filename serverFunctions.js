@@ -127,12 +127,12 @@ module.exports = {
       }
       else{
         result.setUserID(req.session.user);
-        result.delUser(req.params.userID,function (err,response) {
+        result.delUser(req.body.userID,function (err,response) {
           if(err){
             res.status(500).send(err);
           }
           else{
-            res.redirect('/');
+            res.status(200).send('ok');
           }
         })
       }
@@ -218,6 +218,7 @@ module.exports = {
         bm.userID = req.session.user;
         bm.gameID = req.params.gameID;
         bm.viewBookmark(function (result) {
+          console.log(result);
           res.status(200).send(result);
         })
       }

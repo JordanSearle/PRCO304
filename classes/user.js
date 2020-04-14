@@ -79,6 +79,7 @@ module.exports = class user{
 
     delUser(userID,callback){
       //delete current user
+      console.log(this.getUserID()+' '+ userID);
       if (this.getUserID()&& userID && this.getUserID() == userID) {
         var user = schemas.User;
         user.deleteOne({'_id':this.#userID},function (err,res) {

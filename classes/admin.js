@@ -31,6 +31,20 @@ module.exports = class admin extends user {
       if(err)callback(err);
     })
   }
+  delUser(userID,callback){
+    //delete current user
+    if (userID) {
+      var user = schemas.User;
+      user.deleteOne({'_id':userID},function (err,res) {
+        callback(err,res)
+      })
+    }
+    else{
+      var err = 'request not valid',res = false;
+      callback(err,res);
+    }
+
+  }
   addGame(game_name,game_Summery,game_Rules,game_Player_Count,game_Equipment,game_IsNSFW,callback) {
     //add a new pending game
     var game = new classes.game();

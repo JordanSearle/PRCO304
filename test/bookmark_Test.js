@@ -52,11 +52,11 @@ describe('CRUD Bookmark server test',function () {
   const bM = schemas.Bookmark;const bookmark = new classes.bookmark();
   bookmark.userID = '5e4bdab0e623ca4e5ca53955';
   bookmark.gameID = '5e4bdab0e623ca4e5ca53999';
-  afterEach(function () {
+  after(function () {
     bM.deleteOne({userID:bookmark.userID,gameID:bookmark.gameID}).exec(function (err) {
       if(err)console.log(err);
     });
-  });
+  })
   it('POST game/bookmark',function () {
     var agent = chai.request.agent(server)
     agent
