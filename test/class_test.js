@@ -81,7 +81,6 @@ describe('User Class Getters and Setters',function() {
     })
   })
 })
-
 describe('Admin class getters and setters',function() {
   var admin = new classes.admin("A1","AdminTemp","password","AdminTemp@email.com","04 Dec 1995 00:12:00 GMT");
   context('Testing getters',function () {

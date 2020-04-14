@@ -34,7 +34,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 
     }]);
 app.controller('myApps', function($scope, $http) {
-    $http.get("/readgames")
+    $http.get("/game")
       .then(function(response) {
       $scope.myWelcome = response.data;
     });
