@@ -263,10 +263,10 @@ app.controller('requestControl',function ($scope,$http) {
     $scope.games.push($scope.inserted);
   };
   $scope.removeGame = function (id) {
-    $http.delete('/delgame',{data: {id:id}, headers: {'Content-Type': 'application/json;charset=utf-8'}}).then(function (res) {
+    $http.delete('/pending',{data: {gameID:id}, headers: {'Content-Type': 'application/json;charset=utf-8'}}).then(function (res) {
       console.log(res);
+      $scope.load();
     })
-    $scope.load();
   }
 $scope.load();
 })

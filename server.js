@@ -106,13 +106,13 @@ var server = app.listen(9000, function() {
 
     })
 
-    app.delete('/pending/:id',function (req,res) {
+    app.delete('/pending',function (req,res) {
       //Check if admin
 
       //Deny a pending request
       var game = new classes.game();
-      //Check if correct ID
-      game.denyPending(req.params.id,function (err,result) {
+      //Check if correct ID-
+      game.denyPending(req.body.gameID,function (err,result) {
         if(err){
           console.log(err);
           res.status(400).send(err);
