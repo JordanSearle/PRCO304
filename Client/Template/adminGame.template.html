@@ -1,0 +1,83 @@
+<div class="p-3 mt-3">
+  <div class="row">
+    <div class="col-12 col-lg-6">
+      <div class="mb-3 rounded shadow bg-white  p-3">
+      <h1>This will be a panel for game stats</h1>
+      </div>
+    </div>
+    <div class="col-12 col-lg-6">
+      <div class="mb-3 rounded shadow bg-white  p-3">
+      <h1>This will be a panel for game stats</h1>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="mb-3 rounded shadow bg-white  p-3">
+
+          <h1>Manage Games</h1>
+
+          <button type="button" class="btn btn-success" ng-click="addGame()">Add Game +</button>
+          <table class="table table-bordered table-hover table-condensed mt-1">
+            <tr style="font-weight: bold">
+              <td style="width:20%;">Name</td>
+              <td style="width:25%;">Summary</td>
+              <td style="width:25%;">Rules</td>
+              <td style="width:20%;">Player Count</td>
+              <td style="width:5%;" data-toggle="tooltip" data-placement="top" title="Not Safe For Work (18+)?">NSFW</td>
+              <td style="width:5%;">Edit</td>
+            </tr>
+            <tr ng-repeat="game in games">
+              <td>
+                <!-- editable gamename (text with validation) -->
+                <span editable-text="game.game_Name" e-name="game_Name" e-form="rowform" >
+                  {{ game.game_Name || 'empty' }}
+                </span>
+              </td>
+              <td>
+                <!-- editable status (select-local) -->
+                <span editable-textarea="game.game_Summery" e-rows="7" e-cols="40" e-name="game_Summery" e-form="rowform" >
+                  {{ game.game_Summery|| 'empty' | limitTo: 150  }}{{game.game_Summery.length > 150 ? '&hellip;' : ''}}
+                </span>
+              </td>
+              <td>
+                <!-- editable group (select-remote) -->
+                <span editable-textarea="game.game_Rules" e-rows="7" e-cols="40" e-name="game_Rules" e-form="rowform" >
+                  {{ game.game_Rules|| 'empty' | limitTo: 100  }}{{game.game_Summery.length > 100 ? '&hellip;' : ''}}
+                </span>
+              </td>
+              <td>
+                <!-- editable group (select-remote) -->
+                <span editable-text="game.game_Player_Count" e-name="game_Player_Count" e-form="rowform" >
+                  {{ game.game_Player_Count|| 'empty'  }}
+                </span>
+              </td>
+              <td>
+                <!-- editable group (select-remote) -->
+                <span editable-checkbox="game.game_IsNSFW" e-name="game_IsNSFW" e-form="rowform" data-toggle="tooltip" data-placement="top" title="Not Safe For Work (18+)?">
+                  {{ game.game_IsNSFW  && "Yes"|| 'No'  }}
+                </span>
+              </td>
+              <td style="white-space: nowrap">
+                <!-- form -->
+                <form editable-form name="rowform" onaftersave="editGame($data,game)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == game">
+                  <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
+                    save
+                  </button>
+                  <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
+                    cancel
+                  </button>
+                </form>
+                <div class="buttons" ng-show="!rowform.$visible">
+                  <button type="button" class="btn btn-primary" ng-click="rowform.$show()">edit</button>
+                  <button type="button" class="btn btn-danger" ng-click="removeGame(game._id)">del</button>
+                </div>
+              </td>
+            </tr>
+          </table>
+
+
+    </div>
+  </div>
+  </div>
+</div>

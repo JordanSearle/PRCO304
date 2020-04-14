@@ -1,8 +1,6 @@
 var expect = require('chai').expect;
-//var request = require('request');
 var chai = require('chai');
 var chaiHTTP = require('chai-http');
-var app = require('../server.js');
 const mongoose = require('mongoose');
 var schemas = require("../schemas");
 var db = require('../db');
@@ -10,9 +8,11 @@ var chai = require('chai');
 chai.use(require('chai-match'));
 chai.use(chaiHTTP);
 
+
+
 describe('Testing Server functions', function() {
     context('testing GET HTTP request', function() {
-        it('/ test', function(done) {
+        it('/ test', function() {
             chai.request('http://localhost:9000')
                 .get('/')
                 .end(function(err, res) {
@@ -24,7 +24,6 @@ describe('Testing Server functions', function() {
                 .end(function(err, res) {
                     expect(err).to.be.null;
                     expect(res).to.have.status(404);
-                    done()
                 });
         })
         it('/readGames test', function(done) {

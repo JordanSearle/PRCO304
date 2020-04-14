@@ -1,75 +1,48 @@
-
-
-  <!-- Page Content -->
-  <div class="container">
-    <h1 class="my-4">Welcome to That's the Spirit</h1>
-    <h2>This will be a website description. The text will be
+<div class="container">
+<div class="m-1">
+  <h1 class="my-4">Welcome to That's the Spirit</h1>
+  <h2>This will be a website description. The text will be
 filled out properly later, For now placeholder text
 would work and that is good enough for me.
 <br><br>
 I need to focus on the design of the cards though.</h2>
-    <!-- Marketing Icons Section -->
-    <div ng-repeat="(k,v) in myWelcome track by $index">
-      <div class="row" ng-if="$index%3==0">
-      <a class="col-lg-4 mb-4"  ng-if="myWelcome[k].game_Name !=null" ng-Click="loadGames(myWelcome[k].game_Name)">
-        <div class="card h-100">
-          <h4 class="card-header">{{myWelcome[k].game_Name}}</h4>
-          <div class="card-body">
-            <p class="card-text">{{myWelcome[k].game_Summery | limitTo: 150 }}{{myWelcome[k].game_Summery.length > 150 ? '&hellip;' : ''}} Read More</p>
-          </div>
-          <div class="card-footer">
-            <div class="row">
-              <div class="col">
-                <p class="font-weight-light">Added by:<i> {{myWelcome[k].userID.username}}</i></p>
-              </div>
-              <div class="col text-right">
-                Rating: <i>4*</i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </a>
-      <a class="col-lg-4 mb-4" ng-if="myWelcome[k+1].game_Name !=null" ng-Click="loadGames(myWelcome[k+1].game_Name)">
-        <div class="card h-100">
-          <h4 class="card-header">{{myWelcome[k+1].game_Name}}</h4>
-          <div class="card-body">
-            <p class="card-text">{{myWelcome[k+1].game_Summery | limitTo: 150 }}{{myWelcome[k+1].game_Summery.length > 150 ? '&hellip;' : ''}} Read More</p>
-          </div>
-          <div class="card-footer">
-            <div class="row">
-              <div class="col">
-                <p class="font-weight-light">Added by:<i> {{myWelcome[k+1].userID.username}}</i></p>
-              </div>
-              <div class="col text-right">
-                Rating: <i>4*</i>
-              </div>
-            </div>
-          </div>
-        </div>
-        </a>
-      <a class="col-lg-4 mb-4" ng-if="myWelcome[k+2].game_Name !=null" ng-Click="loadGames(myWelcome[k+2].game_Name)">
-        <div class="card h-100">
-          <h4 class="card-header">{{myWelcome[k+2].game_Name}}</h4>
-          <div class="card-body">
-            <p class="card-text">{{myWelcome[k+2].game_Summery | limitTo: 150 }}{{myWelcome[k+2].game_Summery.length > 150 ? '&hellip;' : ''}} Read More</p>
-          </div>
-          <div class="card-footer">
-            <div class="row">
-              <div class="col">
-                <p class="font-weight-light">Added by:<i> {{myWelcome[k+2].userID.username}}</i></p>
-              </div>
-              <div class="col text-right">
-                Rating: <i>4*</i>
-              </div>
-            </div>
-          </div>
-        </div>
-        </a>
-      </div>
-    </div>
+</div>
+  <div class="card-columns">
+    <div class="card text-dark bg-light m-1" >
+       <div class="card-header">Most recently added Games</div>
+       <div class="card-body btn btn-light btn-block" ng-repeat="a in myWelcome| orderBy:'+':true | limitTo:5 "ng-Click="loadGames(a.game_Name)" >
+         <h5 class=" text-left text-dark card-title">{{a.game_Name}}</h5>
+       </div>
+       <hr class="m-0">
+       <div class="card-body">
+         <h5 class=" card-title">Not seeing a game you know? Sign up and add it now!</h5>
+       </div>
+ </div>
+    <div class="card p-3 m-1" ng-class="arr[$index % arr.length]" ng-repeat="i in myWelcome track by $index">
+      <a ng-Click="loadGames(i.game_Name)">
+        <blockquote class="blockquote mb-0 card-body">
+          <h5 class="card-title">{{i.game_Name}}</h5>
+          <hr>
+          <p>{{i.game_Summery}}</p>
+          <footer class="blockquote-footer" style="color:inherit">
+            <small>
+             Added by <cite title="Source Title">{{i.userID.username}}</cite>
+             <div class="text-right">
+               Upvotes: <i>{{i.ratingCount}}</i>
+             </div>
+             <div class="">
+               <button type="button" ng-if="user.username!=null" class="btn btn-primary btn-block" name="button" ng-click="like(i._id)">Upvote</button>
+             </div>
+            </small>
+          </footer>
+      </blockquote>
+    </a>
+   </div>
 
+  </div>
 
-<!-- Modal -->
+</div>
+
 <div class="modal fade text-center" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content" style="height:500px;">
@@ -85,6 +58,7 @@ I need to focus on the design of the cards though.</h2>
             <h4 class="text-left">About:</h4>
             <h3>{{game.game_Summery}}</h3>
             <a href="#"ng-click="bookmark(game._id)"ng-if="user.username!=null">Bookmark game!</a>
+            <button class="btn btn-primary" onclick="$('#exampleModal').modal('hide');" ng-click="load(game.game_Name)" >View More</button>
           </div>
         </div>
       </div>
@@ -95,6 +69,4 @@ I need to focus on the design of the cards though.</h2>
       </div>
     </div>
   </div>
-</div>
-
 </div>

@@ -45,10 +45,24 @@ module.exports = class bookmark {
       callback(err);
     })
   }
-  addTag(){
-
+  addTag(tagName,callback){
+      var bookmark = schemas.Bookmark;
+      bookmark.findOne({userID:this.userID,gameID:this.gameID}).exec(function (err,res) {
+        var tag = {name:tagName}
+        res.tags.push(tag);
+        res.save(function (err) {
+          callback(err);
+        });
+      });
   }
-  delTag(){
-
+  delTag(tagName,callback){
+      var bookmark = schemas.Bookmark;
+      bookmark.findOne({userID:this.userID,gameID:this.gameID}).exec(function (err,res) {
+        var tag = {name:tagName}
+        res.tags.pull(tag);
+        res.save(function (err) {
+          callback(err);
+        });
+      });
   }
 }
