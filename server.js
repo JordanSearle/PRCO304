@@ -57,16 +57,7 @@ var server = app.listen(9000, function() {
     app.ws('/game/prev',serverFunctions.prevGame)
     app.ws('/game/random',serverFunctions.randomGame)
     app.ws('/game/load',serverFunctions.loadGame)
-    app.ws('/game/like',function (ws,req) {
-          ws.on('message', function(msg) {
-            var t = JSON.parse(msg).gameID;
-            var gm = new classes.game();
-            gm.rate(t,req.session.user,function (err) {
-              if(err)console.log(err);
-            })
-            ws.send(JSON.stringify('done'));
-          });
-    })
+    app.ws('/game/like',serverFunctions.likeGame)
     //User functions
     app.post('/game/bookmark',function (req,res) {
       verify(req,res,req.session.user,function (logged) {

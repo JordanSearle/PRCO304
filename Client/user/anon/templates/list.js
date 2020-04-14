@@ -113,6 +113,10 @@ app.controller('myApps', function($scope, $http) {
     });
 
   }
+  $scope.arr = ['text-white bg-secondary','text-white bg-info','bg-light']
+  $scope.getRandomClass = function(){
+    return Math.random()*$scope.arr.length;
+  }
 });
 app.controller('gameControl',function ($scope,$http,$routeParams) {
   $('#exampleModal').modal('hide');

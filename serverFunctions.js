@@ -41,7 +41,7 @@ module.exports = {
   },
   getGame: function (req,res) {
     //This is the app.get /game/:name
-    db.getGame(req.params.name,function (result,err) {      
+    db.getGame(req.params.name,function (result,err) {
         console.log(req.params.name);
       if(result.length ==0 ){
         res.sendStatus(404);
@@ -136,10 +136,27 @@ module.exports = {
     //This is the app.get /user and /users/userID functions, both are being moved into the same function using abstract factory pattern.
   },
   likeGame: function (ws,req) {
-  //This is the ws.get /game/like function
+        ws.on('message', function(msg) {
+          var t = JSON.parse(msg).gameID;
+          var gm = new classes.game();
+          gm.rate(t,req.session.user,function (err) {
+            if(err)console.log(err);
+          })
+          ws.send(JSON.stringify('done'));
+        });
   },
   newBookmark: function (req,res) {
-    //This is the app.post /game/bookmark function
+    verify(req,res,req.session.user,function (logged) {
+      if (logged) {
+        var bm = new classes.bookmark()
+        bm.userID = req.session.user;
+        bm.gameID = req.body.gameID;
+        bm.addBookmark(function (err) {
+          if(err)console.log(err);
+        })
+        res.sendStatus(201)
+      }
+    });
   },
   delBookmark: function (req,res) {
     //This is the app.delete /game/bookmark function
