@@ -119,14 +119,14 @@ module.exports = {
   },
   delUser: function (req,res) {
     //This is the app.delete /user and /users/userID functions, both are being moved into the same function using abstract factory pattern.
-    var fac = new factory();
+    var fac = new controllerFactory();
     fac.create(req.session.user,function (result) {
       if (result == false) {
         //Redirect
         res.redirect('/');
       }
       else{
-        result.setUserID(req.session.userID);
+        result.setUserID(req.session.user);
         result.delUser(req.params.userID,function (err,response) {
           if(err){
             res.status(500).send(err);
@@ -248,12 +248,18 @@ module.exports = {
     res.send('ok');
   },
   newGame: function (req,res) {
-    //Check Admin and logged in
-    //Add game if true
-    db.saveGames(req.session.user,req.body.game_Name,req.body.game_Summery,req.body.game_Rules,req.body.game_Player_Count,req.body.game_Equipment,req.body.game_IsNSFW,function (response) {
-      if(response) console.log(response);
+    var fac = new controllerFactory();
+    fac.create(req.session.user,function (result) {
+      if (result == false) {
+        res.redirect('/');
+      }
+      else {
+        result.setUserID(req.session.user);
+        result.addGame(req.session.user,req.body.game_Name,req.body.game_Summery,req.body.game_Rules,req.body.game_Player_Count,req.body.game_Equipment,req.body.game_IsNSFW,function (err,response) {
+          res.sendStatus(201);
+        })
+      }
     })
-    res.sendStatus(201);
   },
   editGame: function (req,res) {
     //Check Admin and logged in

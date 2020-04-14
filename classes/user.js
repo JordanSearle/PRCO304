@@ -96,8 +96,12 @@ module.exports = class user{
         callback(result);
       })
     }
-    addGame() {
+    addGame(game_name,game_Summery,game_Rules,game_Player_Count,game_Equipment,game_IsNSFW,callback) {
       //add a new pending game
+      var game = schemas.Pending;
+      game.saveGames({userID:this.getUserID(),game_name:game_name,game_Summery:game_Summery,game_Rules:game_Rules,game_Player_Count:game_Player_Count,game_Equipment:game_Equipment,game_isNSFW:game_IsNSFW},function (err,response) {
+        callback(err,response);
+      })
     }
     addBookmark() {
       //add a new bookmark
