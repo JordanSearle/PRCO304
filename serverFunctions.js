@@ -37,7 +37,17 @@ module.exports = {
     })
   },
   user: function (req,res) {
-    // This is the app.post /createuser and Admin /user functions, both are being moved into the same function using abstract factory pattern.
+    //create a new user
+    var user = new classes.user();
+    user.setUsername(req.body.username);
+    user.setPassword(req.body.password);
+    user.setEmail(req.body.email);
+    user.setDOB(req.body.user_DOB);
+    user.addUser(function (err) {
+      //do somehting with error.
+      console.log(err);
+    })
+    res.sendStatus(201);//Correct Status?
   },
   getGame: function (req,res) {
     //This is the app.get /game/:name
@@ -130,10 +140,39 @@ module.exports = {
 
   },
   editUser: function (req,res) {
-    //This is the app.put /user and /users/userID functions, both are being moved into the same function using abstract factory pattern.
+    //edit a user
+    //Verifies the user is logged in or not. not logged in will redirect to default index page
+    verify(req,res,req.session.user,function (logged) {
+      if (logged) {
+        //Delete a user
+        var user = new classes.user();
+        user.setUserID(req.session.user);
+        user.setUsername(req.body.username);
+        user.setEmail(req.body.email);
+        user.setPassword(req.body.password);
+        user.setDOB(req.body.user_DOB);
+        user.editUser(function(err) {
+
+        });
+        res.sendStatus(200);
+      }
+    });
+
   },
   getUser: function (req,res) {
-    //This is the app.get /user and /users/userID functions, both are being moved into the same function using abstract factory pattern.
+    //view user
+    //Verifies the user is logged in or not. not logged in will redirect to default index page
+    verify(req,res,req.session.user,function (logged) {
+      if (logged) {
+        //will return the user's data
+        var user = new classes.user();
+        user.setUserID(req.session.user);
+        user.viewUser(function (result) {
+          res.send(result);
+        })
+      }
+    });
+
   },
   likeGame: function (ws,req) {
         ws.on('message', function(msg) {
@@ -158,32 +197,87 @@ module.exports = {
       }
     });
   },
-  delBookmark: function (req,res) {
-    //This is the app.delete /game/bookmark function
+  delBookmark:  function (req,res) {
+    verify(req,res,req.session.user,function (logged) {
+      if (logged) {
+        var bm = new classes.bookmark()
+        bm.userID = req.session.user;
+        bm.gameID = req.body.gameID;
+        bm.delBookmark(function (err) {
+          if(err)console.log(err);
+        })
+        res.sendStatus(200);
+      }
+    });
+
   },
   getBookmark: function (req,res) {
-    //This is the app.get /game/bookmark/id function
-    //May be redundant
+    verify(req,res,req.session.user,function (logged) {
+      if (logged) {
+        var bm = new classes.bookmark()
+        bm.userID = req.session.user;
+        bm.gameID = req.params.gameID;
+        bm.viewBookmark(function (result) {
+          res.status(200).send(result);
+        })
+      }
+    });
   },
   getBookmarks: function (req,res) {
-    //This is the app.get /game/bookmarks function
+    //Get all bookmarks by user return
+    db.listBookmarks(req.session.user,function (result) {
+      res.send(result);
+    })
   },
   tagBookmark: function (req,res) {
-    //This is the app.post /game/bookmark/tag function
+    var bm = new classes.bookmark();
+    bm.gameID = req.body.gameID;
+    bm.userID = req.session.user
+    bm.addTag(req.body.tagName,function (err) {
+      if(err)console.log(err);
+    })
+    res.send('ok');
   },
   untagBookmark: function (req,res) {
-    //This is the app.delete /game/bookmark/tag function
+    var bm = new classes.bookmark();
+    bm.gameID = req.body.gameID;
+    bm.userID = req.session.user;
+    bm.delTag(req.body.tagName,function (err) {
+      if(err)console.log(err);
+    })
+    res.send('ok');
   },
   newGame: function (req,res) {
-    //This is the app.post /newgame and /pending functions, both are being moved into the same function using abstract factory pattern.
-
+    //Check Admin and logged in
+    //Add game if true
+    db.saveGames(req.session.user,req.body.game_Name,req.body.game_Summery,req.body.game_Rules,req.body.game_Player_Count,req.body.game_Equipment,req.body.game_IsNSFW,function (response) {
+      if(response) console.log(response);
+    })
+    res.sendStatus(201);
   },
   editGame: function (req,res) {
-    //This is the app.put /editgame and /pending functions, both are being moved into the same function using abstract factory pattern.
-
+    //Check Admin and logged in
+    //Add game if true
+    var game = new classes.game();
+    game.game_UID = req.body._id;
+    game.game_Name = req.body.game_Name;
+    game.game_Rules = req.body.game_Rules;
+    game.game_Summery = req.body.game_Summery;
+    game.game_IsNSFW = req.body.game_IsNSFW;
+    game.game_Equipment = req.body.game_Equipment;
+    game.game_Player_Count = req.body.game_Player_Count;
+    game.updateGame(function (err) {
+      if(err)console.log(err);
+    })
+    res.sendStatus(201);
   },
   delGame: function (req,res) {
-    //This is the app.delete /delGame function
+    var game = new classes.game();
+    game.game_UID = req.body.id;
+      game.delGame(function (err) {
+        if(err)callback(err);
+      })
+    res.sendStatus(201);
   },
   returnPending: function (req,res) {
     //This is the app.get /user/pending and /pending functions, both are being moved into the same function using abstract factory pattern.
