@@ -34,8 +34,8 @@ module.exports = class game {
         game_IsNSFW:this.game_IsNSFW
      })
      this.game_UID = game._id;
-     game.save(function (err) {
-       if(err)callback(err);
+     game.save(function (err,res) {
+       callback(err,res)
      });
   }
   delGame(callback){

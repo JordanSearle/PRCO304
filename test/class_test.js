@@ -3,6 +3,11 @@ const expect  = require("chai").expect;
 const mongoose = require('mongoose');
 var schemas = require("../schemas");
 var db = require('../db');
+var chaiHTTP = require('chai-http');
+var chai = require('chai');
+chai.use(require('chai-match'));
+chai.use(chaiHTTP);
+const server = 'http://localhost:9000'
 
 describe('User Class Getters and Setters',function() {
   var acc = new classes.user("1","UserOne","password","email@email.com","04 Dec 1995 00:12:00 GMT");
@@ -132,6 +137,52 @@ describe('Admin class getters and setters',function() {
     })
     it('DOB should no longer be "Mon, 04 Dec 1996 00:12:00 GMT"', function() {
       expect(admin.getDOB()).to.not.equal("Mon, 04 Dec 1995 00:12:00 GMT");
+    })
+  })
+})
+describe('testing Admin and User overrides',function () {
+  context('testing add and delete game for admin and user',function () {
+    after(function (done) {
+      var gm = schemas.Game;
+      gm.deleteMany({game_Name:'Override Game Name'},function (err,res) {
+      })
+      var pn = schemas.Pending;
+      pn.deleteMany({game_Name:'Override Game Name'},function (err,res) {
+        done();
+      })
+    })
+    beforeEach(function (done) {
+      var gm = schemas.Game;
+      gm.deleteMany({game_Name:'Override Game Name'},function (err,res) {
+      })
+      var pn = schemas.Pending;
+      pn.deleteMany({game_Name:'Override Game Name'},function (err,res) {
+        done();
+      })
+    })
+    it('testing add game by user',function (done) {
+      var user = new classes.user()
+      user.setUserID('5e4bdab0e623ca4e5ca53945');
+      user.addGame('Override Game Name','Override Game Name','Override Game Name','1+',['none'],false,function(err,res) {
+        var db = schemas.Pending;
+        db.countDocuments({game_Name:'Override Game Name'}).exec(function (err,res) {
+          expect(err).to.be.null;
+          expect(res).to.equal(1);
+          done();
+        })
+      })
+    })
+    it('testing add game by admin',function (done) {
+      var admin = new classes.admin()
+      admin.setUserID('5e4bdab0e623ca4e5ca53945');
+      admin.addGame('Override Game Name','Override Game Name','Override Game Name','1+',['none'],false,function(err,res) {
+        var db = schemas.Game;
+        db.countDocuments({game_Name:'Override Game Name'}).exec(function (err,res) {
+          expect(err).to.be.null;
+          expect(res).to.equal(1);
+          done();
+        })
+      })
     })
   })
 })

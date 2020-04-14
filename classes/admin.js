@@ -1,5 +1,6 @@
 const user = require('./user');
 var schemas = require("../schemas");
+const classes = require('../classes');
 module.exports = class admin extends user {
   #isAdmin;
   constructor(userID,username,password,email,dob) {
@@ -28,6 +29,19 @@ module.exports = class admin extends user {
     })
     user.save(function (err) {
       if(err)callback(err);
+    })
+  }
+  addGame(game_name,game_Summery,game_Rules,game_Player_Count,game_Equipment,game_IsNSFW,callback) {
+    //add a new pending game
+    var game = new classes.game();
+    game.game_Name=game_name;
+    game.game_Summery=game_Summery;
+    game.game_Rules=game_Rules;
+    game.game_Player_Count=game_Player_Count;
+    game.game_Equipment=game_Equipment;
+    game.game_IsNSFW = game_IsNSFW;
+    game.saveGame(this.getUserID(),function (err,res) {
+      callback(err,res)
     })
   }
 }
