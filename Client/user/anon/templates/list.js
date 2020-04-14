@@ -100,7 +100,6 @@ app.controller('myApps', function($scope, $http) {
   }
   $scope.load = function (name) {
     $scope.selGame = name;
-
     $scope.loadGame();
   }
   $scope.loadGame = function () {
@@ -111,7 +110,6 @@ app.controller('myApps', function($scope, $http) {
         window.location.href = "#!/games/"+$scope.selected;
       }
     });
-
   }
   $scope.arr = ['text-white bg-secondary','text-white bg-info','bg-light']
   $scope.getRandomClass = function(){

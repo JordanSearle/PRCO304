@@ -14,6 +14,9 @@ app.config(['$routeProvider', function($routeProvider) {
   }).when('/request',{
     templateUrl:"/Template/request.template.html",
     controller:"requestControl"
+  }).when('/games/:param',{
+    templateUrl:'/anon/Templates/game.template.html',
+    controller:"gameUIControl"
   })
 
     }]);
@@ -100,6 +103,19 @@ app.controller('gameControl', function($scope, $http) {
       console.log(event);
       $scope.load();
     }
+  }
+  $scope.load = function (name) {
+    $scope.selGame = name;
+    $scope.loadGame();
+  }
+  $scope.loadGame = function () {
+    $scope.myWelcome.forEach((item, i) => {
+      if ($scope.selGame == item.game_Name) {
+        $scope.selected = encodeURIComponent($scope.selGame);
+        console.log($scope.selected);
+        window.location.href = "#!/games/"+$scope.selected;
+      }
+    });
   }
 });
 app.controller('userLoad',function ($scope,$http) {
@@ -232,6 +248,18 @@ app.controller('requestControl',function ($scope,$http) {
   }
   $scope.load();
 
+})
+app.controller('gameUIControl',function ($scope,$http,$routeParams) {
+  $('#exampleModal').modal('hide');
+  $('.modal-backdrop').remove();
+  $scope.load = function () {
+    console.log(encodeURIComponent($routeParams.param));
+    $http.get('/game/'+encodeURIComponent($routeParams.param))
+    .then(function (res) {
+      $scope.game = res.data[0];
+    })
+  }
+  $scope.load();
 })
 //Navbar functions (will be moved to own file)
 function nav() {

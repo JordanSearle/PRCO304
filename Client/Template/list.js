@@ -23,6 +23,10 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
   .when("/request", {
     templateUrl : "/Template/request.template.html",
     controller: "requestControl"
+  })
+  .when('/games/:param',{
+    templateUrl:'/user/anon/Templates/game.template.html',
+    controller:"gameUIControl"
   }).
     otherwise({
       redirectTo: '/'
@@ -106,6 +110,20 @@ app.controller('myApps', function($scope, $http) {
       $scope.game = result;
       $scope.$apply();
       $('#exampleModal').modal('show');
+    }
+    $scope.load = function (name) {
+      $scope.selGame = name;
+      console.log('here');
+      $scope.loadGame();
+    }
+    $scope.loadGame = function () {
+      $scope.myWelcome.forEach((item, i) => {
+        if ($scope.selGame == item.game_Name) {
+          $scope.selected = encodeURIComponent($scope.selGame);
+          console.log($scope.selected);
+          window.location.href = "#!/games/"+$scope.selected;
+        }
+      });
     }
   }
 });
@@ -252,5 +270,15 @@ app.controller('requestControl',function ($scope,$http) {
   }
 $scope.load();
 })
-function nav() {
-}
+app.controller('gameUIControl',function ($scope,$http,$routeParams) {
+  $('#exampleModal').modal('hide');
+  $('.modal-backdrop').remove();
+  $scope.load = function () {
+    console.log(encodeURIComponent($routeParams.param));
+    $http.get('/game/'+encodeURIComponent($routeParams.param))
+    .then(function (res) {
+      $scope.game = res.data[0];
+    })
+  }
+  $scope.load();
+})
