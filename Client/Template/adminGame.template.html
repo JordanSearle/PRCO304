@@ -25,25 +25,25 @@
               <td style="width:25%;">Rules</td>
               <td style="width:20%;">Player Count</td>
               <td style="width:5%;" data-toggle="tooltip" data-placement="top" title="Not Safe For Work (18+)?">NSFW</td>
-              <td style="width:5%;">Edit</td>
+              <td style="width:5%;">Controls</td>
             </tr>
             <tr ng-repeat="game in games">
               <td>
                 <!-- editable gamename (text with validation) -->
-                <span editable-text="game.game_Name" e-name="game_Name" e-form="rowform" >
+                <span editable-textarea="game.game_Name" e-rows="7" e-cols="40" e-name="game_Name" e-form="rowform" >
                   {{ game.game_Name || 'empty' }}
                 </span>
               </td>
               <td>
                 <!-- editable status (select-local) -->
                 <span editable-textarea="game.game_Summery" e-rows="7" e-cols="40" e-name="game_Summery" e-form="rowform" >
-                  {{ game.game_Summery|| 'empty' | limitTo: 150  }}{{game.game_Summery.length > 150 ? '&hellip;' : ''}}
+                  {{ game.game_Summery|| 'empty' | limitTo: 25  }}{{game.game_Summery.length > 25 ? '&hellip;' : ''}}
                 </span>
               </td>
               <td>
                 <!-- editable group (select-remote) -->
                 <span editable-textarea="game.game_Rules" e-rows="7" e-cols="40" e-name="game_Rules" e-form="rowform" >
-                  {{ game.game_Rules|| 'empty' | limitTo: 100  }}{{game.game_Summery.length > 100 ? '&hellip;' : ''}}
+                  {{ game.game_Rules|| 'empty' | limitTo: 25  }}{{game.game_Summery.length > 25 ? '&hellip;' : ''}}
                 </span>
               </td>
               <td>
