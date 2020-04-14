@@ -1,5 +1,5 @@
 
-var app = angular.module("user", ["ngRoute",'ui.filters']);
+var app = angular.module("user", ["ngRoute"]);
 app.config(['$routeProvider', function($routeProvider) {
   $routeProvider
   .when("/", {
@@ -7,24 +7,16 @@ app.config(['$routeProvider', function($routeProvider) {
     controller: "gameControl"
   }).when("/userdetails", {
     templateUrl : "/Template/curruser.template.html",
-    controller: "userControl"
-  }).when('/bookmarks',{
-    templateUrl:"/Template/bookmarks.template.html",
-    controller:"bookmarkControl"
-  }).when('/request',{
-    templateUrl:"/Template/request.template.html",
-    controller:"requestControl"
+    controller: "userControl",
+    base:'#!'
   })
 
     }]);
 app.controller('gameControl', function($scope, $http) {
-  $scope.load = function () {
-    $http.get("/game")
-    .then(function(response) {
-      $scope.myWelcome = response.data;
-    });
-  }
-  $scope.load();
+  $http.get("/readgames")
+  .then(function(response) {
+    $scope.myWelcome = response.data;
+  });
   $http.get("/user")
   .then(function(response) {
     $scope.user = response.data;
@@ -85,21 +77,7 @@ app.controller('gameControl', function($scope, $http) {
     $http.post('/game/bookmark',JSON.stringify({'gameID':id}))
     .then(function (res) {
       console.log(res);
-      $('body').removeClass('modal-open');
-      $('.modal-backdrop').remove();
     })
-  }
-  $scope.like = function (id) {
-    var ws = new WebSocket("ws://localhost:9000/game/like");
-    ws.onopen = function () {
-      ws.send(JSON.stringify({
-        'gameID': id
-      }));
-    }
-    ws.onmessage = function (event) {
-      console.log(event);
-      $scope.load();
-    }
   }
 });
 app.controller('userLoad',function ($scope,$http) {
@@ -117,6 +95,7 @@ app.controller('userLoad',function ($scope,$http) {
     })
   }
 })
+
 app.controller('userControl', function($scope, $http) {
 
   $scope.load = function () {
@@ -151,71 +130,16 @@ app.controller('userControl', function($scope, $http) {
       $scope.load();
     })
   }
+  $scope.delBookmark = function (id) {
+    $http.delete('/game/bookmark',{data: {gameID:id}, headers: {'Content-Type': 'application/json;charset=utf-8'}})
+    .then(function (res) {
+      console.log(res);
+      $scope.load();
+    })
+  }
   $scope.load();
 });
-app.controller('bookmarkControl',function ($scope,$http) {
-  $scope.load = function () {
-    $http.get('/user/bookmarks').then(function (res) {
-      $scope.bookmarks = res.data;
-      $scope.dropdowns = [];
-      $scope.bookmarks.forEach((item, i) => {
-          item.tags.forEach((items, i) => {
-            $scope.dropdowns.push(items.name);
-          });
-      });
-    })
-  }
-  $scope.load();
-  $scope.saveTag = function (id,tag) {
-    $scope.data = {gameID:id,tagName:$scope.tag.name};
-    $http.post('/user/bookmarks/tag',$scope.data).then(function (res) {
-      console.log(res);
-      $scope.load();
-    })
-  }
-  $scope.delTag = function (id,tag) {
-    $http.delete('/user/bookmarks/tag',{data: {gameID:id,tagName:tag}, headers: {'Content-Type': 'application/json;charset=utf-8'}}).then(function (res) {
-      console.log(res);
-      $scope.load();
-    })
-  }
-  $scope.delBookmark = function (id) {
-    $http.delete('/game/bookmark',{data: {gameID:id}, headers: {'Content-Type': 'application/json;charset=utf-8'}}).then(function (res) {
-      console.log(res);
-      $scope.load();
-    })
-  }
-})
-app.controller('requestControl',function ($scope,$http) {
-  var ruleMDE = new SimpleMDE({ element: document.getElementById("ruleInput"),toolbar: ["ordered-list", "|", "preview"],forceSync:true});
-  var summaryMDE = new SimpleMDE({ element: document.getElementById("summaryInput"),toolbar: ["bold", "italic", "heading", "|", "unordered-list","ordered-list","|","preview"],forceSync:true  });
 
-  $scope.addRequest = function () {
-    $scope.nGame.game_Equipment = ['item'];
-    $scope.nGame.game_Rules = ruleMDE.value();
-    $scope.nGame.game_Summery = summaryMDE.value();
-    console.log($scope.nGame);
-    $http.post('/pending',$scope.nGame).then(function (res) {
-      console.log(res);
-    })
-    $scope.load();
-  }
-  $scope.change = function () {
-    $scope.nGame.game_Rules = ruleMDE.value();
-    $scope.nGame.game_Summery = summaryMDE.value();
-    console.log(  $scope.nGame);
-    $scope.$apply();
-  }
-  $scope.load = function () {
-
-    $http.get('/user/pending').then(function (res) {
-      $scope.pList = res.data;
-      console.log(res);
-    })
-  }
-  $scope.load();
-
-})
 //Navbar functions (will be moved to own file)
 function nav() {
   if ($('#mySidebar').width() != 250) {

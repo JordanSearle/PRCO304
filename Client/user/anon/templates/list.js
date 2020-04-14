@@ -6,22 +6,17 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     templateUrl : "/Templates/list.template.html",
     controller: "myApps"
   })
-  .when('/games/:param',{
-    templateUrl:'/Templates/game.template.html',
-    controller:"gameControl"
-  })
   $locationProvider.html5Mode({
-                enabled: false,
-                requireBase: true
+                enabled: true,
+                requireBase: false
          });
 
     }]);
 app.controller('myApps', function($scope, $http) {
   $("#selector").flatpickr({defaultDate:new Date(1997, 0, 10)});
-  $http.get("/game")
+  $http.get("/readgames")
   .then(function(response) {
     $scope.myWelcome = response.data;
-    $scope.test = response.data;
   });
   $scope.login = function() {
     $http.post('/login',$scope.user)
@@ -39,7 +34,7 @@ app.controller('myApps', function($scope, $http) {
     })
   }
   $scope.createAccount = function () {
-    $http.post("/user",$scope.nUser)
+    $http.post("/createuser",$scope.nUser)
     .then(function (res) {
       console.log(res);
     })
@@ -83,6 +78,7 @@ app.controller('myApps', function($scope, $http) {
     }
   }
   $scope.loadGames = function (name) {
+    console.log(name);
     var ws = new WebSocket("ws://localhost:9000/game/load");
     ws.onopen = function () {
       ws.send(JSON.stringify({
@@ -98,35 +94,4 @@ app.controller('myApps', function($scope, $http) {
       $('#exampleModal').modal('show');
     }
   }
-  $scope.load = function (name) {
-    $scope.selGame = name;
-
-    $scope.loadGame();
-  }
-  $scope.loadGame = function () {
-    $scope.myWelcome.forEach((item, i) => {
-      if ($scope.selGame == item.game_Name) {
-        $scope.selected = encodeURIComponent($scope.selGame);
-        console.log($scope.selected);
-        window.location.href = "#!/games/"+$scope.selected;
-      }
-    });
-
-  }
-  $scope.arr = ['text-white bg-secondary','text-white bg-info','bg-light']
-  $scope.getRandomClass = function(){
-    return Math.random()*$scope.arr.length;
-  }
 });
-app.controller('gameControl',function ($scope,$http,$routeParams) {
-  $('#exampleModal').modal('hide');
-  $('.modal-backdrop').remove();
-  $scope.load = function () {
-    console.log(encodeURIComponent($routeParams.param));
-    $http.get('/game/'+encodeURIComponent($routeParams.param))
-    .then(function (res) {
-      $scope.game = res.data[0];
-    })
-  }
-  $scope.load();
-})

@@ -1,14 +1,19 @@
 <!-- Navigation -->
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
   <div class="container">
-    <a class="navbar-brand" href="/">THAT'S THE SPIRIT</a>
+    <a class="navbar-brand" href="index.html">THAT'S THE SPIRIT</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <button class="nav-link btn btn-dark" onclick="nav()"  id="navbarDropdownBlog" >
+          <a class="nav-link btn btn-dark" onclick="nav()" href="#" id="navbarDropdownBlog" >
             <span class="navbar-toggler-icon"></span>
-          </button>
+          </a>
         </li>
       </ul>
+    </div>
   </div>
 </nav>
 <div id="mySidebar" class="sidebar">
@@ -17,10 +22,9 @@
     <h2 class="pb-0">Welcome</h2>
     <h2 class="pt-0">{{user.username}}</h2>
   </div>
-  <a href="#!user">Dashboard</a>
-  <a href="#!user">Users</a>
-  <a href="#!games">Games</a>
-  <a href="#!request">request</a>
+  <a href="#">Users</a>
+  <a href="#">Games</a>
+  <a href="#">request</a>
   <div class="sidebar-footer">
     <a href="#!userdetails">Edit Account</a>
     <a href="#"ng-click="logout()">Log Out</a>

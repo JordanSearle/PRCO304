@@ -56,8 +56,8 @@ module.exports = class user{
         email:this.#email,
         user_DOB:this.#user_DOB,
       })
-      user.save(function (err,res) {
-        callback(err,res)
+      user.save(function (err) {
+        if(err)callback(err);
       })
     }
     editUser(callback){
@@ -76,19 +76,12 @@ module.exports = class user{
       })
     }
 
-    delUser(userID,callback){
+    delUser(callback){
       //delete current user
-      if (this.getUserID()&& userID && this.getUserID() == userID) {
-        var user = schemas.User;
-        user.deleteOne({'_id':this.#userID},function (err,res) {
-          callback(err,res)
-        })
-      }
-      else{
-        var err = 'request not valid',res = false;
-        callback(err,res);
-      }
-
+      var user = schemas.User;
+      user.deleteOne({'_id':this.#userID},function (err) {
+        if(err)callback(err);
+      })
     }
     viewUser(callback){
       var user = schemas.User;
@@ -96,12 +89,8 @@ module.exports = class user{
         callback(result);
       })
     }
-    addGame(game_name,game_Summery,game_Rules,game_Player_Count,game_Equipment,game_IsNSFW,callback) {
+    addGame() {
       //add a new pending game
-      var game = schemas.Pending;
-      game.saveGames({userID:this.getUserID(),game_name:game_name,game_Summery:game_Summery,game_Rules:game_Rules,game_Player_Count:game_Player_Count,game_Equipment:game_Equipment,game_isNSFW:game_IsNSFW},function (err,response) {
-        callback(err,response);
-      })
     }
     addBookmark() {
       //add a new bookmark

@@ -1,7 +1,4 @@
-var app = angular.module("myApp", ["ngRoute","xeditable"]);
-app.run(['editableOptions', function(editableOptions) {
-  editableOptions.theme = 'bs4'; // bootstrap3 theme. Can be also 'bs4', 'bs2', 'default'
-}]);
+var app = angular.module("myApp", ["ngRoute"]);
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $routeProvider
   .when("/", {
@@ -9,24 +6,21 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     controller: "myApps"
   })
   .when("/userdetails", {
-    templateUrl : "/Template/account.template.html",
+    templateUrl : "/Template/user.template.html",
     controller: "userControl"
   })
   .when("/user", {
     templateUrl : "/Template/user.template.html",
-    controller: "user"
+    controller: "userControl"
   })
   .when("/games", {
-    templateUrl : "/Template/adminGame.template.html",
-    controller: "gameControl"
+    templateUrl : "/Template/user.template.html",
+    controller: "userControl"
   })
   .when("/request", {
-    templateUrl : "/Template/request.template.html",
-    controller: "requestControl"
-  }).
-    otherwise({
-      redirectTo: '/'
-    });
+    templateUrl : "/Template/user.template.html",
+    controller: "userControl"
+  })
   $locationProvider.html5Mode({
                 enabled: false,
                 requireBase: false
@@ -34,7 +28,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 
     }]);
 app.controller('myApps', function($scope, $http) {
-    $http.get("/game")
+    $http.get("/readgames")
       .then(function(response) {
       $scope.myWelcome = response.data;
     });
@@ -54,59 +48,6 @@ app.controller('myApps', function($scope, $http) {
     .then(function (res) {
       console.log(res);
     })
-  }
-
-  $scope.nextGame = function () {
-    var ws = new WebSocket("ws://localhost:9000/game/next");
-    ws.onopen = function () {
-      ws.send(JSON.stringify({
-        'name': $scope.game.game_Name
-      }));
-      ws.onmessage = function (event) {
-        var result = JSON.parse(event.data)[0];
-        $scope.game = result;
-        $scope.$apply();
-      }
-    }
-  }
-  $scope.randGame = function () {
-    var ws = new WebSocket("ws://localhost:9000/game/random");
-    ws.onopen = function () {
-      ws.send(JSON.stringify({
-        'rand': "random"
-      }));
-    }
-    ws.onmessage = function (event) {
-      $scope.game = JSON.parse(event.data);
-      $scope.$apply();
-    }
-  }
-  $scope.prevGame = function () {
-    var ws = new WebSocket("ws://localhost:9000/game/prev");
-    ws.onopen = function () {
-      ws.send(JSON.stringify({
-        'name': $scope.game.game_Name
-      }));
-    }
-    ws.onmessage = function (event) {
-      var result = JSON.parse(event.data)[0];
-      $scope.game = result;
-      $scope.$apply();
-    }
-  }
-  $scope.loadGames = function (name) {
-    var ws = new WebSocket("ws://localhost:9000/game/load");
-    ws.onopen = function () {
-      ws.send(JSON.stringify({
-        'name': name
-      }));
-    }
-    ws.onmessage = function (event) {
-      var result = JSON.parse(event.data)[0];
-      $scope.game = result;
-      $scope.$apply();
-      $('#exampleModal').modal('show');
-    }
   }
 });
 app.controller('userControl', function($scope, $http) {
@@ -140,116 +81,13 @@ app.controller('userControl', function($scope, $http) {
   }
   $scope.load();
 });
-app.controller('user',function ($scope,$http) {
-  $scope.load = function () {
-    $http.get('/users').then(function (res) {
-      $scope.userList = res.data;
-    })
-  }
-  $scope.addUser = function () {
-    $http.post('/users',$scope.newUser)
-    .then(function (res) {
-      $scope.load();
-    })
-  }
-  $scope.delUser =function (id) {
-    $http.delete('/users/'+id)
-    .then(function (res) {
-      $scope.load();
-    })
-  }
-  $scope.load();
-})
-app.controller('gameControl', function($scope, $http) {
-  $scope.load = function () {
-    $http.get("/readgames")
-      .then(function(response) {
-      $scope.games = response.data;
-    });
-  }
-  $scope.addGame = function () {
-    $scope.nGame.equipment = ['test','test1'];
-    $http.post("/newgame",$scope.nGame)
-    .then(function (res) {
-      console.log(res);
-    })
-  }
-  $scope.editGame = function ($data,game) {
-    if (game.userID != null) {
-      game.game_Name = $data.game_Name;
-      game.game_Summery = $data.game_Summery;
-      game.game_Rules = $data.game_Rules;
-      game.game_IsNSFW = $data.game_IsNSFW
-      game.game_Player_Count = $data.game_Player_Count
-      $http.put('/editgame',game).then(function (res) {
-        console.log(res);
-      })
-    }
-    else {
-      game.game_Name = $data.game_Name;
-      game.game_Summery = $data.game_Summery;
-      game.game_Rules = $data.game_Rules;
-      game.game_IsNSFW = $data.game_IsNSFW;
-      game.game_Equipment = [];
-      game.game_Player_Count = '1 to 8 Players';
-      $http.post('/newgame',game).then(function (res) {
-        console.log(res);
-      })
-    }
-  }
-  $scope.addGame = function() {
-    $scope.inserted = {
-      game_Name: '',
-      game_Summery: '',
-      game_Rules: '',
-      game_IsNSFW: false,
-      game_userID: null,
-    };
-    $scope.games.push($scope.inserted);
-  };
-  $scope.removeGame = function (id) {
-    $http.delete('/delgame',{data: {id:id}, headers: {'Content-Type': 'application/json;charset=utf-8'}}).then(function (res) {
-      console.log(res);
-    })
-    $scope.load();
-  }
-$scope.load();
-
-})
-app.controller('requestControl',function ($scope,$http) {
-  $scope.load = function () {
-    $http.get("/pending")
-      .then(function(response) {
-      $scope.games = response.data;
-    });
-  }
-  $scope.approveGame = function () {
-
-  }
-  $scope.editGame = function ($data,game) {
-    console.log($data._id);
-      $http.post('/pending/save',$data).then(function (res) {
-        console.log(res);
-        $scope.load();
-      })
-  }
-  $scope.addGame = function() {
-    $scope.inserted = {
-      game_Name: '',
-      game_Summery: '',
-      game_Rules: '',
-      game_IsNSFW: false,
-      game_userID: null,
-    };
-    $scope.games.push($scope.inserted);
-  };
-  $scope.removeGame = function (id) {
-    $http.delete('/delgame',{data: {id:id}, headers: {'Content-Type': 'application/json;charset=utf-8'}}).then(function (res) {
-      console.log(res);
-    })
-    $scope.load();
-  }
-$scope.load();
-})
 function nav() {
+  if ($('#mySidebar').width() != 250) {
+    $('#mySidebar').width('250px');
+    $(".main").css( { marginLeft : "250px"} );
+  }
+  else{
+    $('#mySidebar').width('0px');
+    $(".main").css( { marginLeft : "0px"} );
+  }
 }
