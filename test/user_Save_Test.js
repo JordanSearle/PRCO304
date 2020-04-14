@@ -3,6 +3,7 @@ const expect  = require("chai").expect;
 const mongoose = require('mongoose');
 var schemas = require("../schemas");
 var db = require('../db');
+const WebSocket = require('ws');
 
 describe('User Class account functions',function() {
   var acc = new classes.user("1","UserTwo","password","emailTwo@email.com","04 Dec 1995 00:12:00 GMT");
@@ -86,38 +87,64 @@ describe('User Class account functions',function() {
         })
       }, 10);
     })
-    it('Testing account deletion incorrect id',function (done) {
-      acc.delUser('5e4bdab0e623ca4e5ca53945',function (err,res) {
-        expect(err).to.not.be.null;
-        expect(err).to.equal('request not valid');
-        expect(res).to.be.false;
-        user.countDocuments({'username':acc.getUsername()}, function (err, count) {
-          expect(err).to.be.null;
-          expect(count).to.equal(1);
-          done();
-        });
-      });
-    })
-    it('Testing account deletion blank id',function (done) {
-      acc.delUser(undefined,function (err,res) {
-        expect(err).to.not.be.null;
-        user.countDocuments({'username':acc.getUsername()}, function (err, count) {
-          expect(err).to.be.null;
-          expect(count).to.equal(1);
-          done();
-        });
-      });
-    })
     it('Testing account deletion',function (done) {
-      acc.delUser(acc.getUserID(),function (err,res) {
+      acc.delUser(function (err) {
         expect(err).to.be.null;
-        expect(res.deletedCount).to.equal(1);
-        user.countDocuments({'username':acc.getUsername()}, function (err, count) {
+      });
+      setTimeout(function(){
+        user.countDocuments({'_id':acc.getUserID()}, function (err, count) {
           expect(err).to.be.null;
           expect(count).to.equal(0);
           done();
         });
-      });
+      }, 10);
     })
+  })
+})
+describe('testing websocket functions',function () {
+  it('testing getting a random game',function (done) {
+    var ws = new WebSocket("ws://localhost:9000/game/random");
+    ws.onopen = function () {
+      ws.send(JSON.stringify({
+        'rand': "random"
+      }));
+    }
+    ws.onmessage = function (event) {
+      expect(JSON.parse(event.data)).to.not.be.null;
+      done();
+    }
+  })
+  it('testing getting next game',function (done) {
+    var ws = new WebSocket("ws://localhost:9000/game/next");
+    ws.onopen = function () {
+      ws.send(JSON.stringify({
+        'name': 'This is a game title number 10'
+      }));
+    }
+    ws.onmessage = function (event) {
+      expect(JSON.parse(event.data).length).to.not.equal(0);
+      done();
+    }
+    ws.onopen = function () {
+      ws.send(JSON.stringify({
+        'name': 'This is a game title number 24'
+      }));
+    }
+    ws.onmessage = function (event) {
+      expect(JSON.parse(event.data).length).to.not.equal(0);
+      done();
+    }
+  })
+  it('testing getting prev game',function (done) {
+    var ws = new WebSocket("ws://localhost:9000/game/prev");
+    ws.onopen = function () {
+      ws.send(JSON.stringify({
+        'name': 'This is a game title number 10'
+      }));
+    }
+    ws.onmessage = function (event) {
+      expect(JSON.parse(event.data).length).to.not.equal(0);
+      done();
+    }
   })
 })

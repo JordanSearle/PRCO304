@@ -5,7 +5,7 @@ var mongoose = require("mongoose");
 module.exports = {
   readGames: function (callback) {
     var games = schemas.Game;
-    games.find().populate('userID','username').
+    games.find().populate('userID').
     exec(function (err, game) {
       if (err) return err;
       callback(game);
@@ -96,16 +96,9 @@ module.exports = {
   },
   listBookmarks: function (id,callback) {
     var bm = schemas.Bookmark;
-    bm.find({userID:id}).populate('gameID','game_Name game_Summery').select('-userID').exec(function (err,res) {
+    bm.find({userID:id}).populate('gameID').exec(function (err,res) {
       if(err)callback(err);
       callback(res);
-    })
-  },
-  getUsers: function (callback) {
-    var user = schemas.User;
-    user.find().select('-password -user_DOB').exec(function (err,result) {
-      if(err)console.log(err);
-      callback(result);
     })
   }
 }

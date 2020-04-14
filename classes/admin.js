@@ -17,24 +17,17 @@ module.exports = class admin extends user {
       }
     })
   }
-  addUser(isAdmin,callback){
+  addUser(callback){
     //Create new user
     var user = new schemas.User({
       username: this.getUsername(),
       password: this.getPassword(),
       email:this.getEmail(),
       user_DOB:this.getDOB(),
-      isAdmin:isAdmin
+      isAdmin:true
     })
     user.save(function (err) {
       if(err)callback(err);
-    })
-  }
-  addGame(game_name,game_Summery,game_Rules,game_Player_Count,game_Equipment,game_IsNSFW,callback) {
-    //add a new pending game
-    var game = schemas.Game;
-    game.saveGames({userID:this.getUserID(),game_name:game_name,game_Summery:game_Summery,game_Rules:game_Rules,game_Player_Count:game_Player_Count,game_Equipment:game_Equipment,game_isNSFW:game_IsNSFW},function (err,response) {
-      callback(err,response);
     })
   }
 }
