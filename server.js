@@ -64,7 +64,7 @@ var server = app.listen(9000, function() {
     app.get('/game/bookmark/:gameID',serverFunctions.getBookmark)
     //Admin Functions
     app.post('/game',serverFunctions.newGame)
-    app.put('/game/:gameID',serverFunctions.editGame)
+    app.put('/game',serverFunctions.editGame)
     app.delete('/game',serverFunctions.delGame)
 // /user/ functions
     app.post('/user',serverFunctions.user)
@@ -89,18 +89,36 @@ var server = app.listen(9000, function() {
       verify(req,res,req.session.user,function (logged) {
         if (logged) {
           //Create a new pending request
-          var game = new classes.game();
-          console.log(req.body);
-          game.game_Name = req.body.game_Name;
-          game.game_Rules = req.body.game_Rules;
-          game.game_Summery = req.body.game_Summery;
-          game.game_IsNSFW = req.body.game_IsNSFW;
-          game.game_Equipment = req.body.game_Equipment;
-          game.game_Player_Count = req.body.game_Player_Count;
-          game.addPending(req.session.user,function (err) {
-            if(err)console.log(err);
+          var gm = schemas.Game;
+          gm.find({_id:req.body._id}).then(function (result) {
+            if(result.length > 0){
+              var game = new classes.game();
+              game.game_Name = req.body.game_Name;
+              game.game_Rules = req.body.game_Rules;
+              game.game_Summery = req.body.game_Summery;
+              game.game_IsNSFW = req.body.game_IsNSFW;
+              game.game_Equipment = req.body.game_Equipment;
+              game.game_Player_Count = req.body.game_Player_Count;
+              game.editPending(req.body._id,function (err) {
+                if(err)console.log(err);
+              })
+              res.sendStatus(201);
+            }
+            else{
+              var game = new classes.game();
+              game.game_Name = req.body.game_Name;
+              game.game_Rules = req.body.game_Rules;
+              game.game_Summery = req.body.game_Summery;
+              game.game_IsNSFW = req.body.game_IsNSFW;
+              game.game_Equipment = req.body.game_Equipment;
+              game.game_Player_Count = req.body.game_Player_Count;
+              game.addPending(req.session.user,function (err) {
+                if(err)console.log(err);
+              })
+              res.sendStatus(201);
+            }
           })
-          res.sendStatus(201);
+
         }
       });
 
@@ -114,7 +132,6 @@ var server = app.listen(9000, function() {
       //Check if correct ID-
       game.denyPending(req.body.gameID,function (err,result) {
         if(err){
-          console.log(err);
           res.status(400).send(err);
         }
         else{
@@ -187,3 +204,4 @@ var server = app.listen(9000, function() {
         }
       })
     })
+//Test routes

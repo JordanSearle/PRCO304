@@ -31,7 +31,7 @@ var rating = new Schema({
   game_Rating:{type: Number, required: true}
 });
 var pending = new Schema({
-  _id: mongoose.Schema.Types.ObjectId,
+  id: {type:mongoose.Schema.Types.ObjectId, required: true},
   userID:{type: Schema.Types.ObjectId, ref: 'User', required: true},
   game_Name:{type: String, required: true, },
   game_Summery:{type: String, required: true},

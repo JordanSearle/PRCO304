@@ -1,0 +1,70 @@
+<nav class="navbar navbar-dark bg-dark justify-content-center fixed-bottom main">
+    <a class="nav-link">PREVIOUS</a>
+    <a class="nav-link">RANDOM</a>
+    <a class="nav-link" ng-click="isEditFormOpen = !isEditFormOpen" >EDIT</a>
+    <a class="nav-link ">NEXT</a>
+</nav>
+
+
+
+<div class="mt-4 row">
+  <div class="col-12 col-md  mt-4">
+    <div class="jumbotron pb-0">
+      <h1 class="text-uppercase">{{game.game_Name}}</h1>
+      <hr class="my-4">
+      <div class="row">
+        <div class="col-6">
+          <p>Player Count: <i>{{game.game_Player_Count}}</i></p>
+        </div>
+        <div class="col-6 text-right">
+          <p>Added By: <i>{{game.userID.username}}</i></p>
+        </div>
+      </div>
+    </div>
+    <div class="jumbotron">
+      <h3>SUMMERY</h3>
+      <p class="lead">{{game.game_Summery}}</p>
+      <hr class="my-4">
+      <h3>RULES</h3>
+      <p class="lead">{{game.game_Rules}}</p>
+    </div>
+  </div>
+  <div class="col mt-4" ng-show="isEditFormOpen">
+    <h1>Edit Game</h1>
+    <form ng-submit="editRequest()" class="m-0 ">
+      <div class="input-group mb-1">
+        <div class="input-group-prepend ">
+          <span class="input-group-text" id="">Name</span>
+        </div>
+        <input type="text" class="form-control" ng-value="game.game_Name" ng-model="eGame.game_Name" required>
+        </div>
+        <div class="form-group mb-1">
+          <label for="exampleFormControlTextarea1">Please add a short summary that would describe the game </label>
+          <textarea class="form-control" id="summaryInput" ng-value="game.game_Summery" ng-model="eGame.game_Summery" ng-change="change()" ></textarea>
+        </div>
+        <div class="form-group mb-1">
+          <label for="gameRules">Game Rules: <i>Add each rule to a new line, don't number them</i></label>
+          <textarea class="form-control" id="ruleInput" ng-value="game.game_Rules" ng-model="eGame.game_Rules""></textarea>
+        </div>
+      <div class="input-group mb-1">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="inputGroupSelect01">Is this game 18+?</label>
+        </div>
+        <select class="custom-select" ng-value="game.game_IsNSFW" ng-model="eGame.game_IsNSFW">
+          <option value="">---Please select---</option> <!-- not selected / blank option -->
+          <option value="true">Yes, only over-18s can play this game!</option>
+          <option value="false">No, anyone can play this game!</option>
+        </select>
+      </div>
+        <div class="input-group mb-1">
+            <div class="input-group-prepend ">
+              <span class="input-group-text" id="">Player Count:</span>
+            </div>
+              <input type="text" class="form-control" ng-value="game.game_Player_Count" ng-model="eGame.game_Player_Count" >
+          </div>
+          <p>We cannot guarantee your edit will be accepted. But if it does we will let you know and you can check it out on the games tab. Thank you! <br> <b>That’s the Spirit community!</b></p>
+        <div class="input-group mb-1">
+        <input class="btn btn-success btn-block " type="submit" value="Update Game!">
+        </div>
+    </form>
+</div>

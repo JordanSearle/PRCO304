@@ -98,7 +98,7 @@ module.exports = class game {
   addPending(id,callback){
     const game = new schemas.Pending({
       //UserID needs to be set from the logged on user.
-      _id: new mongoose.Types.ObjectId,
+      id: new mongoose.Types.ObjectId,
       userID:  mongoose.Types.ObjectId(id),
       game_Name: this.game_Name,
       game_Summery:this.game_Summery,
@@ -115,18 +115,19 @@ module.exports = class game {
   }
   editPending(id,callback){
     var uGame = schemas.Game;
-    uGame.findOne({'game_Name':this.game_Name},(err, result) =>{
+    uGame.findOne({'_id':id},(err, result) =>{
       if(err)callback(err);
       //Set game Variables
       const game = new schemas.Pending({
-        _id: result._id,
+        id: result._id,
         userID:  result.userID,
-        game_Name: result.game_Name,
-        game_Summery:result.game_Summery,
-        game_Rules: result.game_Rules,
-        game_Player_Count: result.game_Player_Count,
-        game_Equipment: result.game_Equipment,
-        game_IsNSFW:result.game_IsNSFW
+        game_Name: this.game_Name,
+        game_Summery:this.game_Summery,
+        game_Rules: this.game_Rules,
+        game_Player_Count: this.game_Player_Count,
+        game_Equipment: this.game_Equipment,
+        game_IsNSFW:this.game_IsNSFW,
+        pending:true
       })
        game.save(function (err) {
          if(err)callback(err);
@@ -136,23 +137,36 @@ module.exports = class game {
   approvePending(callback){
     var pending = schemas.Pending;
     pending.findOne({'game_Name':this.game_Name},(err, result) =>{
-      console.log(this.game_Name);
-      //Set game Variables
-      console.log(result);
       if (err == null&&result !=null) {
-        var game = new schemas.Game({
-            _id: result._id,
-          userID:  result.userID,
-          game_Name: result.game_Name,
-          game_Summery:result.game_Summery,
-          game_Rules: result.game_Rules,
-          game_Player_Count: result.game_Player_Count,
-          game_Equipment: result.game_Equipment,
-          game_IsNSFW:result.game_IsNSFW
-        })
-        game.save( (err,res) => {
-          result.remove();
-          callback(err,res);
+        var gm = schemas.Game;
+        gm.findOne({_id:result.id},(err,res)=>{
+          if (err == null && result !=null) {
+            res.game_Name = result.game_Name,
+            res.game_Summery=result.game_Summery,
+            res.game_Rules= result.game_Rules,
+            res.game_Player_Count= result.game_Player_Count,
+            res.game_Equipment= result.game_Equipment,
+            res.game_IsNSFW=result.game_IsNSFW
+            res.save();
+            result.remove();
+            callback(err,res);
+          }
+          else if(err==null){
+            var game = new schemas.Game({
+                _id: result.id,
+              userID:  result.userID,
+              game_Name: result.game_Name,
+              game_Summery:result.game_Summery,
+              game_Rules: result.game_Rules,
+              game_Player_Count: result.game_Player_Count,
+              game_Equipment: result.game_Equipment,
+              game_IsNSFW:result.game_IsNSFW
+            })
+            game.save( (err,res) => {
+              result.remove();
+              callback(err,res);
+            })
+          }
         })
       }
       else{
@@ -162,7 +176,7 @@ module.exports = class game {
   }
   denyPending(id,callback){
       var pending = schemas.Pending;
-      pending.deleteOne({'_id':id},(err,result)=>{
+      pending.deleteOne({'id':id},(err,result)=>{
         callback(err,result)
       })
   }

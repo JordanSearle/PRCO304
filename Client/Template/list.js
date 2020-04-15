@@ -188,7 +188,7 @@ app.controller('gameControl', function($scope, $http) {
   }
   $scope.addGame = function () {
     $scope.nGame.equipment = ['test','test1'];
-    $http.post("/newgame",$scope.nGame)
+    $http.post("/game",$scope.nGame)
     .then(function (res) {
       console.log(res);
     })
@@ -200,7 +200,8 @@ app.controller('gameControl', function($scope, $http) {
       game.game_Rules = $data.game_Rules;
       game.game_IsNSFW = $data.game_IsNSFW
       game.game_Player_Count = $data.game_Player_Count
-      $http.put('/editgame',game).then(function (res) {
+      console.log(game._id);
+      $http.put('/game',game).then(function (res) {
         console.log(res);
       })
     }
@@ -211,7 +212,7 @@ app.controller('gameControl', function($scope, $http) {
       game.game_IsNSFW = $data.game_IsNSFW;
       game.game_Equipment = [];
       game.game_Player_Count = '1 to 8 Players';
-      $http.post('/newgame',game).then(function (res) {
+      $http.post('/game',game).then(function (res) {
         console.log(res);
       })
     }
@@ -246,7 +247,6 @@ app.controller('requestControl',function ($scope,$http) {
 
   }
   $scope.editGame = function ($data,game) {
-    console.log($data._id);
       $http.post('/pending/save',$data).then(function (res) {
         console.log(res);
         $scope.load();
@@ -263,6 +263,7 @@ app.controller('requestControl',function ($scope,$http) {
     $scope.games.push($scope.inserted);
   };
   $scope.removeGame = function (id) {
+    console.log(id);
     $http.delete('/pending',{data: {gameID:id}, headers: {'Content-Type': 'application/json;charset=utf-8'}}).then(function (res) {
       console.log(res);
       $scope.load();

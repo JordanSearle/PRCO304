@@ -15,7 +15,7 @@ app.config(['$routeProvider', function($routeProvider) {
     templateUrl:"/Template/request.template.html",
     controller:"requestControl"
   }).when('/games/:param',{
-    templateUrl:'/anon/Templates/game.template.html',
+    templateUrl:'/Template/game.template.html',
     controller:"gameUIControl"
   })
 
@@ -252,11 +252,23 @@ app.controller('requestControl',function ($scope,$http) {
 app.controller('gameUIControl',function ($scope,$http,$routeParams) {
   $('#exampleModal').modal('hide');
   $('.modal-backdrop').remove();
+  var ruleMDE = new SimpleMDE({ element: document.getElementById("ruleInput"),toolbar: ["ordered-list", "|", "preview"],forceSync:true});
+  var summaryMDE = new SimpleMDE({ element: document.getElementById("summaryInput"),toolbar: ["bold", "italic", "heading", "|", "unordered-list","ordered-list","|","preview"],forceSync:true  });
+  $scope.editRequest = function () {
+    $scope.eGame.game_Summery = summaryMDE.value();
+    $scope.eGame.game_Rules = ruleMDE.value();
+    $http.post('/pending',$scope.eGame).then(function (res) {
+      console.log(res);
+    })
+  }
   $scope.load = function () {
     console.log(encodeURIComponent($routeParams.param));
     $http.get('/game/'+encodeURIComponent($routeParams.param))
     .then(function (res) {
       $scope.game = res.data[0];
+      $scope.eGame = res.data[0];
+      summaryMDE.value($scope.game.game_Summery)
+      ruleMDE.value($scope.game.game_Rules)
     })
   }
   $scope.load();
