@@ -285,8 +285,32 @@ app.controller('gameUIControl',function ($scope,$http,$routeParams) {
   $scope.load();
 })
 app.controller('dashboard',function ($scope,$http) {
-  $http.get('/adminHome').then(function (res) {
-    $scope.data = res.data
-    $scope.data.freeMem = res.data.totalMem - res.data.memm
+  $scope.load = function () {
+    $http.get('/adminHome').then(function (res) {
+      $scope.data = res.data;
+      var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	theme: "light2", // "light1", "light2", "dark1", "dark2"
+	title:{
+		text: "System Memory Usage"
+	},
+	axisY: {
+		title: "Total (GB)"
+	},
+	data: [{
+		type: "column",
+		showInLegend: true,
+		legendMarkerColor: "grey",
+		legendText: "Memory Legend",
+		dataPoints: [
+			{ y: (($scope.data.memm/1024)/1024)/1024, label: "Free" },
+			{ y: ((($scope.data.totalMem - $scope.data.memm)/1024)/1024)/1024,  label: "Memory Used" }
+		]
+	}]
+});
+
+chart.render();
   })
+}
+$scope.load();
 })
