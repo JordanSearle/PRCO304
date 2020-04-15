@@ -9,11 +9,14 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+    <link href="css/xeditable.min.css" rel="stylesheet">
+    <script src="js/xeditable.min.js"></script>
     <script src="Template/list.js"></script>
-    <title>Admin Page</title>
+    <title>Admin: That's the Spirit</title>
     <style>
 body {
   font-family: "Lato", sans-serif;
+  background-color: #f5f5f5;
 }
 
 .sidebar {
@@ -42,28 +45,27 @@ body {
   color: black;
 }
 .sidebar-header{
-  background-color: lightgray;
+  background-color: #f1f1f1;
+  color: black;
 }
 
 .sidebar a:hover ,.sidebar-footer a:hover{
-  color: #f1f1f1;
-  background-color: lightgray;
+  color: black;
+  background-color: #f1f1f1;
 }
 .sidebar-footer{
-  width: inherit;
+  width: 100%;
   position: absolute;
   bottom: 10px;
   overflow-x: hidden;
 }
-
-.sidebar-header .closebtn {
-  padding-top: 60px;
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
+#navbarDropdownBlog{
+  display: none;
 }
 
+.sidebar-header .closebtn {
+  display: none;
+}
 .main {
   padding-top: 60px!important;
   margin-left: 15%;

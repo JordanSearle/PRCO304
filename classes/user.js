@@ -57,8 +57,8 @@ module.exports = class user{
         email:this.#email,
         user_DOB:this.#user_DOB,
       })
-      user.save(function (err) {
-        if(err)callback(err);
+      user.save(function (err,res) {
+        callback(err,res)
       })
     }
     editUser(callback){
@@ -77,7 +77,7 @@ module.exports = class user{
       })
     }
 
-    delUser(callback){
+    delUser(userID,callback){
       //delete current user
       console.log(this.getUserID()+' '+ userID);
       if (this.getUserID()&& userID && this.getUserID() == userID) {
@@ -98,7 +98,7 @@ module.exports = class user{
         callback(result);
       })
     }
-    addGame() {
+    addGame(game_name,game_Summery,game_Rules,game_Player_Count,game_Equipment,game_IsNSFW,callback) {
       //add a new pending game
       var game = new classes.pending();
       game.game_Name=game_name;

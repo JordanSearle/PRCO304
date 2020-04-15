@@ -6,17 +6,22 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     templateUrl : "/Templates/list.template.html",
     controller: "myApps"
   })
+  .when('/games/:param',{
+    templateUrl:'/Templates/game.template.html',
+    controller:"gameControl"
+  })
   $locationProvider.html5Mode({
-                enabled: true,
-                requireBase: false
+                enabled: false,
+                requireBase: true
          });
 
     }]);
 app.controller('myApps', function($scope, $http) {
   $("#selector").flatpickr({defaultDate:new Date(1997, 0, 10)});
-  $http.get("/readgames")
+  $http.get("/game")
   .then(function(response) {
     $scope.myWelcome = response.data;
+    $scope.test = response.data;
   });
   $scope.login = function() {
     $http.post('/login',$scope.user)
@@ -34,7 +39,7 @@ app.controller('myApps', function($scope, $http) {
     })
   }
   $scope.createAccount = function () {
-    $http.post("/createuser",$scope.nUser)
+    $http.post("/user",$scope.nUser)
     .then(function (res) {
       console.log(res);
     })
@@ -78,7 +83,6 @@ app.controller('myApps', function($scope, $http) {
     }
   }
   $scope.loadGames = function (name) {
-    console.log(name);
     var ws = new WebSocket("ws://localhost:9000/game/load");
     ws.onopen = function () {
       ws.send(JSON.stringify({
@@ -112,3 +116,15 @@ app.controller('myApps', function($scope, $http) {
     return Math.random()*$scope.arr.length;
   }
 });
+app.controller('gameControl',function ($scope,$http,$routeParams) {
+  $('#exampleModal').modal('hide');
+  $('.modal-backdrop').remove();
+  $scope.load = function () {
+    console.log(encodeURIComponent($routeParams.param));
+    $http.get('/game/'+encodeURIComponent($routeParams.param))
+    .then(function (res) {
+      $scope.game = res.data[0];
+    })
+  }
+  $scope.load();
+})

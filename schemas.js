@@ -11,10 +11,7 @@ var user = new Schema({
 var bookmark = new Schema({
   userID:{type: Schema.Types.ObjectId, ref: 'User', required: true},
   gameID:{type: Schema.Types.ObjectId, ref: 'Game', required: true},
-});
-var tag = new Schema({
-  bookmarkTag:{type: String, required: true, unique: true},
-  bookmarkID: [{ type: Schema.Types.ObjectId, ref: 'Bookmark'}]
+  tags:{type:[{}]}
 });
 var game = new Schema({
   _id: mongoose.Schema.Types.ObjectId,
@@ -24,7 +21,9 @@ var game = new Schema({
   game_Rules:{type: String, required: true},
   game_Player_Count:{type: String, required: true},
   game_Equipment:{type:[]},
-  game_IsNSFW:{type:Boolean, required:true}
+  game_IsNSFW:{type:Boolean, required:true},
+  ratingCount:{type:Number,default:0},
+  rating:[]
 });
 var rating = new Schema({
   gameID:{type: Schema.Types.ObjectId, ref: 'Game', required: true},
@@ -43,7 +42,5 @@ var pending = new Schema({
 });
 module.exports.User = mongoose.model('User', user);
 module.exports.Bookmark = mongoose.model('Bookmark', bookmark);
-module.exports.Tag = mongoose.model('Tag', tag);
 module.exports.Game = mongoose.model('Game', game);
-module.exports.Rating = mongoose.model('Rating', rating);
 module.exports.Pending = mongoose.model('Pending', pending);
