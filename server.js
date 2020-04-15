@@ -205,3 +205,20 @@ var server = app.listen(9000, function() {
       })
     })
 //Test routes
+const os = require('os');
+  app.get('/adminHome',function (req,res) {
+    var response = {
+      op: os.EOL,
+      platform: os.platform(),
+      release: os.release(),
+      arch: os.arch(),
+      cpus: os.cpus(),
+      memm: os.freemem(),
+      totalMem: os.totalmem(),
+      host: os.hostname(),
+      loadavg: os.loadavg(),
+      netintface: os.networkInterfaces(),
+      uptime: new Date(os.uptime() * 1000).toISOString().substr(11, 8)
+    }
+    res.send(response);
+  })

@@ -5,8 +5,8 @@ app.run(['editableOptions', function(editableOptions) {
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $routeProvider
   .when("/", {
-    templateUrl : "/user/anon/templates/list.template.html",
-    controller: "myApps"
+    templateUrl : "/Template/dash.template.html",
+    controller: "dashboard"
   })
   .when("/userdetails", {
     templateUrl : "/Template/account.template.html",
@@ -46,6 +46,7 @@ app.controller('myApps', function($scope, $http) {
       .then(function(response) {
         $scope.user = response.data.username;
     });
+
   $scope.logout = function () {
     $http.get("/logout")
     .then(function (res) {
@@ -282,4 +283,10 @@ app.controller('gameUIControl',function ($scope,$http,$routeParams) {
     })
   }
   $scope.load();
+})
+app.controller('dashboard',function ($scope,$http) {
+  $http.get('/adminHome').then(function (res) {
+    $scope.data = res.data
+    $scope.data.freeMem = res.data.totalMem - res.data.memm
+  })
 })
