@@ -17,9 +17,7 @@ describe('Game test',function () {
     game.game_IsNSFW = false;
   });
   after(function() {
-    games.deleteMany({'game_Name':'test game name'}).exec(function (err) {
-      if(err)console.log(err);
-    });
+    //games.deleteMany({'game_Name':'test game name'}).exec();
   })
   before(function () {
     games.deleteMany({'game_Name':'test game name'}).exec();
@@ -59,6 +57,14 @@ describe('Game test',function () {
         })
         done();
       }, 50);
+    })
+
+    it('Testing unique DB values',function (done) {
+      this.timeout(3000);
+      game.saveGame(new mongoose.Types.ObjectId,function (err) {
+        expect(err).to.not.be.null;
+        done();
+      })
     })
 
     it('Deleting game in DB',function (done) {

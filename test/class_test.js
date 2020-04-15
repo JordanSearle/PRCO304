@@ -83,19 +83,19 @@ describe('User Class Getters and Setters',function() {
 })
 
 describe('Admin class getters and setters',function() {
-  var admin = new classes.admin("A1","AdminTemp","password","AdminTemp@email.com","04 Dec 1995 00:12:00 GMT");
+  var admin = new classes.admin("A1","AdminOne","password","Admin@email.com","04 Dec 1995 00:12:00 GMT");
   context('Testing getters',function () {
     it('getUserID returns UserID as "A1"',function () {
       expect(admin.getUserID()).to.equal("A1");
     })
-    it('getUsername returns username as "AdminTemp"',function () {
-      expect(admin.getUsername()).to.equal("AdminTemp");
+    it('getUsername returns username as "AdminOne"',function () {
+      expect(admin.getUsername()).to.equal("AdminOne");
     })
     it('getPassword returns password as "password"',function () {
       expect(admin.getPassword()).to.equal("password");
     })
-    it('getEmail returns Email as "AdminTemp@email.com"',function () {
-      expect(admin.getEmail()).to.equal("AdminTemp@email.com");
+    it('getEmail returns Email as "Admin@email.com"',function () {
+      expect(admin.getEmail()).to.equal("Admin@email.com");
     })
     it('getDOB returns DOB as "Mon, 04 Dec 1995 00:12:00 GMT"',function () {
       expect(admin.getDOB()).to.equal("Mon, 04 Dec 1995 00:12:00 GMT");

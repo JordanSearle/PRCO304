@@ -1,7 +1,4 @@
-var app = angular.module("myApp", ["ngRoute","xeditable"]);
-app.run(['editableOptions', function(editableOptions) {
-  editableOptions.theme = 'bs4'; // bootstrap3 theme. Can be also 'bs4', 'bs2', 'default'
-}]);
+var app = angular.module("myApp", ["ngRoute"]);
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $routeProvider
   .when("/", {
@@ -9,16 +6,16 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     controller: "myApps"
   })
   .when("/userdetails", {
-    templateUrl : "/Template/account.template.html",
+    templateUrl : "/Template/user.template.html",
     controller: "userControl"
   })
   .when("/user", {
     templateUrl : "/Template/user.template.html",
-    controller: "user"
+    controller: "userControl"
   })
   .when("/games", {
-    templateUrl : "/Template/adminGame.template.html",
-    controller: "gameControl"
+    templateUrl : "/Template/user.template.html",
+    controller: "userControl"
   })
   .when("/request", {
     templateUrl : "/Template/request.template.html",
@@ -38,7 +35,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 
     }]);
 app.controller('myApps', function($scope, $http) {
-    $http.get("/game")
+    $http.get("/readgames")
       .then(function(response) {
       $scope.myWelcome = response.data;
     });

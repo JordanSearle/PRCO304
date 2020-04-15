@@ -1,8 +1,8 @@
 var express = require('express');
 var classes = require('./classes');
-module.exports = function (req,res,data,callback) {
+module.exports = function (app,res,data,callback) {
   if (!isLogged(data)) {
-    req.app.use(express.static('Client/user/anon'));
+    app.use(express.static('Client/user/anon'));
     res.status(200).sendFile("/", {
       root: 'Client/user/anon'
     });
@@ -12,9 +12,9 @@ module.exports = function (req,res,data,callback) {
     callback(true);
   }
 }
-module.exports.isLogged = function (req,res,data,callback) {
+module.exports.isLogged = function (app,res,data,callback) {
   if (!isAdmin(data)) {
-    req.app.use(express.static('Client/user/anon'));
+    app.use(express.static('Client/user/anon'));
       res.redirect('/');
       callback(false);
   }
@@ -22,20 +22,20 @@ module.exports.isLogged = function (req,res,data,callback) {
     callback(true);
   }
 }
-module.exports.setRoot = function (req,res,data) {
+module.exports.setRoot = function (app,res,data) {
   //Data = UserID
   var user = new classes.admin();
   user.setUserID(data);
   //Check if Admin
   user.isAdmin(function (result) {
     if (result) {
-      req.app.use(express.static('Client'));
+      app.use(express.static('Client'));
       res.status(200).sendFile("/", {
         root: 'Client'
       });
     }
     else{
-      req.app.use(express.static('Client/user'));
+      app.use(express.static('Client/user'));
       res.status(200).sendFile("/", {
         root: 'Client/user'
       });
@@ -43,10 +43,10 @@ module.exports.setRoot = function (req,res,data) {
   })
   //else set user
 }
-module.exports.rootCheck = function (req,res,data) {
+module.exports.rootCheck = function (app,res,data) {
     if (data==null) {
     res.redirect('/');
-    req.app.use(express.static('Client/user/anon'));
+    app.use(express.static('Client/user/anon'));
   }
   else{
     var user = new classes.admin();
@@ -54,11 +54,11 @@ module.exports.rootCheck = function (req,res,data) {
     //Checking if admin
     user.isAdmin(function (result) {
       if (result) {
-      req.app.use(express.static('Client'));
+      app.use(express.static('Client'));
         res.redirect('/');
       }
       else{
-        req.app.use(express.static('Client/user'));
+        app.use(express.static('Client/user'));
           res.redirect('/');
       }
     })

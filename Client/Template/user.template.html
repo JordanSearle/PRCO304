@@ -1,60 +1,23 @@
-<div class="p-3  mt-3 ">
-  <div class="row">
-    <div class="col-12 col-lg-6 ">
-      <div class="shadow p-3 mb-3 bg-white">
-      <h1>Add an Account</h1>
-      <form ng-submit="addUser()" class="mb-3">
-        <div class="form-group">
-          <label for="exampleInputEmail1" >Email address</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"  ng-model="newUser.email">
-          <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-        </div>
-        <div class="form-group">
-          <label for="exampleInputPassword1">Username</label>
-          <input type="text" class="form-control" id="exampleInputPassword1"  ng-model="newUser.username">
-        </div>
-        <div class="form-group">
-          <label for="pass">Password</label>
-          <input type="password" class="form-control" id="pass"  ng-model="newUser.password">
-        </div>
-        <div class="form-group">
-          <label for="pass">DOB</label>
-          <input type="date" class="form-control" id="DOB" ng-model="newUser.user_DOB">
-        </div>
-        <div class="form-group form-check">
-          <input type="checkbox" class="form-check-input" id="exampleCheck1"  ng-model="newUser.isAdmin">
-          <label class="form-check-label" for="exampleCheck1">Is this user an Admin?</label>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
-    </div>
-  </div>
 
-  <div class="col-12 col-lg-6">
-    <div class="shadow p-3 mb-3 bg-white">
-      <h1>This will be filled with a graph or somehting like this</h1>
-  </div>
-  </div>
-  </div>
-  <div class="rounded shadow p-3 bg-white">
-  <h1>Manage Users</h1>
-  <p>Needs to add a search bar and filter etc</p>
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th scope="col">Username</th>
-          <th scope="col">Email</th>
-          <th scope="col">Delete</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="u in userList">
-          <td>{{u.username}}</td>
-          <td>{{u.email}}</td>
-          <td><button type="button" name="button" class="btn btn-danger" ng-click="delUser(u._id)">DELETE</button></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+<h1>User Details:</h1>
+<h1>Username: {{user.username}}</h1>
+<h1>Email: {{user.email}}</h1>
+<h1>DOB: {{user.user_DOB}}</h1>
 
-</div>
+<form>
+    Username:<br>
+    <input type="text" ng-model="eUser.username" ng-value="user.username"required><br>
+    Email:<br>
+    <input type="text" ng-model="eUser.email"ng-value="user.email"required>
+    <br>
+    Password:<br>
+    <input type="text" ng-model="eUser.password"required><br>
+    DOB:<br>
+    <input type="date" ng-model="eUser.user_DOB"ng-value="dInput" required>
+    <br><br>
+    <button ng-click="editAccount()">submit</button>
+</form>
+
+<a href="/">Go Back</a>
+<button type="button" name="button" ng-click="logout()">Sign Out</button>
+<button type="button" name="button" ng-click="delete()">Delete Account</button>

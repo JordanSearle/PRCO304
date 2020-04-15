@@ -20,22 +20,12 @@
 </form>
 <hr>
 <h1>Bookmarks</h1>
-<div class="row" >
-  <div class="col-3 p-3 mr-1 mb-3 border rounded" ng-repeat="b in bookmarks">
-      <button type="button" class="close"ng-click="delBookmark(b.gameID)" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-    <div class="row">
-      <div class="col-12">
-        <p class="">{{b.gameID.game_Name}}</p>
-      </div>
-    </div>
-  <hr>
-  <div class="row">
-    <div class="col">
-      <p>Events</p>
-
-    </div>
+<div class="row m-1 p-1" ng-repeat="b in bookmarks">
+  <div class="col">
+    {{b.gameID.game_Name}}
+  </div>
+  <div class="col">
+    <button type="button" class="btn btn-danger"name="button" ng-click="delBookmark(b.gameID)">Delete</button>
   </div>
 </div>
 
