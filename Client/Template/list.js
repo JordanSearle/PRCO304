@@ -272,7 +272,14 @@ app.controller('requestControl',function ($scope,$http) {
 
   }
   $scope.editGame = function ($data,game) {
-      $http.post('/pending/save',$data).then(function (res) {
+    console.log($data);
+    console.log(game);
+    game.game_Summery = $data.game_Summery;
+    game.game_Rules = $data.game_Rules;
+    game.game_Name = $data.game_Name;
+    game.game_IsNSFW = $data.game_IsNSFW;
+    game.game_Player_Count = $data.game_Player_Count;
+      $http.post('/pending/save',game).then(function (res) {
         console.log(res);
         $scope.load();
       })

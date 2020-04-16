@@ -172,7 +172,16 @@ var server = app.listen(9000, function() {
     app.post('/pending/save',function (req,res) {
       //Approve a pending request
       var game = new classes.game();
+      console.log(req.body.userID);
+      game.game_UID = req.body.id;
+      game.userID = req.body.userID;
+      game.game_Equipment = req.body.game_Equipment;
+      game.game_Summery = req.body.game_Summery;
       game.game_Name = req.body.game_Name;
+      game.game_Rules = req.body.game_Rules;
+      game.game_Player_Count = req.body.game_Player_Count;
+      game.game_IsNSFW = req.body.game_IsNSFW;
+
       game.approvePending(function (err,result) {
         if(err!=null){
           res.status(400).send(err);
