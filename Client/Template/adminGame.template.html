@@ -82,7 +82,7 @@
                     <button class="btn btn-success" type="button" id="button-addon2" ng-click="addEquipment(game._id)">Add Equipment</button>
                   </div>
                 </div>
-                  <button ng-repeat="g in game.game_Equipment" class="btn btn-outline-danger m-1" type="button" id="button-addon2"  ng-click="delEquipment(g, game._id)">{{g}} <span aria-hidden="true">&times;</span></button>
+                  <button ng-repeat="g in game.game_Equipment" class="btn btn-outline-primary m-1" type="button" id="button-addon2"  ng-click="delEquipment(g, game._id)">{{g}} <span class="text-danger" aria-hidden="true">&times;</span></button>
               </td>
               <td colspan="2">
                 <b>Categories</b><br>

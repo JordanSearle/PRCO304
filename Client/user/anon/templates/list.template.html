@@ -7,8 +7,23 @@ would work and that is good enough for me.
 <br><br>
 I need to focus on the design of the cards though.</h2>
 </div>
+<div class="input-group m-1">
+  <div class="input-group-prepend d-none d-md-block">
+    <label class="input-group-text" for="inputGroupSelect01">Filter By Category</label>
+  </div>
+  <select class="custom-select" id="inputGroupSelect01" ng-model="$parent.selIndex" ng-change="filterGame()">
+    <option value="">View All Categories</option>
+    <option ng-repeat="x in categories">{{x}}</option>
+  </select>
+</div>
   <div class="card-columns">
-    <div class="card text-dark bg-light m-1" >
+    <div class="card" ng-if="myWelcome.length == 0">
+      <div class="card-header">No Games Exist Here!</div>
+      <div class="card-body">
+        <h5 class="card-title">Try a different Category or checking your internet connection</h5>
+      </div>
+    </div>
+    <div class="card text-dark bg-light m-1" ng-if="selIndex == '' || selIndex == undefined">
        <div class="card-header">Most recently added Games</div>
        <div class="card-body btn btn-light btn-block" ng-repeat="a in myWelcome| orderBy:'+':true | limitTo:5 "ng-Click="loadGames(a.game_Name)" >
          <h5 class=" text-left text-dark card-title">{{a.game_Name}}</h5>
@@ -18,7 +33,7 @@ I need to focus on the design of the cards though.</h2>
          <h5 class=" card-title">Not seeing a game you know? Sign up and add it now!</h5>
        </div>
  </div>
-    <div class="card p-3 m-1" ng-class="arr[$index % arr.length]" ng-repeat="i in myWelcome track by $index">
+    <div class="card p-3 m-1" ng-class="arr[$index % arr.length]" ng-repeat="i in myWelcome ">
       <a ng-Click="loadGames(i.game_Name)">
         <blockquote class="blockquote mb-0 card-body">
           <h5 class="card-title">{{i.game_Name}}</h5>

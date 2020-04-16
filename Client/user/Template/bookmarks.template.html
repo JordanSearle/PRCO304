@@ -1,55 +1,45 @@
-<div class="row" >
-  <div class="col-lg-3" ng-repeat="b in bookmarks">
-    <div class="mb-4 rounded border">
-      <div class="row">
-        <div class="col-12">
-          <div class="modal-header text-center bg-light">
-            <h5 class="modal-title" id="exampleModalLabel">{{b.gameID.game_Name}}</h5>
-            <button type="button" class="btn btn-clear" ng-click="delBookmark(b.gameID._id)">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-        </div>
+
+<div class="container mt-5">
+  <div class="card-columns">
+    <div class="card  mb-3" ng-repeat="b in bookmarks">
+      <div class="modal-header text-center bg-light">
+        <h5 class="modal-title" id="exampleModalLabel">{{b.gameID.game_Name}}</h5>
+        <button type="button" class="btn btn-outline-danger rounded-circle" ng-click="delBookmark(b.gameID._id)">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <div class="modal-body">
-        <u>EVENTS:</u>
-        <div class="row">
-          <div class="col-sm-auto" ng-repeat="t in b.tags|unique: t">
-            <div class="input-group mb-3">
-               <label class="input-group-text" for="inputGroupSelect01">{{t.name}}</label>
-              <div class="input-group-append">
-                <button class="btn btn-outline-danger" type="button" id="button-addon2"  ng-click="delTag(b.gameID._id,t.name)"><span aria-hidden="true">&times;</span></button>
-              </div>
-            </div>
-          </div>
-          <div class="col" ng-if="b.tags.length == 0">
-            <p>Click <u>ADD</u> to add event tags to this game</p>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col"  ng-show="addTag">
-            <form ng-submit="saveTag(b.gameID._id)">
-              <div class="input-group mt-3">
-              <input list="{{b.gameID._id}}" ng-model="$parent.tag.name" placeholder="Select or Add new"/>
-              <datalist name="{{b.gameID._id}}" id="{{b.gameID._id}}">
-                  <option ng-repeat="x1 in dropdowns|unique: x1" value="{{x1}}">
-              </datalist>
+        <div class="card-body text-primary">
+          <h5 class="card-title">Events</h5>
+          <div class="row">
+            <div class="col-sm-auto" ng-repeat="t in b.tags|unique: t">
+              <div class="input-group mb-3">
+                 <label class="input-group-text" for="inputGroupSelect01">{{t.name}}</label>
                 <div class="input-group-append">
-                  <input type="submit" value="Save" class="btn btn-success">
+                  <button class="btn btn-outline-danger" type="button" id="button-addon2"  ng-click="delTag(b.gameID._id,t.name)"><span aria-hidden="true">&times;</span></button>
                 </div>
               </div>
-            </form>
+            </div>
+            <div class="col" ng-if="b.tags.length == 0">
+              <p>Click <u>ADD</u> to add event tags to this game</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col"  ng-show="addTag">
+              <form ng-submit="saveTag(b.gameID._id)">
+                <div class="input-group mt-3">
+                <input list="{{b.gameID._id}}" ng-model="$parent.tag.name" placeholder="Select or Add new"/>
+                <datalist name="{{b.gameID._id}}" id="{{b.gameID._id}}">
+                    <option ng-repeat="x1 in dropdowns" value="{{x1}}">
+                </datalist>
+                  <div class="input-group-append">
+                    <input type="submit" value="Save" class="btn btn-success">
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <div class="modal-footer justify-content-start">
-          <button type="button" class="btn btn-success" name="button" ng-click="addTag = !addTag">Add +</button>
-
-          </div>
-        </div>
-      </div>
+      <div class="card-footer bg-transparent"><button type="button" class="btn btn-success btn-block" name="button" ng-click="addTag = !addTag">Add +</button></div>
     </div>
   </div>
 </div>

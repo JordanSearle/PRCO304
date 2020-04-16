@@ -200,7 +200,8 @@ app.controller('gameControl', function($scope, $http) {
       return item._id === id
     });
     $scope.games[index].game_Equipment.push($scope.newEquip[id])
-    console.log( $scope.games[index].game_Equipment);
+
+    $scope.newEquip[id] = null;
   }
   $scope.load = function () {
     $http.get("/game")
