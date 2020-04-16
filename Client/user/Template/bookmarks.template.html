@@ -1,21 +1,21 @@
 
-<div class="container mt-5">
+<div class=" mt-5">
   <div class="card-columns">
     <div class="card  mb-3" ng-repeat="b in bookmarks">
       <div class="modal-header text-center bg-light">
         <h5 class="modal-title" id="exampleModalLabel">{{b.gameID.game_Name}}</h5>
-        <button type="button" class="btn btn-outline-danger rounded-circle" ng-click="delBookmark(b.gameID._id)">
+        <button type="button" class="btn btn-outline-secondary text-danger " ng-click="delBookmark(b.gameID._id)">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-        <div class="card-body text-primary">
+        <div class="card-body">
           <h5 class="card-title">Events</h5>
           <div class="row">
             <div class="col-sm-auto" ng-repeat="t in b.tags|unique: t">
               <div class="input-group mb-3">
                  <label class="input-group-text" for="inputGroupSelect01">{{t.name}}</label>
                 <div class="input-group-append">
-                  <button class="btn btn-outline-danger" type="button" id="button-addon2"  ng-click="delTag(b.gameID._id,t.name)"><span aria-hidden="true">&times;</span></button>
+                  <button class="btn btn-outline-secondary  " type="button" id="button-addon2"  ng-click="delTag(b.gameID._id,t.name)"><span aria-hidden="true">&times;</span></button>
                 </div>
               </div>
             </div>
@@ -29,7 +29,7 @@
                 <div class="input-group mt-3">
                 <input list="{{b.gameID._id}}" ng-model="$parent.tag.name" placeholder="Select or Add new"/>
                 <datalist name="{{b.gameID._id}}" id="{{b.gameID._id}}">
-                    <option ng-repeat="x1 in dropdowns" value="{{x1}}">
+                    <option ng-repeat="x1 in dropdowns|unique: x1" value="{{x1}}">
                 </datalist>
                   <div class="input-group-append">
                     <input type="submit" value="Save" class="btn btn-success">

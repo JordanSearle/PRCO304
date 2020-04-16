@@ -21,10 +21,29 @@ app.config(['$routeProvider', function($routeProvider) {
 
     }]);
 app.controller('gameControl', function($scope, $http) {
+  $scope.categories = ['Movie','Coin','Card','Video Games','Sport','Misc','Board Games','Dinner Party','Birthdays','Retirement','Family Gathering']
+  $scope.filterGame = function () {
+    if ($scope.selIndex == '') {
+        $scope.myWelcome = $scope.filter;
+    }
+    else{
+      $scope.myWelcome = [];
+      $scope.filter.forEach((item, i) => {
+        if (item.hasOwnProperty('game_Categories')) {
+          if (item.game_Categories.hasOwnProperty($scope.selIndex)) {
+            if (item.game_Categories[$scope.selIndex] == true) {
+              $scope.myWelcome.push(item);
+            }
+          }
+        }
+      });
+    }
+  }
   $scope.load = function () {
     $http.get("/game")
     .then(function(response) {
       $scope.myWelcome = response.data;
+      $scope.filter = response.data;
     });
   }
   $scope.load();
@@ -119,18 +138,48 @@ app.controller('gameControl', function($scope, $http) {
   }
 });
 app.controller('userLoad',function ($scope,$http) {
+  $scope.search = function () {
+    if ($scope.selGame) {
+      var ws = new WebSocket("ws://localhost:9000/game/search");
+      ws.onopen = function () {
+        ws.send(JSON.stringify({
+          'name': $scope.selGame
+        }));
+        ws.onmessage = function (event) {
+          var result = JSON.parse(event.data);
+          $scope.test = result;
+          $scope.apply
+        }
+      }
+    }
+  }
+  $http.get('/game').then(function (res) {
+    $scope.test = res.data.slice(0,5);
+  })
   $http.get("/user")
   .then(function(response) {
     $scope.user = response.data;
     var test = new Date($scope.user.user_DOB).toISOString().substr(0, 10);
     $("#selector").flatpickr({defaultDate:new Date($scope.user.user_DOB)});
-    $scope.dInput = test
+    $scope.dInput = test;
   });
   $scope.logout = function () {
     $http.get("/logout")
     .then(function (res) {
       window.location.href = "/";
     })
+  }
+  $scope.load = function (name) {
+    $scope.selGame = name;
+    $scope.loadGame();
+  }
+  $scope.loadGame = function () {
+    $scope.test.forEach((item, i) => {
+      if ($scope.selGame == item.game_Name) {
+        $scope.selected = encodeURIComponent($scope.selGame);
+        window.location.href = "#!/games/"+$scope.selected;
+      }
+    });
   }
 })
 app.controller('userControl', function($scope, $http) {
@@ -189,7 +238,7 @@ app.controller('bookmarkControl',function ($scope,$http) {
     $http.get('/user/bookmarks').then(function (res) {
       $scope.bookmarks = res.data;
       $scope.dropdowns = [];
-      if ($scope.bookmarks.length < 0) {
+      if ($scope.bookmarks.length > 0) {
         $scope.bookmarks.forEach((item, i) => {
             item.tags.forEach((items, i) => {
               $scope.dropdowns.push(items.name);
