@@ -3,13 +3,14 @@ var user = require('./user');
 var schemas = require('../schemas');
 var mongoose = require("mongoose");
 module.exports = class game {
-  constructor(gameID,name,summery,rules,count,equipment, nsfw){
+  constructor(gameID,name,summery,rules,count,equipment,nsfw,categories){
     this.game_UID = gameID;
     this.game_Name = name;
     this.game_Summery = summery;
     this.game_Rules = rules;
     this.game_Player_Count = count;
     this.game_Equipment = equipment;
+    this.game_Categories = categories;
     this.game_IsNSFW = nsfw;
     this.game_Rating = 0;
   }
@@ -21,6 +22,7 @@ module.exports = class game {
   game_Equipment;
   game_IsNSFW;
   game_Rating;
+  game_Categories;
   saveGame(id,callback){
       const game = new schemas.Game({
         //UserID needs to be set from the logged on user.
@@ -31,7 +33,8 @@ module.exports = class game {
         game_Rules: this.game_Rules,
         game_Player_Count: this.game_Player_Count,
         game_Equipment: this.game_Equipment,
-        game_IsNSFW:this.game_IsNSFW
+        game_IsNSFW:this.game_IsNSFW,
+        game_Categories:this.game_Categories
      })
      this.game_UID = game._id;
      game.save(function (err,res) {
@@ -56,6 +59,8 @@ module.exports = class game {
       result.game_Player_Count = this.game_Player_Count;
       result.game_Equipment = this.game_Equipment;
       result.game_IsNSFW = this.game_IsNSFW;
+      result.game_Categories = this.game_Categories;
+      console.log(result);
       result.save();
     })
   }

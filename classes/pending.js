@@ -4,8 +4,8 @@ var schemas = require('../schemas');
 var mongoose = require("mongoose");
 
 module.exports = class pending extends game {
-  constructor(gameID,name,summery,rules,count,equipment, nsfw){
-    super(gameID,name,summery,rules,count,equipment, nsfw);
+  constructor(gameID,name,summery,rules,count,equipment, nsfw,game_Categories){
+    super(gameID,name,summery,rules,count,equipment, nsfw,game_Categories);
     this.game_UID = gameID;
     this.game_Name = name;
     this.game_Summery = summery;
@@ -14,6 +14,7 @@ module.exports = class pending extends game {
     this.game_Equipment = equipment;
     this.game_IsNSFW = nsfw;
     this.game_Rating = 0;
+    this.game_Categories = game_Categories;
   }
   saveGame(id,callback){
       const game = new schemas.Pending({
@@ -25,7 +26,8 @@ module.exports = class pending extends game {
         game_Rules: this.game_Rules,
         game_Player_Count: this.game_Player_Count,
         game_Equipment: this.game_Equipment,
-        game_IsNSFW:this.game_IsNSFW
+        game_IsNSFW:this.game_IsNSFW,
+        game_Categories:this.game_Categories
      })
      this.game_UID = game._id;
      game.save(function (err,res) {

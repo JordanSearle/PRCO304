@@ -21,11 +21,11 @@ var game = new Schema({
   game_Rules:{type: String, required: true},
   game_Player_Count:{type: String, required: true},
   game_Equipment:{type:[]},
+  game_Categories:{type:{}},
   game_IsNSFW:{type:Boolean, required:true},
   ratingCount:{type:Number,default:0},
   rating:[]
 });
-game.index({'$**': 'text'})
 var rating = new Schema({
   gameID:{type: Schema.Types.ObjectId, ref: 'Game', required: true},
   userID:{type: Schema.Types.ObjectId, ref: 'User', required: true},

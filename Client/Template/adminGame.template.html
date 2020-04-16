@@ -27,7 +27,7 @@
               <td style="width:5%;" data-toggle="tooltip" data-placement="top" title="Not Safe For Work (18+)?">NSFW</td>
               <td style="width:5%;">Controls</td>
             </tr>
-            <tr ng-repeat="game in games">
+            <tr ng-repeat-start="game in games track by $index ">
               <td>
                 <!-- editable gamename (text with validation) -->
                 <span editable-textarea="game.game_Name" e-rows="7" e-cols="40" e-name="game_Name" e-form="rowform" >
@@ -60,19 +60,31 @@
               </td>
               <td style="white-space: nowrap">
                 <!-- form -->
-                <form editable-form name="rowform" onaftersave="editGame($data,game)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == game">
-                  <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
-                    save
-                  </button>
-                  <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
-                    cancel
-                  </button>
-                </form>
+
                 <div class="buttons" ng-show="!rowform.$visible">
                   <button type="button" class="btn btn-primary" ng-click="rowform.$show()">edit</button>
                   <button type="button" class="btn btn-danger" ng-click="removeGame(game._id)">del</button>
                 </div>
               </td>
+            </tr>
+            <tr ng-repeat-end ng-show="rowform.$visible">
+              <td colspan="2">
+                <input type="text"ng-model="$parent.newEquip[game._id]" placeholder="Equipment Name"><button type="button" ng-click="addEquipment(game._id)" name="button">Add Equipment</button><br>
+                  <button ng-repeat="g in game.game_Equipment" class="btn btn-outline-danger m-1" type="button" id="button-addon2"  ng-click="delEquipment(g, game._id)">{{g}} <span aria-hidden="true">&times;</span></button>
+              </td>
+              <td colspan="2">
+                <label class="checkbox inline" ng-repeat="c in categories" >
+                    <input type="checkbox" class="ml-3" value="c" ng-checked="game.game_Categories[c]"  ng-model="game.game_Categories[c]"> {{c}}
+                    </label>
+                </td>
+              <td colspan="2"style="white-space: nowrap"><form editable-form name="rowform" onaftersave="editGame($data,game)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == game">
+                <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary btn-block">
+                  save
+                </button>
+                <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-danger btn-block">
+                  cancel
+                </button>
+              </form></td>
             </tr>
           </table>
 

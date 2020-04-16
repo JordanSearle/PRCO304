@@ -52,7 +52,6 @@ module.exports = {
   getGame: function (req,res) {
     //This is the app.get /game/:name
     db.getGame(req.params.name,function (result,err) {
-        console.log(req.params.name);
       if(result.length ==0 ){
         res.sendStatus(404);
         return;
@@ -218,7 +217,6 @@ module.exports = {
         bm.userID = req.session.user;
         bm.gameID = req.params.gameID;
         bm.viewBookmark(function (result) {
-          console.log(result);
           res.status(200).send(result);
         })
       }
@@ -256,7 +254,8 @@ module.exports = {
       }
       else {
         result.setUserID(req.session.user);
-        result.addGame(req.session.user,req.body.game_Name,req.body.game_Summery,req.body.game_Rules,req.body.game_Player_Count,req.body.game_Equipment,req.body.game_IsNSFW,function (err,response) {
+        console.log(req.body);
+        result.addGame(req.session.user,req.body.game_Name,req.body.game_Summery,req.body.game_Rules,req.body.game_Player_Count,req.body.game_Equipment,req.body.game_IsNSFW,req.body.game_Categories,function (err,response) {
           res.sendStatus(201);
         })
       }
@@ -266,6 +265,7 @@ module.exports = {
     //Check Admin and logged in
     //Add game if true
     var game = new classes.game();
+    game.game_Categories = req.body.game_Categories;
     game.game_UID = req.body._id;
     game.game_Name = req.body.game_Name;
     game.game_Rules = req.body.game_Rules;
