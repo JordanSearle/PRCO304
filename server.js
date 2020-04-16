@@ -58,6 +58,7 @@ var server = app.listen(9000, function() {
     app.ws('/game/random',serverFunctions.randomGame)
     app.ws('/game/load',serverFunctions.loadGame)
     app.ws('/game/like',serverFunctions.likeGame)
+    app.ws('/game/search',serverFunctions.search)
     //User functions
     app.post('/game/bookmark',serverFunctions.newBookmark)
     app.delete('/game/bookmark',serverFunctions.delBookmark)

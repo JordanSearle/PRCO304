@@ -25,6 +25,7 @@ var game = new Schema({
   ratingCount:{type:Number,default:0},
   rating:[]
 });
+game.index({'$**': 'text'})
 var rating = new Schema({
   gameID:{type: Schema.Types.ObjectId, ref: 'Game', required: true},
   userID:{type: Schema.Types.ObjectId, ref: 'User', required: true},
