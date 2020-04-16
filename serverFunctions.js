@@ -297,8 +297,8 @@ module.exports = {
   },
   search:function (ws,req) {
     ws.on('message', function(msg) {
-      var t = JSON.parse(msg).gameID;
-      var rex = new RegExp(t 'i');
+      var t = JSON.parse(msg).name;
+      var rex = new RegExp(t, 'i');
       var s = schemas.Game;
       s.find({$or:[{game_Name:rex},{game_Summery:rex},{game_Rules:rex},{game_Player_Count:rex}]})
            .limit(10)

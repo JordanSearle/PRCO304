@@ -23,6 +23,21 @@ app.controller('myApps', function($scope, $http) {
     $scope.myWelcome = response.data;
     $scope.test = response.data;
   });
+  $scope.search = function () {
+    if ($scope.selGame) {
+      var ws = new WebSocket("ws://localhost:9000/game/search");
+      ws.onopen = function () {
+        ws.send(JSON.stringify({
+          'name': $scope.selGame
+        }));
+        ws.onmessage = function (event) {
+          var result = JSON.parse(event.data);
+          $scope.test = result;
+          $scope.apply
+        }
+      }
+    }
+  }
   $scope.login = function() {
     $http.post('/login',$scope.user)
     .then(function (response) {
