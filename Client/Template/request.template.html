@@ -17,6 +17,12 @@
 
           <h1>Manage Games</h1>
           <h3>Click <u>edit</u> to make changes and to approve the game</h3>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" ng-model="searchText" placeholder="Search" aria-describedby="button-addon2">
+            <div class="input-group-append">
+              <button class="btn btn-success" type="button" id="button-addon2" >Search Request</button>
+            </div>
+          </div>
           <table class="table table-bordered table-hover table-condensed mt-1">
             <tr style="font-weight: bold">
               <td style="width:20%;">Name</td>
@@ -29,7 +35,7 @@
             <tr>
               <td colspan="6" ng-if="games.length == 0">Looks like you are all caught up with request!</td>
             </tr>
-            <tr ng-repeat="game in games">
+            <tr ng-repeat="game in games | filter:searchText">
               <td>
                 <!-- editable gamename (text with validation) -->
                 <span editable-text="game.game_Name" e-name="game_Name" e-form="rowform" >
