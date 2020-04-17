@@ -1,7 +1,16 @@
 
 <div class=" mt-5">
+  <div class="input-group mb-1">
+    <div class="input-group-prepend d-none d-md-block">
+      <label class="input-group-text" for="inputGroupSelect01">Filter By Event!</label>
+    </div>
+    <select class="custom-select" id="inputGroupSelect01" ng-model="filterValue" ng-change="filter()">
+      <option value="">View All Events</option>
+      <option ng-repeat="x1 in dropdowns|unique: x1" value="{{x1}}">{{x1}}</option>
+    </select>
+  </div>
   <div class="card-columns">
-    <div class="card  mb-3" ng-repeat="b in bookmarks">
+    <div class="card  mb-3" ng-repeat="b in list track by $index">
       <div class="modal-header text-center bg-light">
         <h5 class="modal-title" id="exampleModalLabel">{{b.gameID.game_Name}}</h5>
         <button type="button" class="btn btn-outline-secondary text-danger " ng-click="delBookmark(b.gameID._id)">

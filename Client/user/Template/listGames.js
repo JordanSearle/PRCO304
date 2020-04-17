@@ -237,6 +237,7 @@ app.controller('bookmarkControl',function ($scope,$http) {
   $scope.load = function () {
     $http.get('/user/bookmarks').then(function (res) {
       $scope.bookmarks = res.data;
+      $scope.list = $scope.bookmarks;
       $scope.dropdowns = [];
       if ($scope.bookmarks.length > 0) {
         $scope.bookmarks.forEach((item, i) => {
@@ -248,6 +249,21 @@ app.controller('bookmarkControl',function ($scope,$http) {
     })
   }
   $scope.load();
+  $scope.filter = function () {
+    if ($scope.filterValue == '') {
+      $scope.list = $scope.bookmarks;
+    }
+    else{
+      $scope.list = [];
+      $scope.bookmarks.forEach((item, i) => {
+        item.tags.forEach((item1, i) => {
+          if (item1.name == $scope.filterValue) {
+            $scope.list.push(item);
+          }
+        });
+      });
+    }
+  }
   $scope.saveTag = function (id,tag) {
     $scope.data = {gameID:id,tagName:$scope.tag.name};
     $http.post('/user/bookmarks/tag',$scope.data).then(function (res) {
