@@ -33,6 +33,8 @@ app.use(session({
 }));
 //Server Start...
 var server = app.listen(9000, function() {
+
+
     // Connect to Mongoose.
     mongoose.connect(uri, {
       useCreateIndex: true,
@@ -58,6 +60,7 @@ var server = app.listen(9000, function() {
     app.ws('/game/random',serverFunctions.randomGame)
     app.ws('/game/load',serverFunctions.loadGame)
     app.ws('/game/like',serverFunctions.likeGame)
+    app.ws('/game/search',serverFunctions.search)
     //User functions
     app.post('/game/bookmark',serverFunctions.newBookmark)
     app.delete('/game/bookmark',serverFunctions.delBookmark)
@@ -169,7 +172,16 @@ var server = app.listen(9000, function() {
     app.post('/pending/save',function (req,res) {
       //Approve a pending request
       var game = new classes.game();
+      console.log(req.body.userID);
+      game.game_UID = req.body.id;
+      game.userID = req.body.userID;
+      game.game_Equipment = req.body.game_Equipment;
+      game.game_Summery = req.body.game_Summery;
       game.game_Name = req.body.game_Name;
+      game.game_Rules = req.body.game_Rules;
+      game.game_Player_Count = req.body.game_Player_Count;
+      game.game_IsNSFW = req.body.game_IsNSFW;
+
       game.approvePending(function (err,result) {
         if(err!=null){
           res.status(400).send(err);

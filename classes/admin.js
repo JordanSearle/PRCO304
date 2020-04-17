@@ -45,7 +45,7 @@ module.exports = class admin extends user {
     }
 
   }
-  addGame(game_name,game_Summery,game_Rules,game_Player_Count,game_Equipment,game_IsNSFW,callback) {
+  addGame(id,game_name,game_Summery,game_Rules,game_Player_Count,game_Equipment,game_IsNSFW,game_Categories,callback) {
     //add a new pending game
     var game = new classes.game();
     game.game_Name=game_name;
@@ -54,6 +54,7 @@ module.exports = class admin extends user {
     game.game_Player_Count=game_Player_Count;
     game.game_Equipment=game_Equipment;
     game.game_IsNSFW = game_IsNSFW;
+    game.game_Categories = game_Categories;
     game.saveGame(this.getUserID(),function (err,res) {
       callback(err,res)
     })

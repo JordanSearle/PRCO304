@@ -17,12 +17,47 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 
     }]);
 app.controller('myApps', function($scope, $http) {
+  $scope.categories = ['Movie','Coin','Card','Video Games','Sport','Misc','Board Games','Dinner Party','Birthdays','Retirement','Family Gathering']
+  $scope.filterGame = function () {
+    if ($scope.selIndex == '') {
+        $scope.myWelcome = $scope.filter;
+    }
+    else{
+      $scope.myWelcome = [];
+      $scope.filter.forEach((item, i) => {
+        if (item.hasOwnProperty('game_Categories')) {
+          if (item.game_Categories.hasOwnProperty($scope.selIndex)) {
+            if (item.game_Categories[$scope.selIndex] == true) {
+              $scope.myWelcome.push(item);
+            }
+          }
+        }
+      });
+    }
+
+  }
   $("#selector").flatpickr({defaultDate:new Date(1997, 0, 10)});
   $http.get("/game")
   .then(function(response) {
     $scope.myWelcome = response.data;
     $scope.test = response.data;
+    $scope.filter = response.data;
   });
+  $scope.search = function () {
+    if ($scope.selGame) {
+      var ws = new WebSocket("ws://localhost:9000/game/search");
+      ws.onopen = function () {
+        ws.send(JSON.stringify({
+          'name': $scope.selGame
+        }));
+        ws.onmessage = function (event) {
+          var result = JSON.parse(event.data);
+          $scope.test = result;
+          $scope.apply
+        }
+      }
+    }
+  }
   $scope.login = function() {
     $http.post('/login',$scope.user)
     .then(function (response) {

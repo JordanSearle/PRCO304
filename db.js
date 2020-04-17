@@ -7,7 +7,7 @@ module.exports = {
     var games = schemas.Game;
     games.find().populate('userID','username').
     exec(function (err, game) {
-      if (err) return err;
+      if (err) console.log(err);
       callback(game);
     })
   },
@@ -25,7 +25,7 @@ module.exports = {
   },
   getGame: function (name, callback) {
     var game = schemas.Game;
-    game.find({game_Name: { $regex: new RegExp("^" + name.toLowerCase(), "i") }}).populate('userID','username').limit(1).exec(
+    game.find({game_Name: { $regex: new RegExp("^" + name, "i") }}).populate('userID','username').limit(1).exec(
       function (err, result) {
         // Tada! random game
         if(err)callback(err);
