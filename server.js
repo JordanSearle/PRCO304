@@ -175,6 +175,7 @@ var server = app.listen(9000, function() {
       console.log(req.body.userID);
       game.game_UID = req.body.id;
       game.userID = req.body.userID;
+      game.game_Categories = req.body.game_Categories;
       game.game_Equipment = req.body.game_Equipment;
       game.game_Summery = req.body.game_Summery;
       game.game_Name = req.body.game_Name;

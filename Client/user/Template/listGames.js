@@ -269,27 +269,33 @@ app.controller('bookmarkControl',function ($scope,$http) {
   }
 })
 app.controller('requestControl',function ($scope,$http) {
+  $scope.categories = ['Movie','Coin','Card','Video Games','Sport','Misc','Board Games','Dinner Party','Birthdays','Retirement','Family Gathering']
   var ruleMDE = new SimpleMDE({ element: document.getElementById("ruleInput"),toolbar: ["ordered-list", "|", "preview"],forceSync:true});
   var summaryMDE = new SimpleMDE({ element: document.getElementById("summaryInput"),toolbar: ["bold", "italic", "heading", "|", "unordered-list","ordered-list","|","preview"],forceSync:true  });
-
+  $scope.newGame = {
+    game_Equipment:[]
+  };
   $scope.addRequest = function () {
-    $scope.nGame.game_Equipment = ['item'];
     $scope.nGame.game_Rules = ruleMDE.value();
     $scope.nGame.game_Summery = summaryMDE.value();
-    console.log($scope.nGame);
+    $scope.nGame.game_Equipment = $scope.newGame.game_Equipment
     $http.post('/pending',$scope.nGame).then(function (res) {
       console.log(res);
+      $scope.load();
     })
-    $scope.load();
   }
-  $scope.change = function () {
-    $scope.nGame.game_Rules = ruleMDE.value();
-    $scope.nGame.game_Summery = summaryMDE.value();
-    console.log(  $scope.nGame);
-    $scope.$apply();
+
+  $scope.addEquipment = function () {
+    $scope.newGame.game_Equipment.push($scope.newEquipment);
+    $scope.$apply;
+  }
+  $scope.delEquipment = function (name) {
+    var rtnValue = $scope.newGame.game_Equipment.findIndex(function (item,i) {
+      return item === name;
+    })
+    $scope.newGame.game_Equipment.splice(rtnValue,1);
   }
   $scope.load = function () {
-
     $http.get('/user/pending').then(function (res) {
       $scope.pList = res.data;
       console.log(res);
