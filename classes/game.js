@@ -48,7 +48,6 @@ module.exports = class game {
     });
   }
   updateGame(callback){
-    var game = this;
     var uGame = schemas.Game;
     uGame.findOne({'_id':this.game_UID},(err, result) =>{
       if(err)callback(err);
@@ -60,8 +59,9 @@ module.exports = class game {
       result.game_Equipment = this.game_Equipment;
       result.game_IsNSFW = this.game_IsNSFW;
       result.game_Categories = this.game_Categories;
-      console.log(result);
-      result.save();
+      result.save(function (err,res) {
+        callback(err,res)
+      });
     })
   }
   //Rating function, not important right now.

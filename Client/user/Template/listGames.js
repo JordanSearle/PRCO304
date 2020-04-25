@@ -295,7 +295,8 @@ app.controller('requestControl',function ($scope,$http) {
     $scope.nGame.game_Rules = ruleMDE.value();
     $scope.nGame.game_Summery = summaryMDE.value();
     $scope.nGame.game_Equipment = $scope.newGame.game_Equipment
-    $http.post('/pending',$scope.nGame).then(function (res) {
+    console.log($scope.nGame);
+    $http.post('/game',$scope.nGame).then(function (res) {
       console.log(res);
       $scope.load();
     })
@@ -328,7 +329,7 @@ app.controller('gameUIControl',function ($scope,$http,$routeParams) {
   $scope.editRequest = function () {
     $scope.eGame.game_Summery = summaryMDE.value();
     $scope.eGame.game_Rules = ruleMDE.value();
-    $http.post('/pending',$scope.eGame).then(function (res) {
+    $http.put('/game',$scope.eGame).then(function (res) {
       console.log(res);
     })
   }

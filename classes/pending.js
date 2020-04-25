@@ -20,6 +20,7 @@ module.exports = class pending extends game {
       const game = new schemas.Pending({
         //UserID needs to be set from the logged on user.
         _id: new mongoose.Types.ObjectId,
+        id:new mongoose.Types.ObjectId,
         userID:  mongoose.Types.ObjectId(id),
         game_Name: this.game_Name,
         game_Summery:this.game_Summery,
@@ -30,7 +31,9 @@ module.exports = class pending extends game {
         game_Categories:this.game_Categories
      })
      this.game_UID = game._id;
+     console.log(game);
      game.save(function (err,res) {
+       console.log(err+res);
        callback(err,res)
      });
   }

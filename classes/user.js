@@ -98,7 +98,7 @@ module.exports = class user{
         callback(result);
       })
     }
-    addGame(game_name,game_Summery,game_Rules,game_Player_Count,game_Equipment,game_IsNSFW,game_Categories,callback) {
+    addGame(user,game_name,game_Summery,game_Rules,game_Player_Count,game_Equipment,game_IsNSFW,game_Categories,callback) {
       //add a new pending game
       var game = new classes.pending();
       game.game_Name=game_name;
@@ -112,26 +112,14 @@ module.exports = class user{
         callback(err,res)
       })
     }
-    addBookmark() {
-      //add a new bookmark
-    }
-    delBookmark() {
-      //delete bookmark
-    }
-    addTag() {
-      //add bookmark tag
-    }
-    delTag() {
-      //remove bookmark tag
-    }
-    addRating() {
-      //add a game rating
-    }
-    delRating() {
-      //remove rating
-    }
-    read(){
-      //returns user details from database
+    editGame(gameJSON,callback) {
+      //edit a game
+      var game = new schemas.Pending(gameJSON);
+      game.userID = this.getUserID();
+      game.id = game._id
+      game.save(function(err,res) {
+        callback(err,res)
+      })
     }
     //getters and setters
     getUserID(){

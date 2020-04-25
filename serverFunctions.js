@@ -137,7 +137,7 @@ module.exports = {
       }
     });
 
-  },
+  }, //Updated to Fac controller
   editUser: function (req,res) {
     //edit a user
     //Verifies the user is logged in or not. not logged in will redirect to default index page
@@ -254,37 +254,41 @@ module.exports = {
       }
       else {
         result.setUserID(req.session.user);
-        console.log(req.body);
         result.addGame(req.session.user,req.body.game_Name,req.body.game_Summery,req.body.game_Rules,req.body.game_Player_Count,req.body.game_Equipment,req.body.game_IsNSFW,req.body.game_Categories,function (err,response) {
-          res.sendStatus(201);
+        res.sendStatus(201);
         })
       }
     })
-  },
+  },  //Updated to Fac controller
   editGame: function (req,res) {
-    //Check Admin and logged in
-    //Add game if true
-    var game = new classes.game();
-    game.game_Categories = req.body.game_Categories;
-    game.game_UID = req.body._id;
-    game.game_Name = req.body.game_Name;
-    game.game_Rules = req.body.game_Rules;
-    game.game_Summery = req.body.game_Summery;
-    game.game_IsNSFW = req.body.game_IsNSFW;
-    game.game_Equipment = req.body.game_Equipment;
-    game.game_Player_Count = req.body.game_Player_Count;
-    game.updateGame(function (err) {
-      if(err)console.log(err);
+    var fac = new controllerFactory();
+    fac.create(req.session.user,function (result) {
+      if (result == false) {
+        res.redirect('/');
+      }
+      else {
+        result.setUserID(req.session.user);
+        result.editGame(req.body,function (err,response) {
+        res.sendStatus(201);
+        })
+      }
     })
-    res.sendStatus(201);
-  },
+  },  //Updated to Fac controller
   delGame: function (req,res) {
-    var game = new classes.game();
-    game.game_UID = req.body.id;
-      game.delGame(function (err) {
-        if(err)callback(err);
+    var fac = new controllerFactory();
+    fac.create(req.session.user,function (result) {
+      if (result instanceof classes.admin) {
+        var game = new classes.game();
+        game.game_UID = req.body.id;
+          game.delGame(function (err) {
+            if(err)callback(err);
+          })
+        res.sendStatus(201);
+      }
+      else {
+          res.redirect('/');
+        }
       })
-    res.sendStatus(201);
   },
   returnPending: function (req,res) {
     //This is the app.get /user/pending and /pending functions, both are being moved into the same function using abstract factory pattern.
