@@ -3,11 +3,11 @@ var app = angular.module("myApp", ["ngRoute"]);
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $routeProvider
   .when("/", {
-    templateUrl : "/Templates/list.template.html",
+    templateUrl : "/templates/list.template.html",
     controller: "myApps"
   })
   .when('/games/:param',{
-    templateUrl:'/Templates/game.template.html',
+    templateUrl:'/templates/game.template.html',
     controller:"gameControl"
   })
   $locationProvider.html5Mode({
