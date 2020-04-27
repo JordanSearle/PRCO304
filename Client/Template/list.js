@@ -208,14 +208,10 @@ app.controller('gameControl', function($scope, $http) {
       $scope.games = response.data;
     });
   }
-  $scope.addGame = function () {
-    $http.post("/game",$scope.nGame)
-    .then(function (res) {
-      console.log(res);
-    })
-  }
   $scope.editGame = function ($data,game) {
 
+      console.log($data);
+      console.log(game);
     if (game._id != null) {
       //Add extra variables for the Equipment and categories
       game.game_Name = $data.game_Name;

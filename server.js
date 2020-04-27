@@ -4,7 +4,6 @@ var mongoose = require("mongoose");
 var bodyParser = require('body-parser');
 var session = require('express-session')
 var expressWs = require('express-ws')(app);
-var session = require('express-session')
 
 var db = require('./db');
 var verify = require('./verification');

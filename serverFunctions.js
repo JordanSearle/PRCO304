@@ -247,6 +247,7 @@ module.exports = {
     res.send('ok');
   },
   newGame: function (req,res) {
+    console.log(req.body);
     var fac = new controllerFactory();
     fac.create(req.session.user,function (result) {
       if (result == false) {
