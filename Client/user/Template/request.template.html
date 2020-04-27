@@ -1,13 +1,15 @@
 <div class="container bg-light min-vh-100">
-  <div class="p-3">
+  <div class="p-3 mt-5">
     <h1>Submit a game to the collection</h1>
     <hr>
-    <div class="row">
-      <div class="col-6">
+
+      <form ng-submit="addRequest()" class="m-0 ">
+
+        <div class="row">
+      <div class="col col-md-6">
         <h4>Want to share a new game idea with the community? Submit it below!</h4>
         <p>When you add a new game, you are giving us permission to publish this content. New content will credit the author(s) by their chosen Username, no personal details other than that will be shared.</p>
         <hr>
-        <form ng-submit="addRequest()" class="m-0 ">
           <div class="input-group mb-1">
             <div class="input-group-prepend ">
               <span class="input-group-text" id="">Name:</span>
@@ -19,44 +21,53 @@
               <textarea class="form-control" id="summaryInput" ng-model="$parent.nGame.game_Summery" ng-change="change()" ></textarea>
             </div>
             <div class="form-group mb-1">
-              <label for="gameRules">Game Rules: <i>Add each rule to a new line, don't number them</i></label>
+              <label for="gameRules">Game Rules: <i>You can use markdown!</i></label>
               <textarea class="form-control" id="ruleInput" ng-model="$parent.nGame.game_Rules"></textarea>
             </div>
-          <div class="input-group mb-1">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">Is this game 18+?</label>
+
+      </div>
+      <div class="col col-md-5">
+        <div class="">
+          <b>Equipment</b>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" ng-model="$parent.newEquipment" placeholder="Equipment Name" aria-describedby="button-addon2">
+            <div class="input-group-append">
+              <button class="btn btn-success" type="button" id="button-addon2" ng-click="addEquipment()">Add Equipment</button>
             </div>
-            <select class="custom-select" ng-model="$parent.nGame.game_IsNSFW">
-              <option value="">---Please select---</option> <!-- not selected / blank option -->
-              <option value="true">Yes, only over-18s can play this game!</option>
-              <option value="false">No, anyone can play this game!</option>
-            </select>
           </div>
-            <div class="input-group mb-1">
-                <div class="input-group-prepend ">
-                  <span class="input-group-text" id="">Player Count:</span>
-                </div>
-                  <input type="text" class="form-control"ng-model="$parent.nGame.game_Player_Count" >
+            <button ng-repeat="g in newGame.game_Equipment track by $index" class="btn btn-outline-primary m-1" type="button" id="button-addon2"  ng-click="delEquipment(g)">{{g}} <span class="text-danger" aria-hidden="true">&times;</span></button>
+
+        </div>
+      <div class="">
+        <b>Categories</b><br>
+        <label class="checkbox inline" ng-repeat="c in categories" >
+            <input type="checkbox" class="ml-3" value="c"  ng-model="$parent.nGame.game_Categories[c]"> {{c}}
+            </label>
+        <div class="input-group mb-1">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelect01">Is this game 18+?</label>
+          </div>
+          <select class="custom-select" ng-model="$parent.nGame.game_IsNSFW">
+            <option value="">---Please select---</option> <!-- not selected / blank option -->
+            <option value="true">Yes, only over-18s can play this game!</option>
+            <option value="false">No, anyone can play this game!</option>
+          </select>
+        </div>
+      </div>
+          <div class="input-group mb-1">
+              <div class="input-group-prepend ">
+                <span class="input-group-text" id="">Player Count:</span>
               </div>
-              <p>We cannot guarantee your game will be accepted. But if it does be sure to check it out on the games tab. Thank you! <br> <b>That’s the Spirit community!</b></p>
-            <div class="input-group mb-1">
-            <input class="btn btn-success btn-block " type="submit" value="Submit Game!">
+                <input type="text" class="form-control"ng-model="$parent.nGame.game_Player_Count" >
             </div>
-        </form>
+            <p>We cannot guarantee your game will be accepted. But if it does be sure to check it out on the games tab. Thank you! <br> <b>That’s the Spirit community!</b></p>
+          <div class="input-group mb-1">
+          <input class="btn btn-success btn-block " type="submit" value="Submit Game!">
+          </div>
       </div>
-      <div class="col-6">
-        <h2>New game template:</h2>
-        <h5>Name: </h5>
-        <code>{{$parent.nGame.game_Name}}</code>
-        <h5>Summary: </h5><code>{{$parent.nGame.game_Summery}}</code>
-        <h5>Rules: </h5>
-        <code><ol>
-          <li ng-repeat="item in $parent.nGame.game_Rules track by $index">{{item}}</li>
-        </ol></code>
-        <h5>18+: </h5><code>{{$parent.nGame.game_IsNSFW}}</code>
-        <h5>Player Count: </h5><code>{{$parent.nGame.game_Player_Count}}</code>
+
       </div>
-    </div>
+              </form>
 
   </div>
   <h1>Pending Request</h1>

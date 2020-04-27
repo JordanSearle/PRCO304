@@ -4,7 +4,6 @@ var mongoose = require("mongoose");
 var bodyParser = require('body-parser');
 var session = require('express-session')
 var expressWs = require('express-ws')(app);
-var session = require('express-session')
 
 var db = require('./db');
 var verify = require('./verification');
@@ -87,45 +86,6 @@ var server = app.listen(9000, function() {
 
 //redundant functiopns that need merging into above functions
 
-    app.post('/pending',function (req,res) {
-      //check if logged on user
-      verify(req,res,req.session.user,function (logged) {
-        if (logged) {
-          //Create a new pending request
-          var gm = schemas.Game;
-          gm.find({_id:req.body._id}).then(function (result) {
-            if(result.length > 0){
-              var game = new classes.game();
-              game.game_Name = req.body.game_Name;
-              game.game_Rules = req.body.game_Rules;
-              game.game_Summery = req.body.game_Summery;
-              game.game_IsNSFW = req.body.game_IsNSFW;
-              game.game_Equipment = req.body.game_Equipment;
-              game.game_Player_Count = req.body.game_Player_Count;
-              game.editPending(req.body._id,function (err) {
-                if(err)console.log(err);
-              })
-              res.sendStatus(201);
-            }
-            else{
-              var game = new classes.game();
-              game.game_Name = req.body.game_Name;
-              game.game_Rules = req.body.game_Rules;
-              game.game_Summery = req.body.game_Summery;
-              game.game_IsNSFW = req.body.game_IsNSFW;
-              game.game_Equipment = req.body.game_Equipment;
-              game.game_Player_Count = req.body.game_Player_Count;
-              game.addPending(req.session.user,function (err) {
-                if(err)console.log(err);
-              })
-              res.sendStatus(201);
-            }
-          })
-
-        }
-      });
-
-    })
 
     app.delete('/pending',function (req,res) {
       //Check if admin
@@ -175,6 +135,7 @@ var server = app.listen(9000, function() {
       console.log(req.body.userID);
       game.game_UID = req.body.id;
       game.userID = req.body.userID;
+      game.game_Categories = req.body.game_Categories;
       game.game_Equipment = req.body.game_Equipment;
       game.game_Summery = req.body.game_Summery;
       game.game_Name = req.body.game_Name;

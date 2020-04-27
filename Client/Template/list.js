@@ -121,7 +121,6 @@ app.controller('myApps', function($scope, $http) {
       $scope.myWelcome.forEach((item, i) => {
         if ($scope.selGame == item.game_Name) {
           $scope.selected = encodeURIComponent($scope.selGame);
-          console.log($scope.selected);
           window.location.href = "#!/games/"+$scope.selected;
         }
       });
@@ -209,15 +208,10 @@ app.controller('gameControl', function($scope, $http) {
       $scope.games = response.data;
     });
   }
-  $scope.addGame = function () {
-    $scope.nGame.equipment = ['test','test1'];
-    $http.post("/game",$scope.nGame)
-    .then(function (res) {
-      console.log(res);
-    })
-  }
   $scope.editGame = function ($data,game) {
 
+      console.log($data);
+      console.log(game);
     if (game._id != null) {
       //Add extra variables for the Equipment and categories
       game.game_Name = $data.game_Name;
@@ -226,7 +220,6 @@ app.controller('gameControl', function($scope, $http) {
       game.game_IsNSFW = $data.game_IsNSFW;
       game.game_Player_Count = $data.game_Player_Count;
       game.game_Categories = game.game_Categories;
-      console.log(game);
       $http.put('/game',game).then(function (res) {
         console.log(res);
       })
@@ -236,7 +229,8 @@ app.controller('gameControl', function($scope, $http) {
       game.game_Summery = $data.game_Summery;
       game.game_Rules = $data.game_Rules;
       game.game_IsNSFW = $data.game_IsNSFW;
-      game.game_Player_Count = '1 to 8 Players';
+      game.game_Player_Count = $data.game_Player_Count;
+      game.game_Categories = game.game_Categories;
       $http.post('/game',game).then(function (res) {
         console.log(res);
       })
@@ -262,38 +256,47 @@ $scope.load();
 
 })
 app.controller('requestControl',function ($scope,$http) {
+  $scope.categories = ['Movie','Coin','Card','Video Games','Sport','Misc','Board Games','Dinner Party','Birthdays','Retirement','Family Gathering']
+  $scope.delEquipment = function (name,id) {
+    //Delete Equipment from the game
+
+  var index = $scope.games.findIndex(function(item, i){
+    return item._id === id
+  });
+  var equip = $scope.games[index].game_Equipment.findIndex(function (item,i) {
+    return item === name;
+  })
+  $scope.games[index].game_Equipment.splice(equip,1);
+
+  }
+  $scope.addEquipment = function (id) {
+    //Add Equipment to the game
+    var index = $scope.games.findIndex(function(item, i){
+      return item._id === id
+    });
+    $scope.games[index].game_Equipment.push($scope.newEquip[id])
+
+    $scope.newEquip[id] = null;
+  }
   $scope.load = function () {
     $http.get("/pending")
       .then(function(response) {
       $scope.games = response.data;
     });
   }
-  $scope.approveGame = function () {
-
-  }
   $scope.editGame = function ($data,game) {
-    console.log($data);
-    console.log(game);
     game.game_Summery = $data.game_Summery;
     game.game_Rules = $data.game_Rules;
     game.game_Name = $data.game_Name;
     game.game_IsNSFW = $data.game_IsNSFW;
     game.game_Player_Count = $data.game_Player_Count;
+    game.game_Categories = game.game_Categories;
+      console.log(game);
       $http.post('/pending/save',game).then(function (res) {
         console.log(res);
         $scope.load();
       })
   }
-  $scope.addGame = function() {
-    $scope.inserted = {
-      game_Name: '',
-      game_Summery: '',
-      game_Rules: '',
-      game_IsNSFW: false,
-      game_userID: null,
-    };
-    $scope.games.push($scope.inserted);
-  };
   $scope.removeGame = function (id) {
     console.log(id);
     $http.delete('/pending',{data: {gameID:id}, headers: {'Content-Type': 'application/json;charset=utf-8'}}).then(function (res) {

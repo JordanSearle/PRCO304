@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
+    <link rel="shortcut icon" href="/templates/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/templates/favicon.ico" type="image/x-icon">
+    <script src="https://kit.fontawesome.com/1de2cd54fb.js" crossorigin="anonymous"></script>
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
@@ -23,8 +27,23 @@
       a{
         cursor: pointer;
       }input::-webkit-calendar-picker-indicator {
-  display: none;
-}
+        display: none;
+      }
+      .carousel-control-next{
+        background-color:white;color: blue; right:-115px; opacity:.8;
+      }
+      .carousel-control-next:hover{
+         opacity:1;
+      }
+      .carousel-control-prev{
+        background-color:white; color: blue;left:-115px; opacity: 0.8;
+      }
+      .carousel-control-prev:hover{
+         opacity:1;
+      }
+      .modal-content{
+        height: 50vh;
+      }
     </style>
   </head>
   <body ng-app="myApp">

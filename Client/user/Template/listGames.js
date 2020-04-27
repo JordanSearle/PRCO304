@@ -237,6 +237,7 @@ app.controller('bookmarkControl',function ($scope,$http) {
   $scope.load = function () {
     $http.get('/user/bookmarks').then(function (res) {
       $scope.bookmarks = res.data;
+      $scope.list = $scope.bookmarks;
       $scope.dropdowns = [];
       if ($scope.bookmarks.length > 0) {
         $scope.bookmarks.forEach((item, i) => {
@@ -248,6 +249,21 @@ app.controller('bookmarkControl',function ($scope,$http) {
     })
   }
   $scope.load();
+  $scope.filter = function () {
+    if ($scope.filterValue == '') {
+      $scope.list = $scope.bookmarks;
+    }
+    else{
+      $scope.list = [];
+      $scope.bookmarks.forEach((item, i) => {
+        item.tags.forEach((item1, i) => {
+          if (item1.name == $scope.filterValue) {
+            $scope.list.push(item);
+          }
+        });
+      });
+    }
+  }
   $scope.saveTag = function (id,tag) {
     $scope.data = {gameID:id,tagName:$scope.tag.name};
     $http.post('/user/bookmarks/tag',$scope.data).then(function (res) {
@@ -269,27 +285,34 @@ app.controller('bookmarkControl',function ($scope,$http) {
   }
 })
 app.controller('requestControl',function ($scope,$http) {
+  $scope.categories = ['Movie','Coin','Card','Video Games','Sport','Misc','Board Games','Dinner Party','Birthdays','Retirement','Family Gathering']
   var ruleMDE = new SimpleMDE({ element: document.getElementById("ruleInput"),toolbar: ["ordered-list", "|", "preview"],forceSync:true});
   var summaryMDE = new SimpleMDE({ element: document.getElementById("summaryInput"),toolbar: ["bold", "italic", "heading", "|", "unordered-list","ordered-list","|","preview"],forceSync:true  });
-
+  $scope.newGame = {
+    game_Equipment:[]
+  };
   $scope.addRequest = function () {
-    $scope.nGame.game_Equipment = ['item'];
     $scope.nGame.game_Rules = ruleMDE.value();
     $scope.nGame.game_Summery = summaryMDE.value();
+    $scope.nGame.game_Equipment = $scope.newGame.game_Equipment
     console.log($scope.nGame);
-    $http.post('/pending',$scope.nGame).then(function (res) {
+    $http.post('/game',$scope.nGame).then(function (res) {
       console.log(res);
+      $scope.load();
     })
-    $scope.load();
   }
-  $scope.change = function () {
-    $scope.nGame.game_Rules = ruleMDE.value();
-    $scope.nGame.game_Summery = summaryMDE.value();
-    console.log(  $scope.nGame);
-    $scope.$apply();
+
+  $scope.addEquipment = function () {
+    $scope.newGame.game_Equipment.push($scope.newEquipment);
+    $scope.$apply;
+  }
+  $scope.delEquipment = function (name) {
+    var rtnValue = $scope.newGame.game_Equipment.findIndex(function (item,i) {
+      return item === name;
+    })
+    $scope.newGame.game_Equipment.splice(rtnValue,1);
   }
   $scope.load = function () {
-
     $http.get('/user/pending').then(function (res) {
       $scope.pList = res.data;
       console.log(res);
@@ -306,7 +329,7 @@ app.controller('gameUIControl',function ($scope,$http,$routeParams) {
   $scope.editRequest = function () {
     $scope.eGame.game_Summery = summaryMDE.value();
     $scope.eGame.game_Rules = ruleMDE.value();
-    $http.post('/pending',$scope.eGame).then(function (res) {
+    $http.put('/game',$scope.eGame).then(function (res) {
       console.log(res);
     })
   }
