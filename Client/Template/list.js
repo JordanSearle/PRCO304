@@ -53,13 +53,6 @@ app.controller('myApps', function($scope, $http) {
       window.location.href = "/";
     })
   }
-  $scope.addGame = function () {
-    $scope.nGame.equipment = ['test','test1'];
-    $http.post("/newgame",$scope.nGame)
-    .then(function (res) {
-      console.log(res);
-    })
-  }
 
   $scope.nextGame = function () {
     var ws = new WebSocket("ws://localhost:9000/game/next");
@@ -168,7 +161,7 @@ app.controller('user',function ($scope,$http) {
     })
   }
   $scope.addUser = function () {
-    $http.post('/users',$scope.newUser)
+    $http.post('/user',$scope.newUser)
     .then(function (res) {
       $scope.load();
     })
@@ -322,32 +315,68 @@ app.controller('gameUIControl',function ($scope,$http,$routeParams) {
   $scope.load();
 })
 app.controller('dashboard',function ($scope,$http) {
-  $scope.load = function () {
-    $http.get('/adminHome').then(function (res) {
-      $scope.data = res.data;
-      var chart = new CanvasJS.Chart("chartContainer", {
-	animationEnabled: true,
-	theme: "light2", // "light1", "light2", "dark1", "dark2"
-	title:{
-		text: "System Memory Usage"
-	},
-	axisY: {
-		title: "Total (GB)"
-	},
-	data: [{
-		type: "column",
-		showInLegend: true,
-		legendMarkerColor: "grey",
-		legendText: "Memory Legend",
-		dataPoints: [
-			{ y: (($scope.data.memm/1024)/1024)/1024, label: "Free" },
-			{ y: ((($scope.data.totalMem - $scope.data.memm)/1024)/1024)/1024,  label: "Memory Used" }
-		]
-	}]
-});
 
-chart.render();
-  })
+  $scope.load = function () {
+    $scope.cpuUsage = setInterval(callChart, 3000);
+    $http.get('/adminhome').then(function (res) {
+      $scope.data = res.data;
+      $scope.result.totalMem = $scope.data.totalMem
+      $scope.result.memm = $scope.data.memm
+    })
 }
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawCPUChart);
+
+function drawCPUChart() {
+  var data = google.visualization.arrayToDataTable([
+    ['CPU Usage', 'Free Space'],
+    ['Current Usage',     $scope.result.cpu*100],
+    ['Free CPU',     100 - $scope.result.cpu*100],
+  ]);
+  var data2 = google.visualization.arrayToDataTable([
+    ['CPU Usage', 'Free Space'],
+    ['Memory Free',     $scope.result.totalMem],
+    ['memory Used',     $scope.result.memm],
+  ]);
+
+  var options = {
+    title: 'My Daily Activities',
+    pieHole: 0.4,
+    pieSliceTextStyle: {
+      color: 'black',
+    },
+    backgroundColor: '#007bff',
+    'chartArea': {'width': '100%', 'height': '100%'}
+  };
+  var options2 = {
+    title: 'My Daily Activities',
+    pieHole: 0.4,
+    pieSliceTextStyle: {
+      color: 'black',
+    },
+    backgroundColor: '#ffc107',
+    'chartArea': {'width': '100%', 'height': '100%'}
+  };
+
+  var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+  chart.draw(data, options);
+  var chart = new google.visualization.PieChart(document.getElementById('ramchart'));
+  chart.draw(data2, options2);
+}
+
+function callChart() {
+  var ws = new WebSocket("ws://localhost:9000/adminhome");
+  ws.onopen = function () {
+    ws.send(JSON.stringify({
+      'name': ''
+    }));
+    ws.onmessage = function (event) {
+      $scope.result = JSON.parse(event.data);
+      drawCPUChart()
+        ws.close();
+    }
+  }
+}
+$scope.result = {};
 $scope.load();
 })

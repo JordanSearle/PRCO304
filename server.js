@@ -87,21 +87,7 @@ var server = app.listen(9000, function() {
 //redundant functiopns that need merging into above functions
 
 
-    app.delete('/pending',function (req,res) {
-      //Check if admin
-
-      //Deny a pending request
-      var game = new classes.game();
-      //Check if correct ID-
-      game.denyPending(req.body.gameID,function (err,result) {
-        if(err){
-          res.status(400).send(err);
-        }
-        else{
-          res.sendStatus(200);
-        }
-      })
-    })
+    app.delete('/pending',serverFunctions.delPending)
     app.get('/pending',function (req,res) {
       //Check if admin
 
@@ -117,54 +103,7 @@ var server = app.listen(9000, function() {
         }
       })
     })
-    app.get('/pending/:id',function (req,res) {
-      //Get specific pending request
-      var game = schemas.Pending;
-      game.findOne({_id:req.params.id}).exec(function (err,result) {
-        if(err){
-          res.status(400).send(err);
-        }
-        else{
-          res.status(200).send(result);
-        }
-      })
-    })
-    app.post('/pending/save',function (req,res) {
-      //Approve a pending request
-      var game = new classes.game();
-      console.log(req.body.userID);
-      game.game_UID = req.body.id;
-      game.userID = req.body.userID;
-      game.game_Categories = req.body.game_Categories;
-      game.game_Equipment = req.body.game_Equipment;
-      game.game_Summery = req.body.game_Summery;
-      game.game_Name = req.body.game_Name;
-      game.game_Rules = req.body.game_Rules;
-      game.game_Player_Count = req.body.game_Player_Count;
-      game.game_IsNSFW = req.body.game_IsNSFW;
-
-      game.approvePending(function (err,result) {
-        if(err!=null){
-          res.status(400).send(err);
-        }
-        else{
-          res.sendStatus(200);
-        }
-      })
-    })
-    app.put('/pending/:name',function (req,res) {
-      //edit a pending request
-      var game = new classes.game();
-      game.game_Name = req.params.game_Name;
-      game.approvePending(function (err,result) {
-        if(err){
-          res.status(400).send(err);
-        }
-        else{
-          res.sendstatus(200);
-        }
-      })
-    })
+    app.post('/pending/save',serverFunctions.savePending)
     app.get('/user/pending',function (req,res) {
       var game = schemas.Pending;
       game.find({userID:req.session.user}).exec(function (err,result) {
@@ -179,7 +118,23 @@ var server = app.listen(9000, function() {
     })
 //Test routes
 const os = require('os');
-  app.get('/adminHome',function (req,res) {
+var osUtil = require('os-utils');
+
+  app.ws('/adminhome',function (ws,req) {
+    ws.on('message', function(msg) {
+      osUtil.cpuUsage(function(v){
+        if (ws.readyState === 1) {
+          sd = {
+            cpu: v,
+            memm: os.freemem(),
+            totalMem: os.totalmem(),
+          }
+          ws.send(JSON.stringify(sd));
+        }
+      });
+    });
+  })
+  app.get('/adminhome',function (req,res) {
     var response = {
       op: os.EOL,
       platform: os.platform(),
@@ -195,3 +150,13 @@ const os = require('os');
     }
     res.send(response);
   })
+  function errorHandler (err, req, res, next) {
+    if(req.ws){
+        console.error("ERROR from WS route - ", err);
+    } else {
+        console.error(err);
+        res.setHeader('Content-Type', 'text/plain');
+        res.status(500).send(err.stack);
+    }
+}
+app.use(errorHandler);

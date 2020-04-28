@@ -225,7 +225,7 @@ app.controller('userControl', function($scope, $http) {
       if ($scope.eUser.hasOwnProperty('user_DOB')) {
         $scope.editUser.user_DOB = $scope.eUser.user_DOB
       }
-      $http.put("/user/",$scope.editUser)
+      $http.put("/user",$scope.editUser)
       .then(function (res) {
         $scope.load();
         console.log(res);
