@@ -71,7 +71,7 @@ var server = app.listen(9000, function() {
 // /user/ functions
     app.post('/user',serverFunctions.user)
     app.delete('/user',serverFunctions.delUser)
-    app.put('/user/:userID',serverFunctions.editUser)
+    app.put('/user',serverFunctions.editUser)
     app.get('/user',serverFunctions.getUser)
 
     app.get('/users',function (req,res) {

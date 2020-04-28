@@ -143,23 +143,23 @@ module.exports = {
   }, //Updated to Fac controller
   editUser: function (req,res) {
     //edit a user
-    //Verifies the user is logged in or not. not logged in will redirect to default index page
-    verify(req,res,req.session.user,function (logged) {
-      if (logged) {
-        //Delete a user
-        var user = new classes.user();
+    var fac = new controllerFactory();
+    fac.create(req.session.user,function (user) {
+      if (user == false) {
+        res.redirect(403);
+      }
+      else {
         user.setUserID(req.session.user);
         user.setUsername(req.body.username);
         user.setEmail(req.body.email);
         user.setPassword(req.body.password);
         user.setDOB(req.body.user_DOB);
-        user.editUser(function(err) {
-
+        user.editUser(function(err,response) {
+          if(err){res.status(400).send('An Error Occurred');}
+          else{res.status(200).send('updated');}
         });
-        res.sendStatus(200);
       }
-    });
-
+    })
   },
   getUser: function (req,res) {
     //view user
@@ -250,7 +250,6 @@ module.exports = {
     res.send('ok');
   },
   newGame: function (req,res) {
-    console.log(req.body);
     var fac = new controllerFactory();
     fac.create(req.session.user,function (result) {
       if (result == false) {

@@ -151,9 +151,12 @@ app.controller('userControl', function($scope, $http) {
     })
   }
   $scope.editAccount= function () {
-    $http.put("/user",$scope.eUser)
+    result = Object.assign({}, $scope.user, $scope.eUser);
+    $http.put("/user",result)
     .then(function (res) {
+      console.log(res.data);
       $scope.load();
+
     })
   }
   $scope.load();

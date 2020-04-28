@@ -19,11 +19,7 @@ module.exports = class user{
       //Return true or false based on password and username values
       var user = schemas.User;
       var thisUSR = this;
-      var secure = new classes.secure();
-      var saltHash = secure.saltNewHashPassword(this.getPassword());
-      console.log(saltHash);
-      var test = secure.saltHashPassword(this.getPassword(),saltHash.salt);
-      console.log(test);
+
       user.findOne({
         username: thisUSR.getUsername()
       }, function(err, obj) {
@@ -38,8 +34,10 @@ module.exports = class user{
         }
         //If it find the item in the DB
         else {
+          var secure = new classes.secure();
+          var testPassword = secure.saltHashPassword(thisUSR.getPassword(),obj.salt);
           //if the username matches the password
-          if (obj.password == thisUSR.getPassword()) {
+          if (obj.password == testPassword.passwordHash) {
             //res.status(200).send(String(obj.userID));
             //Login Stuff and session processes here.
             callback({'status':'true',
@@ -79,13 +77,16 @@ module.exports = class user{
       var usr = this;
       var username = this.#username;
       var user = schemas.User;
+      var secure = new classes.secure();
+      var saltHash = secure.saltNewHashPassword(usr.getPassword());
       user.findOne({'_id':this.#userID},function (err, result) {
-        result.username=username;
-        result.password=usr.getPassword();
+        result.username = username;
+        result.password = saltHash.passwordHash;
+        result.salt = saltHash.salt;
         result.email=usr.getEmail();
         result.user_DOB=usr.getDOB();
-        result.save(function (err) {
-          if(err)callback(err);
+        result.save(function (err,res) {
+          callback(err,res)
         });
       })
     }
