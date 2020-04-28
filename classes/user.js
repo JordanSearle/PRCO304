@@ -6,10 +6,12 @@ module.exports = class user{
     #password;
     #email;
     #user_DOB;
-    constructor(userID,username,password,email,dob){
+    #salt;
+    constructor(userID,username,password,salt,email,dob){
       this.#userID = userID;
       this.#username = username;
       this.#password = password;
+      this.#salt = salt;
       this.#email = email;
       this.#user_DOB = Date.parse(dob);
     }
@@ -17,6 +19,7 @@ module.exports = class user{
       //Return true or false based on password and username values
       var user = schemas.User;
       var thisUSR = this;
+
       user.findOne({
         username: thisUSR.getUsername()
       }, function(err, obj) {
@@ -31,8 +34,10 @@ module.exports = class user{
         }
         //If it find the item in the DB
         else {
+          var secure = new classes.secure();
+          var testPassword = secure.saltHashPassword(thisUSR.getPassword(),obj.salt);
           //if the username matches the password
-          if (obj.password == thisUSR.getPassword()) {
+          if (obj.password == testPassword.passwordHash) {
             //res.status(200).send(String(obj.userID));
             //Login Stuff and session processes here.
             callback({'status':'true',
@@ -49,11 +54,17 @@ module.exports = class user{
       });
 
     }
+
+
     addUser(callback){
+      //Encrypt password
+      var secure = new classes.secure();
+      var saltHash = secure.saltNewHashPassword(this.#password);
       //Create new user
       var user = new schemas.User({
         username: this.#username,
-        password: this.#password,
+        password: saltHash.passwordHash,
+        salt:saltHash.salt,
         email:this.#email,
         user_DOB:this.#user_DOB,
       })
@@ -66,13 +77,16 @@ module.exports = class user{
       var usr = this;
       var username = this.#username;
       var user = schemas.User;
+      var secure = new classes.secure();
+      var saltHash = secure.saltNewHashPassword(usr.getPassword());
       user.findOne({'_id':this.#userID},function (err, result) {
-        result.username=username;
-        result.password=usr.getPassword();
+        result.username = username;
+        result.password = saltHash.passwordHash;
+        result.salt = saltHash.salt;
         result.email=usr.getEmail();
         result.user_DOB=usr.getDOB();
-        result.save(function (err) {
-          if(err)callback(err);
+        result.save(function (err,res) {
+          callback(err,res)
         });
       })
     }
@@ -131,6 +145,9 @@ module.exports = class user{
     getPassword(){
       return this.#password;
     }
+    getSalt(){
+      return this.#salt;
+    }
     getEmail(){
       return this.#email;
     }
@@ -146,6 +163,9 @@ module.exports = class user{
     }
     setPassword(password){
       this.#password = password;
+    }
+    setSalt(salt){
+      this.#salt = salt;
     }
     setEmail(email){
       this.#email = email;

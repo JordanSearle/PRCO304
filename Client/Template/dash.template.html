@@ -1,51 +1,80 @@
 
 
-<div class="row bg-white p-3" >
-  <h1>Dashboard</h1>
+<div class="row bg-white" >
+  <h1 class="ml-3">Dashboard</h1>
   <div class="col-12 mb-3 bg-light rounded">
-    <h2>Dashboard</h2>
+    <h2>Resource Usage</h2>
   </div>
-  <div class="sm-column">
+  <div class="sm-column p-3">
     <div class="card-columns">
       <div class="card text-white bg-primary" >
-    <div class="card-header">Header</div>
+    <div class="card-header">CPU USAGE</div>
     <div class="card-body">
-      <h5 class="card-title">Primary card title</h5>
+      <div id="donutchart" style="width: 100%; height: 170px;"></div>
     </div>
   </div>
   <div class="card text-white bg-warning " >
-    <div class="card-header">Header</div>
+    <div class="card-header">MEMORY USAGE</div>
     <div class="card-body">
-      <h5 class="card-title">Secondary card title</h5>
+      <div id="ramchart" style="width: 100%; height: 170px;"></div>
     </div>
   </div>
   <div class="card text-white bg-success" >
-    <div class="card-header">Header</div>
+    <div class="card-header">AVERAGE LOAD</div>
     <div class="card-body">
-      <h5 class="card-title">Success card title</h5>
+        <div id="usagechart" style="width: 100%; height: 170px;"></div>
     </div>
   </div>
   <div class="card text-white bg-danger" >
-    <div class="card-header">Header</div>
+    <div class="card-header">NETWORK USAGE</div>
     <div class="card-body">
-      <h5 class="card-title">Danger card title</h5>
+        <div id="donutchart2" style="width: 100%; height: 170px;"></div>
     </div>
   </div>
     </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 mb-3 bg-light rounded">
+    <h2>Database Statistics</h2>
   </div>
   <div class="card-columns">
     <div class="card border-light mb-3" >
-  <div class="card-header">System Memory Usage</div>
-  <div class="card-body text-dark">
-    <div id="chartContainer"  class="position-relative" style=" height: 300px;width: 100%;"></div>
+      <div class="card-header">Games by Categories</div>
+      <div class="card-body text-dark">
+        <div id="gameCategories" style="width: 100%; height: 300px;"></div>
+      </div>
+    </div>
+    <div class="card border-light mb-3" >
+      <div class="card-header">Placement Header</div>
+      <div class="card-body text-dark">
+        <div id="gameCategories1" style="width: 100%; height: 300px;"></div>
+      </div>
+    </div>
   </div>
 </div>
-<div class="card border-light mb-3" >
-<div class="card-header">Header</div>
-<div class="card-body text-dark">
-<h5 class="card-title">Dark card title</h5>
-<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-</div>
-</div>
+<div class="row">
+  <div class="col-12 mb-3 bg-light rounded">
+    <h2>Games List</h2>
+  </div>
+  <div class="col bg-white p-3 ">
+    <table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Added By:</th>
+      <th scope="col">Equipment</th>
+      <th scope="col">Safe for Work? (18+)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="game in games">
+      <th>{{game.game_Name}}</th>
+      <td>{{game.userID.username}} <u ng-if="game.userID.username == null">User Deleted</u></td>
+      <td><span ng-repeat="eq in game.game_Equipment">{{eq}}, </span></td>
+      <td>{{game.game_IsNSFW}}</td>
+    </tr>
+  </tbody>
+</table>
   </div>
 </div>

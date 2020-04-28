@@ -53,13 +53,6 @@ app.controller('myApps', function($scope, $http) {
       window.location.href = "/";
     })
   }
-  $scope.addGame = function () {
-    $scope.nGame.equipment = ['test','test1'];
-    $http.post("/newgame",$scope.nGame)
-    .then(function (res) {
-      console.log(res);
-    })
-  }
 
   $scope.nextGame = function () {
     var ws = new WebSocket("ws://localhost:9000/game/next");
@@ -151,9 +144,12 @@ app.controller('userControl', function($scope, $http) {
     })
   }
   $scope.editAccount= function () {
-    $http.put("/user",$scope.eUser)
+    result = Object.assign({}, $scope.user, $scope.eUser);
+    $http.put("/user",result)
     .then(function (res) {
+      console.log(res.data);
       $scope.load();
+
     })
   }
   $scope.load();
@@ -165,7 +161,7 @@ app.controller('user',function ($scope,$http) {
     })
   }
   $scope.addUser = function () {
-    $http.post('/users',$scope.newUser)
+    $http.post('/user',$scope.newUser)
     .then(function (res) {
       $scope.load();
     })
@@ -320,31 +316,125 @@ app.controller('gameUIControl',function ($scope,$http,$routeParams) {
 })
 app.controller('dashboard',function ($scope,$http) {
   $scope.load = function () {
-    $http.get('/adminHome').then(function (res) {
-      $scope.data = res.data;
-      var chart = new CanvasJS.Chart("chartContainer", {
-	animationEnabled: true,
-	theme: "light2", // "light1", "light2", "dark1", "dark2"
-	title:{
-		text: "System Memory Usage"
-	},
-	axisY: {
-		title: "Total (GB)"
-	},
-	data: [{
-		type: "column",
-		showInLegend: true,
-		legendMarkerColor: "grey",
-		legendText: "Memory Legend",
-		dataPoints: [
-			{ y: (($scope.data.memm/1024)/1024)/1024, label: "Free" },
-			{ y: ((($scope.data.totalMem - $scope.data.memm)/1024)/1024)/1024,  label: "Memory Used" }
-		]
-	}]
-});
+    $scope.cpuUsage = setInterval(callChart, 30000);
+    $http.get('/game').then(function (res) {
+      $scope.games = res.data;
+      $scope.categories = {'Movie':0,'Coin':0,'Card':0,'Video Games':0,'Sport':0,'Misc':0,'Board Games':0,'Dinner Party':0,'Birthdays':0,'Retirement':0,'Family Gathering':0};
+      $scope.games.forEach((item, i) => {
+        if (item.hasOwnProperty("game_Categories")) {
+          Object.keys(item.game_Categories).forEach(function(k){
+              $scope.categories[k] = $scope.categories[k] +1;
+          });
+        }
+      });
+      console.log($scope.categories);
 
-chart.render();
-  })
+    })
+    $http.get('/adminhome').then(function (res) {
+      $scope.data = res.data;
+      $scope.result.cpu = 0.3;
+      $scope.result.totalMem = $scope.data.totalMem
+      $scope.result.memm = $scope.data.memm
+      console.log($scope.data);
+    })
 }
+google.charts.load('current', {'packages':['corechart','bar']});
+google.charts.setOnLoadCallback(drawCPUChart);
+
+function drawCPUChart() {
+  var data = google.visualization.arrayToDataTable([
+    ['CPU Usage', 'Free Space'],
+    ['Current Usage',     $scope.result.cpu*100],
+    ['CPU Load',     100 - $scope.result.cpu*100],
+  ]);
+  var data2 = google.visualization.arrayToDataTable([
+    ['CPU Usage', 'Free Space'],
+    ['Memory Free',     $scope.result.totalMem],
+    ['memory Used',     $scope.result.memm],
+  ]);
+  var data3 = google.visualization.arrayToDataTable([
+    ['Average Time', 'Load Average'],
+    ['One Minute Average',    $scope.data.loadavg[0]],
+    ['Five Minute Average',     $scope.data.loadavg[1]],
+    ['Fifteen Minute Average',     $scope.data.loadavg[2]],
+  ]);
+  var gameCateData = new google.visualization.arrayToDataTable([
+    ['Category', 'Count'],
+    ['Birthdays',$scope.categories.Birthdays],
+    ['Board Games',$scope.categories['Board Games']],
+    ['Dinner Party',$scope.categories['Dinner Party']],
+    ['Card',$scope.categories.Card],
+    ['Coin',$scope.categories.Coin],
+    ['Family Gathering',$scope.categories['Family Gathering']],
+    ['Misc',$scope.categories.Misc],
+    ['Video Games',$scope.categories['Video Games']],
+    ['Movie',$scope.categories.Movie],
+    ['Sport',$scope.categories.Sport],
+    ['Retirement',$scope.categories.Retirement]
+  ]);
+
+  var options = {
+    title: 'CPU Usage',
+    pieHole: 0.4,
+    pieSliceTextStyle: {
+      color: 'black',
+    },
+    backgroundColor: '#007bff',
+    'chartArea': {'width': '100%', 'height': '100%'}
+  };
+  var options2 = {
+    title: 'Ram Usage',
+    pieHole: 0.4,
+    pieSliceTextStyle: {
+      color: 'black',
+    },
+    backgroundColor: '#ffc107',
+    'chartArea': {'width': '100%', 'height': '100%'}
+  };
+  var options3 = {
+    title: 'Average Usage',
+    pieHole: 0.4,
+    pieSliceTextStyle: {
+      color: 'black',
+    },
+    backgroundColor: '#28a745',
+    'chartArea': {'width': '100%', 'height': '100%'}
+  };
+  var optionsGameCat = {
+    width: "100%",
+    legend: { position: 'none' },
+    bar: { groupWidth: "100%" }
+  };
+
+  var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+  chart.draw(data, options);
+  var chart = new google.visualization.PieChart(document.getElementById('donutchart2'));
+  chart.draw(data, options);
+  var chart = new google.visualization.PieChart(document.getElementById('ramchart'));
+  chart.draw(data2, options2);
+  var chart = new google.visualization.PieChart(document.getElementById('usagechart'));
+  chart.draw(data3, options3);
+  var chart = new google.charts.Bar(document.getElementById('gameCategories'));
+  // Convert the Classic options to Material options.
+  chart.draw(gameCateData, google.charts.Bar.convertOptions(optionsGameCat));
+  var chart = new google.charts.Bar(document.getElementById('gameCategories1'));
+  // Convert the Classic options to Material options.
+  chart.draw(gameCateData, google.charts.Bar.convertOptions(optionsGameCat));
+}
+
+function callChart() {
+  var ws = new WebSocket("ws://localhost:9000/adminhome");
+  ws.onopen = function () {
+    ws.send(JSON.stringify({
+      'name': ''
+    }));
+    ws.onmessage = function (event) {
+      $scope.result = JSON.parse(event.data);
+      drawCPUChart()
+        ws.close();
+    }
+  }
+}
+$scope.result = {};
 $scope.load();
 })
