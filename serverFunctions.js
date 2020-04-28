@@ -7,10 +7,13 @@ var db = require('./db');
 var session = require('express-session')
 var express = require('express');
 var app = express();
+
+
 // Export the functions for each server operation, e.g Post game and get game
 module.exports = {
 //Unregistered User functions
   default: function (req,res) {
+
     // This it the app.get '/' function
     verify(req,res,req.session.user,function (logged) {
       if (logged) {
