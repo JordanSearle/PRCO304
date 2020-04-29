@@ -152,11 +152,6 @@ module.exports = {
 
   }, //Updated to Fac controller
   editUser: function (req,res) {
-    //edit a user
-    if (!req.body.hasOwnProperty('username')||!req.body.hasOwnProperty('password')||!req.body.hasOwnProperty('email')||!req.body.hasOwnProperty('user_DOB')|| Object.keys(req.body).length === 0) {
-      res.sendStatus(400)
-    }
-    else{
       var fac = new controllerFactory();
       fac.create(req.session.user,function (user) {
         if (user == false) {
@@ -164,17 +159,15 @@ module.exports = {
         }
         else {
           user.setUserID(req.session.user);
-          user.setUsername(req.body.username);
-          user.setEmail(req.body.email);
-          user.setPassword(req.body.password);
-          user.setDOB(req.body.user_DOB);
-          user.editUser(function(err,response) {
+          if (req.body.hasOwnProperty('password') && Object.keys(req.body.password > 0)) {
+            user.setPassword(req.body.password);
+          }
+          user.editUser(req.body,function(err,response) {
             if(err){res.status(400).send('An Error Occurred');}
             else{res.status(200).send('updated');}
           });
         }
       })
-    }
   },
   getUser: function (req,res) {
     //view user

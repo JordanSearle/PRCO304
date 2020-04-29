@@ -72,19 +72,21 @@ module.exports = class user{
         callback(err,res)
       })
     }
-    editUser(callback){
+    editUser(userJSON,callback){
       //edit and save current user
       var usr = this;
-      var username = this.#username;
-      var user = schemas.User;
       var secure = new classes.secure();
-      var saltHash = secure.saltNewHashPassword(usr.getPassword());
       user.findOne({'_id':this.#userID},function (err, result) {
-        result.username = username;
-        result.password = saltHash.passwordHash;
-        result.salt = saltHash.salt;
-        result.email=usr.getEmail();
-        result.user_DOB=usr.getDOB();
+        Object.keys(userJSON).forEach((item, i) => {
+          if (item != "password") {
+            result[item] = userJSON[item];
+          }
+        });
+        if (usr.getPassword() != null) {
+          var saltHash = secure.saltNewHashPassword(usr.getPassword());
+          result.password = saltHash.passwordHash;
+          result.salt = saltHash.salt;
+        }
         result.save(function (err,res) {
           callback(err,res)
         });
