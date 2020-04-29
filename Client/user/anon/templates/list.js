@@ -10,6 +10,10 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     templateUrl:'/templates/game.template.html',
     controller:"gameControl"
   })
+  .otherwise({
+    templateUrl : "/templates/list.template.html",
+    controller: "myApps"
+  });
   $locationProvider.html5Mode({
                 enabled: false,
                 requireBase: true

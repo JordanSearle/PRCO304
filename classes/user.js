@@ -76,6 +76,7 @@ module.exports = class user{
       //edit and save current user
       var usr = this;
       var secure = new classes.secure();
+      var user = schemas.User;
       user.findOne({'_id':this.#userID},function (err, result) {
         Object.keys(userJSON).forEach((item, i) => {
           if (item != "password") {
@@ -95,7 +96,6 @@ module.exports = class user{
 
     delUser(userID,callback){
       //delete current user
-      console.log(this.getUserID()+' '+ userID);
       if (this.getUserID()&& userID && this.getUserID() == userID) {
         var user = schemas.User;
         user.deleteOne({'_id':this.#userID},function (err,res) {
