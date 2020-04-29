@@ -145,7 +145,7 @@ $scope.alert = {}
     })
   }
   $scope.editAccount= function () {
-    
+
     result = Object.assign({}, $scope.user, $scope.eUser);
     $http.put("/user",result)
     .then(function (res) {
@@ -153,9 +153,6 @@ $scope.alert = {}
       $scope.load();
       $scope.loadAlert(res.data)
     })
-  }
-  $scope.loadAlert(json){
-    $('.toast').toast('show');
   }
   $scope.load();
 });
@@ -200,7 +197,6 @@ app.controller('gameControl', function($scope, $http) {
       return item._id === id
     });
     $scope.games[index].game_Equipment.push($scope.newEquip[id])
-
     $scope.newEquip[id] = null;
   }
   $scope.load = function () {
@@ -244,6 +240,8 @@ app.controller('gameControl', function($scope, $http) {
       game_Rules: '',
       game_IsNSFW: false,
       game_userID: null,
+      game_Categories:{},
+      game_Equipment: []
     };
     $scope.games.push($scope.inserted);
   };
