@@ -42,22 +42,29 @@
 <hr>
 <h1>Bookmarks</h1>
 <div class="row" >
-  <div class="col-3 p-3 mr-1 mb-3 border rounded" ng-repeat="b in bookmarks">
+  <div class=" col-12 col-md-3" ng-repeat="b in bookmarks">
+    <div class="p-3 mb-1 border rounded">
       <button type="button" class="close"ng-click="delBookmark(b.gameID)" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-    <div class="row">
-      <div class="col-12">
-        <p class="">{{b.gameID.game_Name}}</p>
-      </div>
+      <p class="">{{b.gameID.game_Name}}</p>
     </div>
-  <hr>
-  <div class="row">
-    <div class="col">
-      <p>Events</p>
+</div>
 
+</div>
+
+</div>
+
+  <!-- Then put toasts within -->
+  <div class="toast w-100" data-delay="5000" style="position: fixed; bottom: 10; right: 0;" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="mr-auto">{{alert.title}}</strong>
+      <small>{{alert.time}}</small>
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="toast-body">
+      {{alert.message}}
     </div>
   </div>
-</div>
-
-</div>

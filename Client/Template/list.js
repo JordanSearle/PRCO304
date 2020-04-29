@@ -1,3 +1,4 @@
+$('.toast').toast('show');
 var app = angular.module("myApp", ["ngRoute","xeditable"]);
 app.run(['editableOptions', function(editableOptions) {
   editableOptions.theme = 'bs4'; // bootstrap3 theme. Can be also 'bs4', 'bs2', 'default'
@@ -121,7 +122,7 @@ app.controller('myApps', function($scope, $http) {
   }
 });
 app.controller('userControl', function($scope, $http) {
-
+$scope.alert = {}
   $scope.load = function () {
 
   $http.get("/user")
@@ -144,13 +145,17 @@ app.controller('userControl', function($scope, $http) {
     })
   }
   $scope.editAccount= function () {
+    
     result = Object.assign({}, $scope.user, $scope.eUser);
     $http.put("/user",result)
     .then(function (res) {
       console.log(res.data);
       $scope.load();
-
+      $scope.loadAlert(res.data)
     })
+  }
+  $scope.loadAlert(json){
+    $('.toast').toast('show');
   }
   $scope.load();
 });

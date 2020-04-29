@@ -183,7 +183,7 @@ app.controller('userLoad',function ($scope,$http) {
   }
 })
 app.controller('userControl', function($scope, $http) {
-
+$scope.alert = {}
   $scope.load = function () {
     $http.get("/user")
     .then(function(response) {
@@ -215,9 +215,16 @@ app.controller('userControl', function($scope, $http) {
       $http.put("/user",$scope.eUser)
       .then(function (res) {
         $scope.load();
-        console.log(res);
+        $scope.alertShow(res)
       })
     }
+  }
+  $scope.alertShow = function (json) {
+    console.log(json);
+    $scope.alert.title = json.statusText;
+    $scope.alert.message = json.data;
+    $scope.alert.time = 'Now';
+    $('.toast').toast('show');
   }
   $scope.load();
 });
