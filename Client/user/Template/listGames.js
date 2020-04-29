@@ -182,7 +182,7 @@ app.controller('userLoad',function ($scope,$http) {
     });
   }
 })
-app.controller('userControl', function($scope, $http) {
+app.controller('userControl', function($scope, $http, $sce) {
 $scope.alert = {}
   $scope.load = function () {
     $http.get("/user")
@@ -204,6 +204,10 @@ $scope.alert = {}
       window.location.href = "/";
     })
   }
+  $scope.alertDelete = function () {
+    $('#toast').toast('hide');
+    $('#delete').toast('show');
+  }
   $scope.delete= function () {
     $http.delete("/user",{data: {userID:$scope.user._id}, headers: {'Content-Type': 'application/json;charset=utf-8'}})
     .then(function (res) {
@@ -215,17 +219,17 @@ $scope.alert = {}
       $http.put("/user",$scope.eUser)
       .then(function (res) {
         $scope.load();
-        $scope.alertShow(res)
+        alertShow(res,$scope)
       })
     }
+    else{
+      var res = {}
+      res.statusText = "OK";
+      res.data = "Nothing to Change";
+      alertShow(res,$scope)
+    }
   }
-  $scope.alertShow = function (json) {
-    console.log(json);
-    $scope.alert.title = json.statusText;
-    $scope.alert.message = json.data;
-    $scope.alert.time = 'Now';
-    $('.toast').toast('show');
-  }
+
   $scope.load();
 });
 app.controller('bookmarkControl',function ($scope,$http) {
@@ -350,4 +354,11 @@ function nav() {
     $('#mySidebar').width('0px');
     $(".main").css( { marginLeft : "0px"} );
   }
+}
+var alertShow = function (json,$scope) {
+  $scope.alert.title = json.statusText;
+  $scope.alert.message = json.data;
+  $scope.alert.time = 'Now';
+  $('#delete').toast('hide');
+  $('#toast').toast('show');
 }
