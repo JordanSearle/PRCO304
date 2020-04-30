@@ -325,7 +325,6 @@ app.controller('gameUIControl',function ($scope,$http,$routeParams) {
 })
 app.controller('dashboard',function ($scope,$http) {
   $scope.load = function () {
-    $scope.cpuUsage = setInterval(callChart, 30000);
     $http.get('/game').then(function (res) {
       $scope.games = res.data;
       $scope.categories = {'Movie':0,'Coin':0,'Card':0,'Video Games':0,'Sport':0,'Misc':0,'Board Games':0,'Dinner Party':0,'Birthdays':0,'Retirement':0,'Family Gathering':0};
@@ -336,7 +335,7 @@ app.controller('dashboard',function ($scope,$http) {
           });
         }
       });
-      console.log($scope.categories);
+      $scope.cpuUsage = setInterval(callChart, 30000);
 
     })
     $http.get('/adminhome').then(function (res) {

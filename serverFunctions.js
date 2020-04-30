@@ -40,21 +40,29 @@ module.exports = {
       })
   },
   user: function (req,res) {
-    //create a new user
+    //create a new users
     if (!req.body.hasOwnProperty('username')||!req.body.hasOwnProperty('password')||!req.body.hasOwnProperty('email')||!req.body.hasOwnProperty('user_DOB')|| Object.keys(req.body).length === 0) {
-      res.sendStatus(400)
+      if(err){res.status(400).send('An Error Occurred')}
     }
-    else{
-      var user = new classes.user();
-      user.setUsername(req.body.username);
-      user.setPassword(req.body.password);
-      user.setEmail(req.body.email);
-      user.setDOB(req.body.user_DOB);
-      user.addUser(function (err) {
-        //do somehting with error.
-        if(err)console.log(err);
+    else {
+      var fac = new controllerFactory();
+      fac.create(req.session.user,function (result) {
+        if (result instanceof classes.admin ) {
+          result.setIsAdmin(req.body.isAdmin)
+        }
+        else if (result == false) {
+          result = new classes.user();
+        }
+        result.setUsername(req.body.username);
+        result.setPassword(req.body.password);
+        result.setEmail(req.body.email);
+        result.setDOB(req.body.user_DOB);
+        result.addUser(function (err,response) {
+          //do somehting with error.
+          if(err){res.status(400).send(err)}
+          else{res.sendStatus(201)}//Correct Status?
+        })
       })
-      res.sendStatus(201);//Correct Status?
     }
   },//Added Input validation
   getGame: function (req,res) {

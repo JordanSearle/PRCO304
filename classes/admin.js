@@ -18,17 +18,20 @@ module.exports = class admin extends user {
       }
     })
   }
-  addUser(isAdmin,callback){
+  addUser(callback){
+    var secure = new classes.secure();
+    var saltHash = secure.saltNewHashPassword(this.getPassword());
     //Create new user
     var user = new schemas.User({
       username: this.getUsername(),
-      password: this.getPassword(),
+      password: saltHash.passwordHash,
+      salt:saltHash.salt,
       email:this.getEmail(),
       user_DOB:this.getDOB(),
-      isAdmin:isAdmin
+      isAdmin:this.getIsAdmin()
     })
-    user.save(function (err) {
-      if(err)callback(err);
+    user.save(function (err,res) {
+    callback(err,res);
     })
   }
   delUser(userID,callback){
@@ -72,5 +75,11 @@ module.exports = class admin extends user {
     game.updateGame(function (err,res) {
       callback(err,res)
     })
+  }
+  setIsAdmin(admin){
+    this.#isAdmin = admin;
+  }
+  getIsAdmin(){
+    return this.#isAdmin;
   }
 }
