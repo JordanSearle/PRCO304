@@ -128,7 +128,14 @@ $scope.alert = {}
   $http.get("/user")
   .then(function(response) {
     $scope.user = response.data;
-    var test = new Date($scope.user.user_DOB).toISOString().substr(0, 10);
+    try {
+      var test = new Date($scope.user.user_DOB).toISOString().substr(0, 10);
+    } catch (e) {
+      console.log(e);
+    } finally {
+
+    }
+
     $scope.dInput = test
   });
     }
@@ -151,7 +158,6 @@ $scope.alert = {}
     .then(function (res) {
       console.log(res.data);
       $scope.load();
-      $scope.loadAlert(res.data)
     })
   }
   $scope.load();
