@@ -336,14 +336,13 @@ app.controller('dashboard',function ($scope,$http) {
         }
       });
 
-
     })
     $http.get('/adminhome').then(function (res) {
       $scope.data = res.data;
       $scope.result.cpu = 0.3;
       $scope.result.totalMem = $scope.data.totalMem
       $scope.result.memm = $scope.data.memm
-      $scope.cpuUsage = setInterval(callChart, 30000);
+      setInterval(callChart, 30000);
     })
 }
 google.charts.load('current', {'packages':['corechart','bar']});
