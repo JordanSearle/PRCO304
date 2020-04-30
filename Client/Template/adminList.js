@@ -335,7 +335,7 @@ app.controller('dashboard',function ($scope,$http) {
           });
         }
       });
-      $scope.cpuUsage = setInterval(callChart, 30000);
+
 
     })
     $http.get('/adminhome').then(function (res) {
@@ -343,7 +343,7 @@ app.controller('dashboard',function ($scope,$http) {
       $scope.result.cpu = 0.3;
       $scope.result.totalMem = $scope.data.totalMem
       $scope.result.memm = $scope.data.memm
-      console.log($scope.data);
+      $scope.cpuUsage = setInterval(callChart, 30000);
     })
 }
 google.charts.load('current', {'packages':['corechart','bar']});
@@ -438,6 +438,7 @@ function callChart() {
     }));
     ws.onmessage = function (event) {
       $scope.result = JSON.parse(event.data);
+      console.log($scope.result);
       drawCPUChart()
         ws.close();
     }
