@@ -1,0 +1,1 @@
+//For shared JavaScript Functions.

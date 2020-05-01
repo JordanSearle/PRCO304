@@ -12,71 +12,17 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui/0.4.0/angular-ui.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <link rel="stylesheet" href="/anon/css/mobileCSS.css">
+    <link rel="stylesheet" href="/anon/css/tabletCSS.css">
+    <link rel="stylesheet" href="/anon/css/desktopCSS.css">
+
     <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
     <script src="Template/listGames.js"></script>
     <title>That's the Spirit</title>
     <style>
-    body {
-      font-family: "Lato", sans-serif;
-    }
-    .CodeMirror, .CodeMirror-scroll {
-	min-height: 150px;
-}
-    .sidebar {
-      height: 100%;
-      width: 0;
-      position: fixed;
-      z-index: 1;
-      padding-top: 60px;
-      top: 60;
-      left: 0;
-      bottom: 0;
-      background-color: #111;
-      overflow-x: hidden;
-      transition: 0.5s;
-    }
-
-    .sidebar a, .sidebar h2,.sidebar-footer a{
-      padding: 8px 8px 8px 32px;
-      text-decoration: none;
-      font-size: 25px;
-      color: #818181;
-      display: block;
-      transition: 0.3s;
-    }
-    .sidebar h2{
-      color: black;
-    }
-    .sidebar-header{
-      background-color: lightgray;
-    }
-
-    .sidebar a:hover ,.sidebar-footer a:hover{
-      color: #f1f1f1;
-      background-color: lightgray;
-    }
-    .sidebar-footer{
-      width: inherit;
-      position: absolute;
-      bottom: 10px;
-      overflow-x: hidden;
-    }
-
-    .sidebar-header .closebtn {
-      padding-top: 60px;
-      position: absolute;
-      top: 0;
-      right: 25px;
-      font-size: 36px;
-    }
-
-    .main {
-      padding-top: 60px;
-      transition: margin-left .5s;
-      padding: 16px;
-    }
+    
 
     /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
     @media screen and (max-height: 450px) {
