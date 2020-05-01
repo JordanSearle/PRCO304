@@ -346,13 +346,19 @@ app.controller('gameUIControl',function ($scope,$http,$routeParams) {
 })
 //Navbar functions (will be moved to own file)
 function nav() {
-  if ($('#mySidebar').width() != 250) {
-    $('#mySidebar').width('250px');
-    $(".main").css( { marginLeft : "250px"} );
+  if ($('#mySidebar').width() == 0) {
+    if ($(window).width() > 991) {
+      $('#mySidebar').width('250px');
+      $(".main").css( { marginLeft : "250px"} );
+    }
+    else{
+      $('#mySidebar').width($(window).width());
+      $(".main").css( {display:'none'} );
+    }
   }
   else{
     $('#mySidebar').width('0px');
-    $(".main").css( { marginLeft : "0px"} );
+    $(".main").css( { marginLeft : "0px", display:'block'} );
   }
 }
 var alertShow = function (json,$scope) {
