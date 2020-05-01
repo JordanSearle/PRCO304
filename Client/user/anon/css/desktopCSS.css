@@ -1,7 +1,9 @@
 /*Desktop and landscape tablet styling*/
 @media only screen and (min-width: 992px){
+
     body{
       font-family: 'Roboto', sans-serif;
+      overflow-x: hidden;
     }
     .card-header{
       font-size: 22px;
@@ -52,6 +54,9 @@
       color: #818181;
       display: block;
       transition: 0.3s;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .sidebar h2{
       color: black;

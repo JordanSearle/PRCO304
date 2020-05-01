@@ -345,20 +345,22 @@ app.controller('gameUIControl',function ($scope,$http,$routeParams) {
   $scope.load();
 })
 //Navbar functions (will be moved to own file)
+
 function nav() {
   if ($('#mySidebar').width() == 0) {
     if ($(window).width() > 991) {
-      $('#mySidebar').width('250px');
-      $(".main").css( { marginLeft : "250px"} );
+      $('#mySidebar').width('30vw');
     }
     else{
       $('#mySidebar').width($(window).width());
-      $(".main").css( {display:'none'} );
+      $('html, body').css({'overflowY':'hidden'});
     }
+    $(".main").css( { marginLeft : "30vw"} );
   }
   else{
     $('#mySidebar').width('0px');
-    $(".main").css( { marginLeft : "0px", display:'block'} );
+    $(".main").css( { marginLeft : "0px"} );
+    $('html, body').css({'overflowY':'auto'});
   }
 }
 var alertShow = function (json,$scope) {
