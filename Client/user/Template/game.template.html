@@ -1,4 +1,4 @@
-<nav class="navbar navbar-dark bg-dark justify-content-center fixed-bottom main">
+<nav class="navbar navbar-dark bg-dark justify-content-center fixed-bottom main nav-menu mt-5">
     <a class="nav-link">PREVIOUS</a>
     <a class="nav-link">RANDOM</a>
     <a class="nav-link" ng-click="isEditFormOpen = !isEditFormOpen" >EDIT</a>
@@ -29,11 +29,9 @@
       <p class="lead">{{game.game_Rules}}</p>
     </div>
   </div>
-  <div class="col mt-4" ng-show="isEditFormOpen">
+  <div class="col mt-4 mb-5" ng-show="isEditFormOpen">
     <h1>Edit Game</h1>
     <form ng-submit="editRequest()" class="m-0 ">
-
-      <input class="btn btn-success btn-block " type="submit" value="Update Game!">
       <div class="input-group mb-1">
         <div class="input-group-prepend ">
           <span class="input-group-text" id="">Name</span>
@@ -65,7 +63,8 @@
               <input type="text" class="form-control" ng-value="game.game_Player_Count" ng-model="eGame.game_Player_Count" >
           </div>
           <p>We cannot guarantee your edit will be accepted. But if it does we will let you know and you can check it out on the games tab. Thank you! <br> <b>That’s the Spirit community!</b></p>
-        <div class="input-group mb-1">
+        <div class="input-group mb-5">
+          <input class="btn btn-success btn-block " type="submit" value="Update Game!">
         </div>
     </form>
 </div>

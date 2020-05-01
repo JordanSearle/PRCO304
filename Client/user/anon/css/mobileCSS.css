@@ -10,7 +10,7 @@
     height: 100%;
     width: 0;
     position: fixed;
-    z-index: 1;
+    z-index: 4;
     padding-top: 60px;
     top: 60;
     left: 0;
@@ -61,6 +61,12 @@
     margin-top: 60px;
     transition: margin-left .5s;
     padding: 16px;
+  }
+  .nav-menu{
+    z-index: 3;
+  }
+  .border-right{
+    border-style: none!important;
   }
 
 }

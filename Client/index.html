@@ -4,8 +4,8 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" href="/user/anon/templates/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="/user/anon/templates/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/user/anon/src/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/user/anon/src/favicon.ico" type="image/x-icon">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
@@ -29,7 +29,6 @@
   bottom: 0;
   background-color: #111;
   overflow-x: hidden;
-  transition: 0.5s;
 }
 
 .sidebar a, .sidebar h2,.sidebar-footer a{
@@ -38,7 +37,6 @@
   font-size: 25px;
   color: #818181;
   display: block;
-  transition: 0.3s;
 }
 .sidebar h2{
   color: black;
@@ -76,12 +74,35 @@
 .sm-column .card-columns {
     column-count: 4;
   }
+  .card{
+    min-width:350px;
+  }
+  @media screen and (max-width: 479px) {
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+    .sidebar a {
+      text-align: center;
+      float: none;
+    }
+    .sidebar-footer{
+      width: inherit;
+      position: relative;
+    }
+    .main {
+      padding-top: 60px!important;
+      margin-left: 0;
+      padding: 0px;
+    }
+    .section{
+      overflow-y: scroll;
+      padding: 10px;
+    }
 
-/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-@media screen and (max-height: 450px) {
-  .sidebar {padding-top: 15px;}
-  .sidebar a {font-size: 18px;}
-}
+    div.content {margin-left: 0;}
+  }
 </style>
   </head>
   <body ng-app="myApp">

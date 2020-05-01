@@ -90,5 +90,11 @@
       transition: margin-left .5s;
       padding: 16px;
     }
+    .nav-menu{
+      z-index: 3;
+    }
+    .border-top{
+      border-style: none!important;
+    }
 
 }

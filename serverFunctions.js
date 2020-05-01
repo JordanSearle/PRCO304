@@ -67,7 +67,8 @@ module.exports = {
   },//Added Input validation
   getGame: function (req,res) {
     //This is the app.get /game/:name
-    if (!req.params.hasOwnProperty('name') || Object.keys(req.body).length === 0) {
+    console.log(req.params);
+    if (!req.params.hasOwnProperty('name') || Object.keys(req.params).length === 0) {
       res.sendStatus(400)
     }
     else{
