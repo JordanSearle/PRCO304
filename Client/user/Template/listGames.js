@@ -342,17 +342,62 @@ app.controller('gameUIControl',function ($scope,$http,$routeParams) {
       ruleMDE.value($scope.game.game_Rules)
     })
   }
+  $scope.nextGame = function () {
+    var ws = new WebSocket("ws://localhost:9000/game/next");
+    ws.onopen = function () {
+      ws.send(JSON.stringify({
+        'name': $scope.game.game_Name
+      }));
+      ws.onmessage = function (event) {
+        var result = JSON.parse(event.data)[0];
+          window.location.href = "#!/games/"+encodeURIComponent(result.game_Name)
+      }
+    }
+  }
+$scope.randGame = function () {
+    var ws = new WebSocket("ws://localhost:9000/game/random");
+    ws.onopen = function () {
+      ws.send(JSON.stringify({
+        'rand': "random"
+      }));
+    }
+    ws.onmessage = function (event) {
+      var result = JSON.parse(event.data);
+        window.location.href = "#!/games/"+encodeURIComponent(result.game_Name)
+    }
+  }
+  $scope.prevGame = function () {
+    var ws = new WebSocket("ws://localhost:9000/game/prev");
+    ws.onopen = function () {
+      ws.send(JSON.stringify({
+        'name': $scope.game.game_Name
+      }));
+    }
+    ws.onmessage = function (event) {
+      var result = JSON.parse(event.data)[0];
+        window.location.href = "#!/games/"+encodeURIComponent(result.game_Name)
+    }
+  }
+
   $scope.load();
 })
 //Navbar functions (will be moved to own file)
+
 function nav() {
-  if ($('#mySidebar').width() != 250) {
-    $('#mySidebar').width('250px');
-    $(".main").css( { marginLeft : "250px"} );
+  if ($('#mySidebar').width() == 0) {
+    if ($(window).width() > 991) {
+      $('#mySidebar').width('30vw');
+    }
+    else{
+      $('#mySidebar').width($(window).width());
+      $('html, body').css({'overflowY':'hidden'});
+    }
+    $(".main").css( { marginLeft : "30vw"} );
   }
   else{
     $('#mySidebar').width('0px');
     $(".main").css( { marginLeft : "0px"} );
+    $('html, body').css({'overflowY':'auto'});
   }
 }
 var alertShow = function (json,$scope) {

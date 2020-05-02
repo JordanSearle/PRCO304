@@ -22,7 +22,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     controller: "gameControl"
   })
   .when("/request", {
-    templateUrl : "/Template/request.template.html",
+    templateUrl : "/Template/adminRequest.template.html",
     controller: "requestControl"
   })
   .when('/games/:param',{

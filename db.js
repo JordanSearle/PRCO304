@@ -103,7 +103,7 @@ module.exports = {
   },
   getUsers: function (callback) {
     var user = schemas.User;
-    user.find().select('-password -user_DOB').exec(function (err,result) {
+    user.find().select('-password -user_DOB -salt').exec(function (err,result) {
       if(err)console.log(err);
       callback(result);
     })
