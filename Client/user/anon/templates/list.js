@@ -46,6 +46,7 @@ app.controller('myApps', function($scope, $http) {
     $scope.myWelcome = response.data;
     $scope.test = response.data;
     $scope.filter = response.data;
+    console.log($scope.myWelcome);
   });
   $scope.search = function () {
     if ($scope.selGame) {
