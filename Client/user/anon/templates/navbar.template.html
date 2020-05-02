@@ -48,19 +48,21 @@
         <div class="row">
           <div class="col-md-6 col-12 border-right">
             <h4>Login</h4>
-            <form ng-submit="login()">
+            <form ng-submit="login()" class="text-left">
               <div class="input-group m-1">
                 <div class="input-group-prepend ml-1">
                   <span class="input-group-text" id="">Username:</span>
                 </div>
                 <input type="text" class="form-control" ng-model="$parent.user.username" required>
                 </div>
+                <p class="text-danger">{{loginUsername}}</p>
                 <div class="input-group m-1">
                 <div class="input-group-prepend ml-1">
                   <span class="input-group-text" id="">Password:</span>
                 </div>
                 <input type="password" class="form-control" ng-model="$parent.user.password" required>
               </div>
+              <p class="text-danger">{{loginPassword}}</p>
               <div class="input-group m-1">
               <input class="btn btn-success btn-block ml-1" type="submit" value="submit">
               </div>
@@ -96,6 +98,7 @@
                 <div class="input-group m-1">
                 <input class="btn btn-success btn-block ml-1" type="submit" value="submit">
                 </div>
+                <p class="text-danger">{{accountStatus}}</p>
             </form>
           </div>
         </div>

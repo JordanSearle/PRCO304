@@ -66,13 +66,17 @@ app.controller('myApps', function($scope, $http) {
   $scope.login = function() {
     $http.post('/login',$scope.user)
     .then(function (response) {
+      $scope.loginUsername = '';
+      $scope.loginPassword = '';
       if (response.data == "username") {
         //show error
         console.log(response.data);
+        $scope.loginUsername = 'Username does not exist';
       }
       else if (response.data == "password") {
         //Show error
         console.log(response.data);
+        $scope.loginPassword = 'Incorrect Password';
       }else{
         window.location.href = "/";
       }
@@ -81,7 +85,7 @@ app.controller('myApps', function($scope, $http) {
   $scope.createAccount = function () {
     $http.post("/user",$scope.nUser)
     .then(function (res) {
-      console.log(res);
+      $scope.accountStatus = res.data;
     })
   }
   $scope.nextGame = function () {
