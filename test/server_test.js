@@ -115,14 +115,22 @@ describe('Testing Server functions', function() {
             expect(res).to.not.include({text:'password'});
             expect(res).to.have.cookie('sessionid');
             //Testing returns correct user data
-            agent.get('/user')
-              .then(function (response) {
-                expect(response).to.have.status(200);
-                expect(response.text).to.match(/^(.*),"username":"testUsername",(.*)/);
-                agent.close();
-                done();
-              })
+
+            agent.close();
+            done();
           })
+        })
+        it('Testing get /User',function (done) {
+          var agent = chai.request.agent(app);
+          agent.post('/login')
+               .send({username: 'testUsername', password: 'password'})
+               .then(function(res){
+                       agent.get('/user')
+                            .then(function(res2){
+                                expect(res2).to.have.status(200);
+                                done();
+               });
+          });
         })
         it('testing edit user funtion',function (done) {
           var agent = chai.request.agent('http://localhost:9000')
@@ -148,33 +156,37 @@ describe('Testing Server functions', function() {
               })
               .end(function (err, response) {
                 expect(err).to.be.null;
-                expect(res).to.have.status(200);
+                expect(response).to.have.status(200);
               })
           })
           agent.close();
           done();
         })
         it('testing edit delete funtion',function (done) {
-          var agent = chai.request.agent('http://localhost:9000')
-          agent
-          .post('/login')
-          .type('form')
-          .send({
-            'username':'testUsername',
-            'password':'password'
-          })
-          .then(function (res) {
-            expect(res).to.have.status(200);
-            expect(res).to.not.include({text:'username'});
-            expect(res).to.not.include({text:'password'});
-            expect(res).to.have.cookie('sessionid');
-            //Testing returns correct user data
-            agent.delete('/user')
-              .then(function (response) {
-                expect(res).to.have.status(200);
-                agent.close();
-                done();
-              })
+          var db = schemas.User;
+          db.findOne({username:'testUsername'}).exec(function (err,result) {
+            expect(err).to.be.null;var agent = chai.request.agent('http://localhost:9000')
+            agent
+            .post('/login')
+            .type('form')
+            .send({
+              'username':'testUsername',
+              'password':'password'
+            })
+            .then(function (res) {
+              expect(res).to.have.status(200);
+              expect(res).to.not.include({text:'username'});
+              expect(res).to.not.include({text:'password'});
+              expect(res).to.have.cookie('sessionid');
+              //Testing returns correct user data
+              agent.delete('/user')
+              .send({'userID':result._id})
+                .then(function (response) {
+                  expect(response).to.have.status(200);
+                  agent.close();
+                  done();
+                })
+            })
           })
         })
     })
