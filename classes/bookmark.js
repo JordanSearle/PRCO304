@@ -41,8 +41,8 @@ module.exports = class bookmark {
   }
   delBookmark(callback){
     var bookmark = schemas.Bookmark;
-    bookmark.deleteOne({userID:this.userID,gameID:this.gameID},function (err) {
-      callback(err);
+    bookmark.deleteOne({userID:this.userID,gameID:this.gameID},function (err,res) {
+      callback(err,res);
     })
   }
   addTag(tagName,callback){
@@ -50,8 +50,8 @@ module.exports = class bookmark {
       bookmark.findOne({userID:this.userID,gameID:this.gameID}).exec(function (err,res) {
         var tag = {name:tagName}
         res.tags.push(tag);
-        res.save(function (err) {
-          callback(err);
+        res.save(function (err,res) {
+          callback(err,res);
         });
       });
   }
@@ -60,8 +60,8 @@ module.exports = class bookmark {
       bookmark.findOne({userID:this.userID,gameID:this.gameID}).exec(function (err,res) {
         var tag = {name:tagName}
         res.tags.pull(tag);
-        res.save(function (err) {
-          callback(err);
+        res.save(function (err,res) {
+          callback(err,res);
         });
       });
   }

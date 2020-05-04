@@ -74,17 +74,17 @@ describe('User Class account functions',function() {
     })
 
     it('Testing account edit',function (done) {
-      acc.setPassword('password123');
-      acc.editUser(function (err) {
+      acc.setPassword('password123')
+      acc.editUser({password:'password123'},function (err,res) {
         expect(err).to.be.null;
-      });
-      setTimeout(function () {
         user.findOne({username: acc.getUsername()}).exec(function (err,account) {
+          var sec = new classes.secure();
+          var passwordCheck = sec.saltHashPassword('password123',account.salt)
               expect(account).to.not.be.null;
-              expect(account.password).to.equal(acc.getPassword());
+              expect(account.password).to.equal(passwordCheck.passwordHash);
               done();
         })
-      }, 10);
+      });
     })
     it('Testing account deletion incorrect id',function (done) {
       acc.delUser('5e4bdab0e623ca4e5ca53945',function (err,res) {
