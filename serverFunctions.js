@@ -187,6 +187,7 @@ module.exports = {
       }
       else{
         result.viewUser(function (err,result) {
+          console.log(err,result);
           if (err) {
             res.send(err)
           }

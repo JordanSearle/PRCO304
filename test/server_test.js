@@ -9,6 +9,7 @@ var db = require('../db');
 var chai = require('chai');
 chai.use(require('chai-match'));
 chai.use(chaiHTTP);
+var app = require('../server.js');
 
 describe('Testing Server functions', function() {
     context('testing GET HTTP request', function() {
@@ -118,13 +119,10 @@ describe('Testing Server functions', function() {
               .then(function (response) {
                 expect(response).to.have.status(200);
                 expect(response.text).to.match(/^(.*),"username":"testUsername",(.*)/);
-              }).catch(function (err) {
-                if(err)console.log(err);
-                expect(err).to.be.null;
+                agent.close();
+                done();
               })
           })
-          agent.close();
-          done();
         })
         it('testing edit user funtion',function (done) {
           var agent = chai.request.agent('http://localhost:9000')
@@ -166,7 +164,7 @@ describe('Testing Server functions', function() {
             'password':'password'
           })
           .then(function (res) {
-            expect(res).to.have.status(201);
+            expect(res).to.have.status(200);
             expect(res).to.not.include({text:'username'});
             expect(res).to.not.include({text:'password'});
             expect(res).to.have.cookie('sessionid');
@@ -174,10 +172,10 @@ describe('Testing Server functions', function() {
             agent.delete('/user')
               .then(function (response) {
                 expect(res).to.have.status(200);
+                agent.close();
+                done();
               })
           })
-          agent.close();
-          done();
         })
     })
 })

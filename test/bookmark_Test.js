@@ -29,16 +29,14 @@ describe('CRUD Bookmark class test',function () {
   it('create  bookmark',function (done) {
     bookmark.userID = '5e4bdab0e623ca4e5ca53945';
     bookmark.gameID = '5e4bdab0e623ca4e5ca53991';
-    bookmark.addBookmark(function (err) {
+    bookmark.addBookmark(function (err,res) {
       expect(err).to.be.null;
-    });
-    setTimeout(function () {
       bM.find({gameID:bookmark.gameID,userID:bookmark.userID}).exec(function (err,count) {
         expect(err).to.be.null;
         expect(count.length).to.equal(1);
         done();
       })
-    }, 50);
+    });
   })
   it('view bookmarks',function () {
     bookmark.userID = '5e4bdab0e623ca4e5ca53945';

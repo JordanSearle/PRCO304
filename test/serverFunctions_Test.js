@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 var schemas = require("../schemas");
 adminid = '5e4bdab0e623ca4e5ca53946'
 userid =  '5e4bdab0e623ca4e5ca53945'
+var app = require('../server.js');
 
 describe('testing factory methods',function () {
   var secure = new classes.secure()
