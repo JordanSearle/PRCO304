@@ -13,23 +13,13 @@ module.exports = class bookmark {
     //write to DB
     var userID = this.userID;
     var gameID = this.gameID;
-    var bm = schemas.Bookmark;
     var bookmark = new schemas.Bookmark({
       userID:mongoose.Types.ObjectId(userID),
       gameID:mongoose.Types.ObjectId(gameID)
     })
 
-    bm.countDocuments({userID:userID,gameID:gameID}).exec(function (err,count) {
-      if (count == 1) {
-        bm.deleteOne({userID:userID,gameID:gameID},function (err) {
-          callback(err);
-        })
-      }
-      else{
-        bookmark.save(function (err) {
-          if(err)callback(err);
-        })
-      }
+    bookmark.save(function (err,res) {
+      callback(err,res);
     })
   }
   viewBookmark(callback){

@@ -37,10 +37,23 @@ describe('Testing Server functions', function() {
         });
     })
     context('testing CRUD user',function () {
-
+      before(function (done) {
+        var db = schemas.User;
+        db.deleteOne({'username': 'testUsername'},function (err,res) {
+          expect(err).to.be.null;
+          done();
+        })
+      })
+      after(function (done) {
+        var db = schemas.User;
+        db.deleteOne({'username': 'testUsername'},function (err,res) {
+          expect(err).to.be.null;
+          done();
+        })
+      })
         it('testing creation of a new user',function (done) {
           chai.request('http://localhost:9000')
-          .post('/createuser')
+          .post('/user')
           .send({
             'email':'test@test.com',
             'username':'testUsername',
@@ -153,7 +166,7 @@ describe('Testing Server functions', function() {
             'password':'password'
           })
           .then(function (res) {
-            expect(res).to.have.status(200);
+            expect(res).to.have.status(201);
             expect(res).to.not.include({text:'username'});
             expect(res).to.not.include({text:'password'});
             expect(res).to.have.cookie('sessionid');

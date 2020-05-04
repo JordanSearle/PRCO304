@@ -84,6 +84,15 @@ describe('Testing, user pending functions',function () {
   })
 })
 describe('Testing, admin approving or denying a pending request functions',function () {
+    var game = new classes.game();
+    game.game_UID= new mongoose.Types.ObjectId;
+    game.userID= new mongoose.Types.ObjectId;
+    game.game_Name= 'Pending game name';
+    game.game_Summery='Pending game name';
+    game.game_Rules= 'Pending game name';
+    game.game_Player_Count= 'Pending game name';
+    game.game_Equipment= ['Pending game name'];
+    game.game_IsNSFW=false;
   afterEach(function (done) {
     var game = schemas.Pending;
     game.deleteMany({game_Name:'Pending game name'}, function (err,result) {
@@ -121,18 +130,6 @@ describe('Testing, admin approving or denying a pending request functions',funct
       done();
     });
   })
-
-
-  var game = new classes.game();
-  game.game_UID= new mongoose.Types.ObjectId;
-  game.userID= new mongoose.Types.ObjectId;
-  game.game_Name= 'Pending game name';
-  game.game_Summery='Pending game name';
-  game.game_Rules= 'Pending game name';
-  game.game_Player_Count= 'Pending game name';
-  game.game_Equipment= ['Pending game name'];
-  game.game_IsNSFW=false;
-
   it('Approving a pending request',function (done) {
     game.approvePending(function (err,res) {
       expect(err).to.be.null;

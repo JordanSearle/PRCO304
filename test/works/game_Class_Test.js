@@ -3,7 +3,7 @@ const expect  = require("chai").expect;
 const mongoose = require('mongoose');
 var schemas = require("../schemas");
 var db = require('../db');
-
+var server = require('../server')
 
 describe('Game test',function () {
   var games = schemas.Game;
@@ -22,7 +22,14 @@ describe('Game test',function () {
     });
   })
   before(function () {
-    games.deleteMany({'game_Name':'test game name'}).exec();
+    before(done =>{
+      server.on( "app_started", function()
+      {
+        games.deleteMany({'game_Name':'test game name'}).exec(function (err,res) {
+          done();
+        });
+      })
+    })
   })
   context('testing variable values',function () {
     it('Expecting name to equal: test game name',function () {

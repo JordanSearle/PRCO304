@@ -10,8 +10,13 @@ module.exports = class admin extends user {
   isAdmin(callback){
     var user = schemas.User;
     user.findOne({'_id':this.getUserID()},function (err, result) {
-      if (result.isAdmin == true) {
-        callback(true);
+      if (result.hasOwnProperty('admin')) {
+        if (result.isAdmin == true) {
+          callback(true);
+        }
+        else{
+          callback(false);
+        }
       }
       else{
         callback(false);

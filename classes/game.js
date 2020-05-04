@@ -67,37 +67,47 @@ module.exports = class game {
   //Rating function, not important right now.
   rate(gameID,userID,callback){
     var gm = schemas.Game;
-    gm.find({
-      _id:mongoose.Types.ObjectId(gameID),
-    },{
-      rating:{
-        "$elemMatch":{"$eq":mongoose.Types.ObjectId(userID)}
-      }
+    gm.findOne({
+      _id:gameID,
     }).exec(function (err,res) {
-      if(err)callback(err);
-      if(res[0].rating.length == 0){
-        var game = schemas.Game;
-        game.updateOne({
-          _id:mongoose.Types.ObjectId(gameID),
-           "rating": { "$ne": mongoose.Types.ObjectId(userID)}
-        },{
-          "$inc": { "ratingCount": 1 },
-          "$push":{"rating":  mongoose.Types.ObjectId(userID)}
-        }).exec(function (err,res) {
-          if(err)callback(err);
-        })
-      }
-      else{
-        gm.updateOne({
-          _id:mongoose.Types.ObjectId(gameID),
-           "rating": mongoose.Types.ObjectId(userID)
-        },{
-          "$inc": { "ratingCount": -1 },
-          "$pull":{"rating":  mongoose.Types.ObjectId(userID)}
-        }).exec(function (err,res) {
-          if(err)callback(err);
-        })
-      }
+        if (res) {
+          if (res.rating.length > 0) {
+            var data = res.rating.find( function( ele ) {
+              return ele.gameID === gameID;
+            });
+            if( data ) {
+              res.rating.forEach((item, i) => {
+                if (item.userID == userID) {
+                  res.rating.splice(i,1)
+                }
+              });
+              res.ratingCount--;
+              res.markModified('rating')
+              res.save(function (err,res) {
+                callback(err,res)
+              })
+            }
+            else{
+              res.rating.push({'userID':userID,'gameID':gameID})
+              res.ratingCount++;
+              res.markModified('rating')
+              res.save(function (err,res) {
+                callback(err,res)
+              })
+            }
+          }
+          else{
+            res.rating.push({'userID':userID,'gameID':gameID});
+            res.ratingCount++;
+            res.markModified('rating')
+            res.save(function (err,res) {
+              callback(err,res)
+            })
+          }
+        }
+        else{
+          callback('Error',null)
+        }
     })
   }
   addPending(id,callback){

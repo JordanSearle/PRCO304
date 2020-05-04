@@ -7,7 +7,7 @@ var chaiHTTP = require('chai-http');
 var chai = require('chai');
 chai.use(require('chai-match'));
 chai.use(chaiHTTP);
-const server = 'http://localhost:9000'
+const server = require('../server')
 
 describe('User Class Getters and Setters',function() {
   var acc = new classes.user("1","UserOne","password",'salt',"email@email.com","04 Dec 1995 00:12:00 GMT");
@@ -130,6 +130,14 @@ describe('Admin class getters and setters',function() {
 })
 describe('testing Admin and User overrides',function () {
   context('testing add and delete game for admin and user',function () {
+    before(function () {
+      before(done =>{
+        server.on( "app_started", function()
+        {
+          done();
+        })
+      })
+    })
     after(function (done) {
       var gm = schemas.Game;
       gm.deleteMany({game_Name:'Override Game Name'},function (err,res) {
