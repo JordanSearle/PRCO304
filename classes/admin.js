@@ -3,8 +3,8 @@ var schemas = require("../schemas");
 const classes = require('../classes');
 module.exports = class admin extends user {
   #isAdmin;
-  constructor(userID,username,password,email,dob) {
-    super(userID,username,password,email,dob);
+  constructor(userID,username,password,salt,email,dob) {
+    super(userID,username,password,salt,email,dob);
     this.#isAdmin = true;
   }
   isAdmin(callback){

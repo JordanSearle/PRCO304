@@ -114,8 +114,8 @@ module.exports = class game {
       pending:true
    })
    this.game_UID = game._id;
-   game.save(function (err) {
-     if(err)callback(err);
+   game.save(function (err,res) {
+     callback(err,res);
    });
   }
   editPending(id,callback){
@@ -134,9 +134,9 @@ module.exports = class game {
         game_IsNSFW:this.game_IsNSFW,
         pending:true
       })
-       game.save(function (err) {
-         if(err)callback(err);
-       });
+      game.save(function (err,res) {
+        callback(err,res);
+      });
     })
   }
   approvePending(callback){

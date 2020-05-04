@@ -5,7 +5,7 @@ var schemas = require("../schemas");
 var db = require('../db');
 
 describe('Testing, user pending functions',function () {
-  before(function () {
+  before(function (done) {
     const games = new schemas.Game({
       //UserID needs to be set from the logged on user.
       _id: new mongoose.Types.ObjectId,
@@ -17,13 +17,22 @@ describe('Testing, user pending functions',function () {
       game_Equipment: ['Pending game name'],
       game_IsNSFW:false
    })
-   games.save(function (err) {
-     if(err)console.log(err);
+   games.save(function (err,res) {
+     expect(err).to.be.null
+     done();
    });
   })
   afterEach(function (done) {
+
     var uGame = schemas.Pending;
     uGame.deleteOne({game_Name:'Pending game name'}, function (err,result) {
+      if (err) callback(err);
+      done();
+    });
+  })
+  after(function (done) {
+    var games = schemas.Game;
+    games.deleteOne({game_Name:'Pending game name'}, function (err,result) {
       if (err) callback(err);
       done();
     });
@@ -39,11 +48,8 @@ describe('Testing, user pending functions',function () {
   game.game_IsNSFW=false;
 
   it('User saving the game',function (done) {
-    game.addPending(new mongoose.Types.ObjectId,function (err) {
-      if(err)console.log(err);
-    })
-
-    setTimeout(function () {
+    game.addPending(new mongoose.Types.ObjectId,function (err,res) {
+      expect(err).to.be.null
       var pn = schemas.Pending;
       pn.findOne({game_Name: 'Pending game name'}).exec(function (err,res) {
         expect(err).to.be.null;
@@ -55,25 +61,26 @@ describe('Testing, user pending functions',function () {
         expect(res).to.have.property('game_IsNSFW',false);
         done();
       })
-    }, 15);
+    })
   })
   it('User suggesting a game edit',function (done) {
-    game.editPending(new mongoose.Types.ObjectId,function (err) {
-      if(err)console.log(err);
-    })
-    setTimeout(function () {
-      var pend = schemas.Pending;
-      pend.findOne({game_Name: 'Pending game name'}).exec(function (err,res) {
+    var dGame = schemas.Game;
+    dGame.findOne({game_Name: 'Pending game name'},function (err,res) {
+      game.editPending(res,function (err,res) {
         expect(err).to.be.null;
-        expect(res).to.not.be.null;
-        expect(res).to.have.property('game_Name','Pending game name');
-        expect(res).to.have.property('game_Summery','Pending game name');
-        expect(res).to.have.property('game_Rules','Pending game name');
-        expect(res).to.have.property('game_Player_Count','Pending game name');
-        expect(res).to.have.property('game_IsNSFW',false);
-        done();
+        var pend = schemas.Pending;
+        pend.findOne({game_Name: 'Pending game name'}).exec(function (err,res) {
+          expect(err).to.be.null;
+          expect(res).to.not.be.null;
+          expect(res).to.have.property('game_Name','Pending game name');
+          expect(res).to.have.property('game_Summery','Pending game name');
+          expect(res).to.have.property('game_Rules','Pending game name');
+          expect(res).to.have.property('game_Player_Count','Pending game name');
+          expect(res).to.have.property('game_IsNSFW',false);
+          done();
+        })
       })
-    }, 15);
+    })
   })
 })
 describe('Testing, admin approving or denying a pending request functions',function () {
@@ -96,6 +103,7 @@ describe('Testing, admin approving or denying a pending request functions',funct
     const games = new schemas.Pending({
       //UserID needs to be set from the logged on user.
       _id: new mongoose.Types.ObjectId,
+      id: new mongoose.Types.ObjectId,
       userID: new mongoose.Types.ObjectId,
       game_Name: 'Pending game name',
       game_Summery:'Pending game name',
@@ -105,7 +113,7 @@ describe('Testing, admin approving or denying a pending request functions',funct
       game_IsNSFW:false
    })
    games.save(function (err) {
-     if(err)console.log(err);
+     expect(err).to.be.null;
    });
     var uGame = schemas.Game;
     uGame.deleteMany({game_Name:'Pending game name'}, function (err,result) {
