@@ -58,12 +58,10 @@ app.controller('myApps', function($scope, $http) {
       $scope.loginPassword = '';
       if (response.data == "username") {
         //show error
-        console.log(response.data);
         $scope.loginUsername = 'Username does not exist';
       }
       else if (response.data == "password") {
         //Show error
-        console.log(response.data);
         $scope.loginPassword = 'Incorrect Password';
       }else{
         window.location.href = "/";

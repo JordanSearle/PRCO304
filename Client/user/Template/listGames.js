@@ -131,6 +131,7 @@ app.controller('userLoad',function ($scope,$http) {
   }
 })
 app.controller('userControl', function($scope, $http) {
+  hideAllAlerts();
 $scope.alert = {}
   $scope.load = function () {
     loadSelfUser($scope,$http)

@@ -61,12 +61,6 @@ function prevGame($scope){
   }
 }
 
-function alertDelete() {
-  $('#toast').toast('hide');
-  $('#toast').css('z-index', -1)
-  $('#delete').toast('show');
-  $('#delete').css('z-index', 1000)
-}
 
 function editAccount($scope,$http) {
   result = Object.assign({}, $scope.user, $scope.eUser);
@@ -141,9 +135,17 @@ function nav() {
   }
 function hideAllAlerts() {
   $('#toast').toast('hide');
-  $('toast').css('z-index', -1)
+  $('#toast').css('z-index', -1)
   $('#delete').toast('hide');
   $('#delete').css('z-index', -1)
+  $('#delete').children().children().attr("disabled", true);
+}
+function alertDelete() {
+  $('#toast').toast('hide');
+  $('#toast').css('z-index', -1)
+  $('#delete').toast('show');
+  $('#delete').css('z-index', 1000)
+  $('#delete').children().children().removeAttr("disabled");
 }
 function alertStatusShow(json,$scope) {
   $("#alertTitle").text(json.statusText)
@@ -152,4 +154,5 @@ function alertStatusShow(json,$scope) {
   $('#toast').css('z-index', 1000)
   $('#delete').toast('hide');
   $('#delete').css('z-index', -1)
+  $('#delete').children().children().attr("disabled", true);
   }

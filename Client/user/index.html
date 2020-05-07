@@ -6,13 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="shortcut icon" href="anon/src/favicon.ico" type="image/x-icon">
     <link rel="icon" href="anon/src/favicon.ico" type="image/x-icon">
-    <script src="https://kit.fontawesome.com/1de2cd54fb.js" crossorigin="anonymous"></script>
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui/0.4.0/angular-ui.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
@@ -20,9 +15,7 @@
     <link rel="stylesheet" href="/anon/css/tabletCSS.css">
     <link rel="stylesheet" href="/anon/css/desktopCSS.css">
 
-    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-    <script src="anon/js/user.js" charset="utf-8"></script>
-    <script src="Template/listGames.js"></script>
+
     <title>That's the Spirit</title>
     <style>
 
@@ -55,29 +48,14 @@
         <p id="alertMessage"></p>
       </div>
     </div>
-    <div ng-controller="userControl">
-      <div class="d-flex justify-content-center align-items-center" >
-        <div class="toast w-100 bg-white" id="delete" data-delay="10000" style="position: fixed; bottom: 0; z-index:-1;" role="alert" aria-live="assertive" aria-atomic="true">
-          <div class="toast-header bg-white">
-            <strong class="mr-auto">Are you Sure?</strong>
-            <small>Now</small>
-            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="toast-body">
-            <button class="btn btn-primary m-1" data-dismiss="toast" >No, Go Back</button><button class="btn btn-danger m-1" ng-click="delete()">Yes Delete</button>
-          </div>
-          <div class="toast-body mt-0" >
-            <h4>This action cannot be undone</h4>
-            <!--This cannot be removed and for the life on me I cannot work out why. The buttons do not work unless this is here -->
-          </div>
-        </div>
-      </div>
-    </div>
 
 
 
+    <script src="https://kit.fontawesome.com/1de2cd54fb.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui/0.4.0/angular-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -85,6 +63,7 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
+    <script src="anon/js/user.js" charset="utf-8"></script>
+    <script src="Template/listGames.js"></script>
   </body>
 </html>

@@ -1,4 +1,4 @@
-$('.toast').toast('show');
+
 var app = angular.module("myApp", ["ngRoute","xeditable"]);
 app.run(['editableOptions', function(editableOptions) {
   editableOptions.theme = 'bs4'; // bootstrap3 theme. Can be also 'bs4', 'bs2', 'default'
@@ -40,6 +40,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     }]);
 
 app.controller('userControl', function($scope, $http) {
+  hideAllAlerts();
   $scope.alert = {}
   $scope.load = function () {
     loadSelfUser($scope,$http)
@@ -72,9 +73,9 @@ app.controller('user',function ($scope,$http) {
     })
   }
   $scope.delUser =function (id) {
-    console.log(id);
     $http.delete('/user',{data: {userID:id}, headers: {'Content-Type': 'application/json;charset=utf-8'}})
     .then(function (res) {
+      alertStatusShow(res,$scope)
       $scope.load();
     })
   }
@@ -109,9 +110,6 @@ app.controller('gameControl', function($scope, $http) {
     });
   }
   $scope.editGame = function ($data,game) {
-
-      console.log($data);
-      console.log(game);
     if (game._id != null) {
       //Add extra variables for the Equipment and categories
       game.game_Name = $data.game_Name;
@@ -121,7 +119,7 @@ app.controller('gameControl', function($scope, $http) {
       game.game_Player_Count = $data.game_Player_Count;
       game.game_Categories = game.game_Categories;
       $http.put('/game',game).then(function (res) {
-        console.log(res);
+        alertStatusShow(res,$scope)
       })
     }
     else {
@@ -132,7 +130,7 @@ app.controller('gameControl', function($scope, $http) {
       game.game_Player_Count = $data.game_Player_Count;
       game.game_Categories = game.game_Categories;
       $http.post('/game',game).then(function (res) {
-        console.log(res);
+        alertStatusShow(res,$scope)
       })
     }
   }
@@ -150,7 +148,7 @@ app.controller('gameControl', function($scope, $http) {
   };
   $scope.removeGame = function (id) {
     $http.delete('/game',{data: {id:id}, headers: {'Content-Type': 'application/json;charset=utf-8'}}).then(function (res) {
-      console.log(res);
+      alertStatusShow(res,$scope)
     })
     $scope.load();
   }
@@ -194,14 +192,13 @@ app.controller('requestControl',function ($scope,$http) {
     game.game_Player_Count = $data.game_Player_Count;
     game.game_Categories = game.game_Categories;
       $http.post('/pending/save',game).then(function (res) {
-        console.log(res);
+        alertStatusShow(res,$scope)
         $scope.load();
       })
   }
   $scope.removeGame = function (id) {
-    console.log(id);
     $http.delete('/pending',{data: {gameID:id}, headers: {'Content-Type': 'application/json;charset=utf-8'}}).then(function (res) {
-      console.log(res);
+      alertStatusShow(res,$scope)
       $scope.load();
     })
   }
@@ -211,7 +208,6 @@ app.controller('gameUIControl',function ($scope,$http,$routeParams) {
   $('#exampleModal').modal('hide');
   $('.modal-backdrop').remove();
   $scope.load = function () {
-    console.log(encodeURIComponent($routeParams.param));
     $http.get('/game/'+encodeURIComponent($routeParams.param))
     .then(function (res) {
       $scope.game = res.data[0];
@@ -333,7 +329,6 @@ function callChart() {
     }));
     ws.onmessage = function (event) {
       $scope.result = JSON.parse(event.data);
-      console.log($scope.result);
       drawCPUChart()
         ws.close();
     }
