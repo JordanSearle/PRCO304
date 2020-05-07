@@ -63,19 +63,21 @@ function prevGame($scope){
 
 function alertDelete() {
   $('#toast').toast('hide');
+  $('#toast').css('z-index', -1)
   $('#delete').toast('show');
+  $('#delete').css('z-index', 1000)
 }
 
 function editAccount($scope,$http) {
   result = Object.assign({}, $scope.user, $scope.eUser);
   $http.put("/user",result)
   .then(function (res) {
-    console.log(res.data);
+    alertStatusShow(res,$scope)
     $scope.load();
   })
 }
 function deleteAcc($scope,$http) {
-  $http.delete("/user")
+  $http.delete("/user",{data: {userID:$scope.user._id}, headers: {'Content-Type': 'application/json;charset=utf-8'}})
   .then(function (res) {
     $scope.logout();
   })
@@ -137,10 +139,17 @@ function nav() {
       $('html, body').css({'overflowY':'auto'});
     }
   }
-function alertShow(json,$scope) {
-    $scope.alert.title = json.statusText;
-    $scope.alert.message = json.data;
-    $scope.alert.time = 'Now';
-    $('#delete').toast('hide');
-    $('#toast').toast('show');
+function hideAllAlerts() {
+  $('#toast').toast('hide');
+  $('toast').css('z-index', -1)
+  $('#delete').toast('hide');
+  $('#delete').css('z-index', -1)
+}
+function alertStatusShow(json,$scope) {
+  $("#alertTitle").text(json.statusText)
+  $("#alertMessage").text(json.data)
+  $('#toast').toast('show');
+  $('#toast').css('z-index', 1000)
+  $('#delete').toast('hide');
+  $('#delete').css('z-index', -1)
   }

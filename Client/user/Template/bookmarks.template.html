@@ -50,5 +50,12 @@
         </div>
       <div ng-show="!addTag" class=" bg-light card-footer"><button  type="button" class="btn btn-light btn-block" name="button" ng-click="addTag = !addTag">+ Add Event</button></div>
     </div>
+    <div class="card" ng-if="list.length == 0">
+      <div class="card-header">Nothing is here</div>
+      <div class="card-body">
+        <h5 class="card-title">Bookmark a game now!</h5>
+        <p class="card-text"><a href="#!">Click here to view a list of games you can bookmark</a></p>
+      </div>
+    </div>
   </div>
 </div>

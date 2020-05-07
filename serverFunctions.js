@@ -239,7 +239,7 @@ module.exports = {
         bm.delBookmark(function (err) {
           if(err)console.log(err);
         })
-        res.sendStatus(200);
+        res.status(200).send('Bookmark has been deleted');
       }
       else {
           res.sendStatus(403);

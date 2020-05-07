@@ -71,7 +71,7 @@ app.controller('gameControl', function($scope, $http) {
     $http.post('/game/bookmark',JSON.stringify({'gameID':id}))
     .then(function (res) {
       //Replace Console.Log with Alert Show...
-      console.log(res);
+      alertStatusShow(res,$scope)
       $('body').removeClass('modal-open');
       $('.modal-backdrop').remove();
     })
@@ -84,7 +84,7 @@ app.controller('gameControl', function($scope, $http) {
       }));
     }
     ws.onmessage = function (event) {
-      console.log(event);
+      alertStatusShow(event,$scope)
       $scope.load();
     }
   }
@@ -97,6 +97,7 @@ app.controller('gameControl', function($scope, $http) {
   }
 });
 app.controller('userLoad',function ($scope,$http) {
+  hideAllAlerts();
   $scope.search = function () {
     search($scope);
   }
@@ -182,19 +183,19 @@ app.controller('bookmarkControl',function ($scope,$http) {
   $scope.saveTag = function (id,tag) {
     $scope.data = {gameID:id,tagName:$scope.tag.name};
     $http.post('/user/bookmarks/tag',$scope.data).then(function (res) {
-      console.log(res);
+      alertStatusShow(res,$scope)
       $scope.load();
     })
   }
   $scope.delTag = function (id,tag) {
     $http.delete('/user/bookmarks/tag',{data: {gameID:id,tagName:tag}, headers: {'Content-Type': 'application/json;charset=utf-8'}}).then(function (res) {
-      console.log(res);
+      alertStatusShow(res,$scope)
       $scope.load();
     })
   }
   $scope.delBookmark = function (id) {
     $http.delete('/game/bookmark',{data: {gameID:id}, headers: {'Content-Type': 'application/json;charset=utf-8'}}).then(function (res) {
-      console.log(res);
+      alertStatusShow(res,$scope)
       $scope.load();
     })
   }
@@ -210,9 +211,9 @@ app.controller('requestControl',function ($scope,$http) {
     $scope.nGame.game_Rules = ruleMDE.value();
     $scope.nGame.game_Summery = summaryMDE.value();
     $scope.nGame.game_Equipment = $scope.newGame.game_Equipment
-    console.log($scope.nGame);
+
     $http.post('/game',$scope.nGame).then(function (res) {
-      console.log(res);
+      alertStatusShow(res,$scope)
       $scope.load();
     })
   }
@@ -230,7 +231,7 @@ app.controller('requestControl',function ($scope,$http) {
   $scope.load = function () {
     $http.get('/user/pending').then(function (res) {
       $scope.pList = res.data;
-      console.log(res);
+      alertStatusShow(res,$scope)
     })
   }
   $scope.load();
