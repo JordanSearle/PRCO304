@@ -10,7 +10,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     controller: "dashboard"
   })
   .when("/userdetails", {
-    templateUrl : "/Template/account.template.html",
+    templateUrl : "user/Template/curruser.template.html",
     controller: "userControl"
   })
   .when("/user", {
@@ -38,130 +38,27 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
          });
 
     }]);
-app.controller('myApps', function($scope, $http) {
-    $http.get("/game")
-      .then(function(response) {
-      $scope.myWelcome = response.data;
-    });
-    $http.get("/user")
-      .then(function(response) {
-        $scope.user = response.data.username;
-    });
 
-  $scope.logout = function () {
-    $http.get("/logout")
-    .then(function (res) {
-      window.location.href = "/";
-    })
-  }
-
-  $scope.nextGame = function () {
-    var ws = new WebSocket("ws://localhost:9000/game/next");
-    ws.onopen = function () {
-      ws.send(JSON.stringify({
-        'name': $scope.game.game_Name
-      }));
-      ws.onmessage = function (event) {
-        var result = JSON.parse(event.data)[0];
-        $scope.game = result;
-        $scope.$apply();
-      }
-    }
-  }
-  $scope.randGame = function () {
-    var ws = new WebSocket("ws://localhost:9000/game/random");
-    ws.onopen = function () {
-      ws.send(JSON.stringify({
-        'rand': "random"
-      }));
-    }
-    ws.onmessage = function (event) {
-      $scope.game = JSON.parse(event.data);
-      $scope.$apply();
-    }
-  }
-  $scope.prevGame = function () {
-    var ws = new WebSocket("ws://localhost:9000/game/prev");
-    ws.onopen = function () {
-      ws.send(JSON.stringify({
-        'name': $scope.game.game_Name
-      }));
-    }
-    ws.onmessage = function (event) {
-      var result = JSON.parse(event.data)[0];
-      $scope.game = result;
-      $scope.$apply();
-    }
-  }
-  $scope.loadGames = function (name) {
-    var ws = new WebSocket("ws://localhost:9000/game/load");
-    ws.onopen = function () {
-      ws.send(JSON.stringify({
-        'name': name
-      }));
-    }
-    ws.onmessage = function (event) {
-      var result = JSON.parse(event.data)[0];
-      $scope.game = result;
-      $scope.$apply();
-      $('#exampleModal').modal('show');
-    }
-    $scope.load = function (name) {
-      $scope.selGame = name;
-      console.log('here');
-      $scope.loadGame();
-    }
-    $scope.loadGame = function () {
-      $scope.myWelcome.forEach((item, i) => {
-        if ($scope.selGame == item.game_Name) {
-          $scope.selected = encodeURIComponent($scope.selGame);
-          window.location.href = "#!/games/"+$scope.selected;
-        }
-      });
-    }
-  }
-});
 app.controller('userControl', function($scope, $http) {
-$scope.alert = {}
+  $scope.alert = {}
   $scope.load = function () {
-
-  $http.get("/user")
-  .then(function(response) {
-    $scope.user = response.data;
-    try {
-      var test = new Date($scope.user.user_DOB).toISOString().substr(0, 10);
-    } catch (e) {
-      console.log(e);
-    } finally {
-
-    }
-
-    $scope.dInput = test
-  });
-    }
-  $scope.logout = function () {
-    $http.get("/logout")
-    .then(function (res) {
-      window.location.href = "/";
-    })
+    loadSelfUser($scope,$http)
+  }
+  $scope.logout =function () {
+    logout($http);
+  }
+  $scope.alertDelete = function () {
+    alertDelete()
   }
   $scope.delete= function () {
-    $http.delete("/user")
-    .then(function (res) {
-      $scope.logout();
-    })
+    deleteAcc($scope,$http)
   }
   $scope.editAccount= function () {
-
-    result = Object.assign({}, $scope.user, $scope.eUser);
-    $http.put("/user",result)
-    .then(function (res) {
-      console.log(res.data);
-      $scope.load();
-    })
+    editAccount($scope,$http);
   }
   $scope.load();
 });
+
 app.controller('user',function ($scope,$http) {
   $scope.load = function () {
     $http.get('/users').then(function (res) {
@@ -296,7 +193,6 @@ app.controller('requestControl',function ($scope,$http) {
     game.game_IsNSFW = $data.game_IsNSFW;
     game.game_Player_Count = $data.game_Player_Count;
     game.game_Categories = game.game_Categories;
-      console.log(game);
       $http.post('/pending/save',game).then(function (res) {
         console.log(res);
         $scope.load();

@@ -51,61 +51,26 @@ app.controller('gameControl', function($scope, $http) {
   .then(function(response) {
     $scope.user = response.data;
   });
-  $scope.nextGame = function () {
-    var ws = new WebSocket("ws://localhost:9000/game/next");
-    ws.onopen = function () {
-      ws.send(JSON.stringify({
-        'name': $scope.game.game_Name
-      }));
-      ws.onmessage = function (event) {
-        var result = JSON.parse(event.data)[0];
-        $scope.game = result;
-        $scope.$apply();
-      }
-    }
+
+  $scope.logout =function () {
+    logout($http);
+  }
+  $scope.nextGame =function () {
+    nextGame($scope);
   }
   $scope.randGame = function () {
-    var ws = new WebSocket("ws://localhost:9000/game/random");
-    ws.onopen = function () {
-      ws.send(JSON.stringify({
-        'rand': "random"
-      }));
-    }
-    ws.onmessage = function (event) {
-      $scope.game = JSON.parse(event.data);
-      $scope.$apply();
-    }
+    randGame($scope);
   }
   $scope.prevGame = function () {
-    var ws = new WebSocket("ws://localhost:9000/game/prev");
-    ws.onopen = function () {
-      ws.send(JSON.stringify({
-        'name': $scope.game.game_Name
-      }));
-    }
-    ws.onmessage = function (event) {
-      var result = JSON.parse(event.data)[0];
-      $scope.game = result;
-      $scope.$apply();
-    }
+    prevGame($scope);
   }
   $scope.loadGames = function (name) {
-    var ws = new WebSocket("ws://localhost:9000/game/load");
-    ws.onopen = function () {
-      ws.send(JSON.stringify({
-        'name': name
-      }));
-    }
-    ws.onmessage = function (event) {
-      var result = JSON.parse(event.data)[0];
-      $scope.game = result;
-      $scope.$apply();
-      $('#exampleModal').modal('show');
-    }
+    loadModalGame(name,$scope)
   }
   $scope.bookmark = function (id) {
     $http.post('/game/bookmark',JSON.stringify({'gameID':id}))
     .then(function (res) {
+      //Replace Console.Log with Alert Show...
       console.log(res);
       $('body').removeClass('modal-open');
       $('.modal-backdrop').remove();
@@ -123,36 +88,22 @@ app.controller('gameControl', function($scope, $http) {
       $scope.load();
     }
   }
-  $scope.load = function (name) {
-    $scope.selGame = name;
-    $scope.loadGame();
+  $scope.loadGamePage = function (name) {
+    loadAGame(name,$scope)
   }
-  $scope.loadGame = function () {
-    $scope.myWelcome.forEach((item, i) => {
-      if ($scope.selGame == item.game_Name) {
-        $scope.selected = encodeURIComponent($scope.selGame);
-        console.log($scope.selected);
-        window.location.href = "#!/games/"+$scope.selected;
-      }
-    });
+  $scope.arr = ['text-white bg-secondary','text-white bg-info','bg-light']
+  $scope.getRandomClass = function(){
+    return Math.random()*$scope.arr.length;
   }
 });
 app.controller('userLoad',function ($scope,$http) {
   $scope.search = function () {
-    if ($scope.selGame) {
-      var ws = new WebSocket("ws://localhost:9000/game/search");
-      ws.onopen = function () {
-        ws.send(JSON.stringify({
-          'name': $scope.selGame
-        }));
-        ws.onmessage = function (event) {
-          var result = JSON.parse(event.data);
-          $scope.test = result;
-          $scope.apply
-        }
-      }
-    }
+    search($scope);
   }
+  $scope.logout =function () {
+    logout($http);
+  }
+
   $http.get('/game').then(function (res) {
     $scope.test = res.data.slice(0,5);
   })
@@ -163,12 +114,8 @@ app.controller('userLoad',function ($scope,$http) {
     $("#selector").flatpickr({defaultDate:new Date($scope.user.user_DOB)});
     $scope.dInput = test;
   });
-  $scope.logout = function () {
-    $http.get("/logout")
-    .then(function (res) {
-      window.location.href = "/";
-    })
-  }
+
+
   $scope.load = function (name) {
     $scope.selGame = name;
     $scope.loadGame();
@@ -182,54 +129,23 @@ app.controller('userLoad',function ($scope,$http) {
     });
   }
 })
-app.controller('userControl', function($scope, $http, $sce) {
+app.controller('userControl', function($scope, $http) {
 $scope.alert = {}
   $scope.load = function () {
-    $http.get("/user")
-    .then(function(response) {
-      $scope.user = response.data;
-      var test = new Date($scope.user.user_DOB).toISOString().substr(0, 10);
-      $("#selector").flatpickr({defaultDate:new Date($scope.user.user_DOB)});
-      $scope.dInput = test
-    });
-    $http.get('/user/bookmarks')
-    .then(function (res) {
-      $scope.bookmarks = res.data;
-    })
-    }
-  $scope.logout = function () {
-    console.log('log');
-    $http.get("/logout")
-    .then(function (res) {
-      window.location.href = "/";
-    })
+    loadSelfUser($scope,$http)
+  }
+  $scope.logout =function () {
+    logout($http);
   }
   $scope.alertDelete = function () {
-    $('#toast').toast('hide');
-    $('#delete').toast('show');
+    alertDelete()
   }
   $scope.delete= function () {
-    $http.delete("/user",{data: {userID:$scope.user._id}, headers: {'Content-Type': 'application/json;charset=utf-8'}})
-    .then(function (res) {
-      $scope.logout();
-    })
+    deleteAcc($scope,$http)
   }
   $scope.editAccount= function () {
-    if ($scope.eUser) {
-      $http.put("/user",$scope.eUser)
-      .then(function (res) {
-        $scope.load();
-        alertShow(res,$scope)
-      })
-    }
-    else{
-      var res = {}
-      res.statusText = "OK";
-      res.data = "Nothing to Change";
-      alertShow(res,$scope)
-    }
+    editAccount($scope,$http);
   }
-
   $scope.load();
 });
 app.controller('bookmarkControl',function ($scope,$http) {
@@ -325,15 +241,8 @@ app.controller('gameUIControl',function ($scope,$http,$routeParams) {
   $('.modal-backdrop').remove();
   var ruleMDE = new SimpleMDE({ element: document.getElementById("ruleInput"),toolbar: ["ordered-list", "|", "preview"],forceSync:true});
   var summaryMDE = new SimpleMDE({ element: document.getElementById("summaryInput"),toolbar: ["bold", "italic", "heading", "|", "unordered-list","ordered-list","|","preview"],forceSync:true  });
-  $scope.editRequest = function () {
-    $scope.eGame.game_Summery = summaryMDE.value();
-    $scope.eGame.game_Rules = ruleMDE.value();
-    $http.put('/game',$scope.eGame).then(function (res) {
-      console.log(res);
-    })
-  }
+
   $scope.load = function () {
-    console.log(encodeURIComponent($routeParams.param));
     $http.get('/game/'+encodeURIComponent($routeParams.param))
     .then(function (res) {
       $scope.game = res.data[0];
@@ -382,28 +291,3 @@ $scope.randGame = function () {
   $scope.load();
 })
 //Navbar functions (will be moved to own file)
-
-function nav() {
-  if ($('#mySidebar').width() == 0) {
-    if ($(window).width() > 991) {
-      $('#mySidebar').width('30vw');
-    }
-    else{
-      $('#mySidebar').width($(window).width());
-      $('html, body').css({'overflowY':'hidden'});
-    }
-    $(".main").css( { marginLeft : "30vw"} );
-  }
-  else{
-    $('#mySidebar').width('0px');
-    $(".main").css( { marginLeft : "0px"} );
-    $('html, body').css({'overflowY':'auto'});
-  }
-}
-var alertShow = function (json,$scope) {
-  $scope.alert.title = json.statusText;
-  $scope.alert.message = json.data;
-  $scope.alert.time = 'Now';
-  $('#delete').toast('hide');
-  $('#toast').toast('show');
-}

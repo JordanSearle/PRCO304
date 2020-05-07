@@ -1,5 +1,5 @@
 /*Smartphone Portrait*/
-@media only screen and (max-width: 479px){
+@media only screen and (max-width: 1025px){
   html, body {
     overflow-x: hidden;
   }
@@ -68,9 +68,9 @@
   .border-right{
     border-style: none!important;
   }
-
-}
-/*Smartphone Landscape*/
-@media only screen and (min-width: 480px) and (max-width: 767px){
+  .modal-content{
+    height: 95vh;
+    overflow-y: scroll;
+  }
 
 }

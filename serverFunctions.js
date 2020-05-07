@@ -196,6 +196,7 @@ module.exports = {
         ws.on('message', function(msg) {
           var fac = new controllerFactory();
           var t = JSON.parse(msg)
+          console.log(t);
           fac.create(req.session.user,function (result) {
             if (result instanceof classes.user && t.hasOwnProperty('gameID') && Object.keys(t).length > 0) {
               var gm = new classes.game();

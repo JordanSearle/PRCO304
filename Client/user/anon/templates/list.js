@@ -8,7 +8,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
   })
   .when('/games/:param',{
     templateUrl:'/templates/game.template.html',
-    controller:"gameControl"
+    controller:"gameUIControl"
   })
   .otherwise({
     templateUrl : "/templates/list.template.html",
@@ -46,23 +46,11 @@ app.controller('myApps', function($scope, $http) {
     $scope.myWelcome = response.data;
     $scope.test = response.data;
     $scope.filter = response.data;
-    console.log($scope.myWelcome);
   });
   $scope.search = function () {
-    if ($scope.selGame) {
-      var ws = new WebSocket("ws://localhost:9000/game/search");
-      ws.onopen = function () {
-        ws.send(JSON.stringify({
-          'name': $scope.selGame
-        }));
-        ws.onmessage = function (event) {
-          var result = JSON.parse(event.data);
-          $scope.test = result;
-          $scope.apply
-        }
-      }
-    }
+    search($scope);
   }
+
   $scope.login = function() {
     $http.post('/login',$scope.user)
     .then(function (response) {
@@ -88,6 +76,38 @@ app.controller('myApps', function($scope, $http) {
       $scope.accountStatus = res.data;
     })
   }
+  $scope.nextGame =function () {
+    nextGame($scope);
+  }
+  $scope.randGame = function () {
+    randGame($scope);
+  }
+  $scope.prevGame = function () {
+    prevGame($scope);
+  }
+
+  $scope.loadGames = function (name) {
+    loadModalGame(name,$scope)
+  }
+
+  $scope.loadGamePage = function (name) {
+    loadAGame(name,$scope)
+  }
+  $scope.arr = ['text-white bg-secondary','text-white bg-info','bg-light']
+  $scope.getRandomClass = function(){
+    return Math.random()*$scope.arr.length;
+  }
+});
+
+app.controller('gameUIControl',function ($scope,$http,$routeParams) {
+  $('#exampleModal').modal('hide');
+  $('.modal-backdrop').remove();
+  $scope.load = function () {
+    $http.get('/game/'+encodeURIComponent($routeParams.param))
+    .then(function (res) {
+      $scope.game = res.data[0];
+    })
+  }
   $scope.nextGame = function () {
     var ws = new WebSocket("ws://localhost:9000/game/next");
     ws.onopen = function () {
@@ -96,12 +116,11 @@ app.controller('myApps', function($scope, $http) {
       }));
       ws.onmessage = function (event) {
         var result = JSON.parse(event.data)[0];
-        $scope.game = result;
-        $scope.$apply();
+          window.location.href = "#!/games/"+encodeURIComponent(result.game_Name)
       }
     }
   }
-  $scope.randGame = function () {
+$scope.randGame = function () {
     var ws = new WebSocket("ws://localhost:9000/game/random");
     ws.onopen = function () {
       ws.send(JSON.stringify({
@@ -109,8 +128,8 @@ app.controller('myApps', function($scope, $http) {
       }));
     }
     ws.onmessage = function (event) {
-      $scope.game = JSON.parse(event.data);
-      $scope.$apply();
+      var result = JSON.parse(event.data);
+        window.location.href = "#!/games/"+encodeURIComponent(result.game_Name)
     }
   }
   $scope.prevGame = function () {
@@ -122,53 +141,9 @@ app.controller('myApps', function($scope, $http) {
     }
     ws.onmessage = function (event) {
       var result = JSON.parse(event.data)[0];
-      $scope.game = result;
-      $scope.$apply();
+        window.location.href = "#!/games/"+encodeURIComponent(result.game_Name)
     }
   }
-  $scope.loadGames = function (name) {
-    var ws = new WebSocket("ws://localhost:9000/game/load");
-    ws.onopen = function () {
-      ws.send(JSON.stringify({
-        'name': name
-      }));
-    }
-    ws.onmessage = function (event) {
-      var result = JSON.parse(event.data)[0];
-      $scope.game = result;
-      $scope.$apply();
 
-      console.log($scope.game);
-      $('#exampleModal').modal('show');
-    }
-  }
-  $scope.load = function (name) {
-    $scope.selGame = name;
-    $scope.loadGame();
-  }
-  $scope.loadGame = function () {
-    $scope.myWelcome.forEach((item, i) => {
-      if ($scope.selGame == item.game_Name) {
-        $scope.selected = encodeURIComponent($scope.selGame);
-        console.log($scope.selected);
-        window.location.href = "#!/games/"+$scope.selected;
-      }
-    });
-  }
-  $scope.arr = ['text-white bg-secondary','text-white bg-info','bg-light']
-  $scope.getRandomClass = function(){
-    return Math.random()*$scope.arr.length;
-  }
-});
-app.controller('gameControl',function ($scope,$http,$routeParams) {
-  $('#exampleModal').modal('hide');
-  $('.modal-backdrop').remove();
-  $scope.load = function () {
-    console.log(encodeURIComponent($routeParams.param));
-    $http.get('/game/'+encodeURIComponent($routeParams.param))
-    .then(function (res) {
-      $scope.game = res.data[0];
-    })
-  }
   $scope.load();
 })

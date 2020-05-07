@@ -45,9 +45,6 @@ I need to focus on the design of the cards though.</h2>
              <div class="text-right">
                Upvotes: <i>{{i.ratingCount}}</i>
              </div>
-             <div class="">
-               <button type="button" ng-if="user.username!=null" class="btn btn-primary btn-block" name="button" ng-click="like(i._id)">Upvote</button>
-             </div>
             </small>
           </footer>
       </blockquote>
@@ -60,14 +57,7 @@ I need to focus on the design of the cards though.</h2>
 <div class="modal fade text-center" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content" >
-      <a class="carousel-control-prev" role="button" ng-click="prevGame()">
-<span class="fas fa-chevron-left" aria-hidden="true"></span>
-<span class="sr-only">Previous</span>
-</a>
-<a class="carousel-control-next" role="button" ng-click="nextGame()">
-<span class="fas fa-chevron-right" aria-hidden="true" ></span>
-<span class="sr-only">Next</span>
-</a>
+
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel"> Game Name: {{game.game_Name}}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -79,13 +69,24 @@ I need to focus on the design of the cards though.</h2>
           <div class="col">
             <h4 class="text-left">About:</h4>
             <h3>{{game.game_Summery}}</h3>
-            <a href="#"ng-click="bookmark(game._id)"ng-if="user.username!=null">Bookmark game!</a>
-            <button class="btn btn-primary" onclick="$('#exampleModal').modal('hide');" ng-click="load(game.game_Name)" >View More</button>
+            <div class="" ng-if="user.username!=null">
+              <div class="btn-group w-100" role="group" aria-label="Game Navigation Buttons">
+                <button type="button" ng-if="user.username!=null" class="btn btn-danger" name="button" ng-click="like(game._id)"><i class="fas fa-heart"></i></button>
+                <button class="btn btn-primary mx-1" onclick="$('#exampleModal').modal('hide');"  ng-click="loadGamePage(game.game_Name)" >View More</button>
+                <button type="button" class="btn btn-success" ng-click="bookmark(game._id)"ng-if="user.username!=null"><i class="fas fa-bookmark"></i></button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
       <div class="modal-footer" style="justify-content: center">
-        <button ng-click="randGame()" class="btn btn-primary btn-block" name="button">Random</button>
+        <div class="w-100">
+          <div class="btn-group w-100" role="group" aria-label="Game Navigation Buttons">
+            <button type="button" class="btn btn-primary" ng-click="prevGame()"><span class="fas fa-chevron-left"></span></button>
+            <button type="button" class="btn btn-primary mx-1" ng-click="randGame()"><span class="fas fa-random"></span></button>
+            <button type="button" class="btn btn-primary" ng-click="nextGame()"><span class="fas fa-chevron-right"></span></button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

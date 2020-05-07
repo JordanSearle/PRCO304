@@ -1,5 +1,5 @@
 /*Desktop and landscape tablet styling*/
-@media only screen and (min-width: 992px){
+@media only screen and (min-width: 1026px){
 
     body{
       font-family: 'Roboto', sans-serif;
