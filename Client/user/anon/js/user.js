@@ -90,10 +90,12 @@ function loadModalGame(name,$scope) {
     $('#exampleModal').modal('show');
   }
 }
+
 function loadAGame(name,$scope) {
   $scope.selGame = name;
   loadGame($scope);
 }
+
 function loadGame($scope) {
   $scope.myWelcome.forEach((item, i) => {
     if ($scope.selGame == item.game_Name) {
@@ -120,16 +122,20 @@ function nav() {
     if ($('#mySidebar').width() == 0) {
       if ($(window).width() > 1024) {
         $('#mySidebar').width('30vw');
+        $(".navbar").css( { marginLeft : "30vw"} );
+        $(".parallax").css( { marginLeft : "30vw"} );
+        $(".main").css( { marginLeft : "30vw"} );
       }
       else{
         $('#mySidebar').width($(window).width());
         $('html, body').css({'overflowY':'hidden'});
       }
-      $(".main").css( { marginLeft : "30vw"} );
     }
     else{
       $('#mySidebar').width('0px');
       $(".main").css( { marginLeft : "0px"} );
+      $(".navbar").css( { marginLeft : "0px"} );
+      $(".parallax").css( { marginLeft : "0px"} );
       $('html, body').css({'overflowY':'auto'});
     }
   }

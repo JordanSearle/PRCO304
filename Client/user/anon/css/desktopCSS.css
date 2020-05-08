@@ -38,8 +38,7 @@
       width: 0;
       position: fixed;
       z-index: 1;
-      padding-top: 60px;
-      top: 60;
+      top: 0;
       left: 0;
       bottom: 0;
       background-color: #111;
@@ -77,14 +76,13 @@
     }
 
     .sidebar-header .closebtn {
-      padding-top: 60px;
       position: absolute;
       top: 0;
       right: 25px;
       font-size: 36px;
     }
 
-    .main {
+    .main{
       /*Set Margin top to Navbar height*/
       margin-top: 30px;
       transition: margin-left .5s;
@@ -95,6 +93,25 @@
     }
     .border-top{
       border-style: none!important;
+    }
+    .navbar{
+      transition: margin-left .5s;
+    }
+
+
+
+    .parallax {
+      /* The image used */
+      background-image: url("logo.svg");
+      /* Set a specific height */
+      height: 0;
+      padding-top: 16.51%;
+      /* Create the parallax scrolling effect */
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      background-size: contain;
+      cursor: pointer;
+      transition: margin-left .5s;
     }
 
 }

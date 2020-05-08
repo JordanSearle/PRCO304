@@ -85,7 +85,11 @@ app.controller('myApps', function($scope, $http) {
   }
 
   $scope.loadGames = function (name) {
+    console.log(name);
     loadModalGame(name,$scope)
+  }
+  $scope.loadGame = function (name) {
+    loadGame($scope)
   }
 
   $scope.loadGamePage = function (name) {

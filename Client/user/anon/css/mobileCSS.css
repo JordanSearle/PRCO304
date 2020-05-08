@@ -9,10 +9,10 @@
   .sidebar {
     height: 100%;
     width: 0;
-    position: fixed;
+    position: absolute;
     z-index: 4;
-    padding-top: 60px;
-    top: 60;
+    margin-top: 60px;
+    top: 11%;
     left: 0;
     bottom: 0;
     background-color: #111;
@@ -50,7 +50,6 @@
   }
 
   .sidebar-header .closebtn {
-    padding-top: 60px;
     position: absolute;
     top: 0;
     right: 25px;
@@ -71,6 +70,18 @@
   .modal-content{
     height: 95vh;
     overflow-y: scroll;
+  }
+  .parallax {
+    /* The image used */
+    background-image: url("logo.svg");
+    /* Set a specific height */
+    height: 0;
+    padding-top: 16.51%;
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: contain;
+    cursor: pointer;
   }
 
 }
