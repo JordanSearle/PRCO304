@@ -3,6 +3,7 @@ const expect  = require("chai").expect;
 const mongoose = require('mongoose');
 var schemas = require("../schemas");
 var db = require('../db');
+var server = require('../server')
 
 describe('Game rating tests',function () {
   gm = new classes.game();

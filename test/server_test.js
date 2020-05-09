@@ -11,6 +11,12 @@ chai.use(require('chai-match'));
 chai.use(chaiHTTP);
 
 describe('Testing Server functions', function() {
+  before(function (done) {
+    var user = schemas.User;
+    user.deleteMany({'username':'testUsername'},function (err,res) {
+      done();
+    })
+  })
     context('testing GET HTTP request', function() {
         it('/ test', function(done) {
             chai.request('http://localhost:9000')
@@ -29,7 +35,7 @@ describe('Testing Server functions', function() {
         })
         it('/readGames test', function(done) {
             chai.request('http://localhost:9000')
-                .get('/readgames')
+                .get('/game')
                 .end(function (err, res) {
                   expect(err).to.be.null;
                   done();
@@ -37,10 +43,9 @@ describe('Testing Server functions', function() {
         });
     })
     context('testing CRUD user',function () {
-
         it('testing creation of a new user',function (done) {
           chai.request('http://localhost:9000')
-          .post('/createuser')
+          .post('/user')
           .send({
             'email':'test@test.com',
             'username':'testUsername',
