@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 var schemas = require("../schemas");
 var db = require('../db');
 const WebSocket = require('ws');
+var app = require('../server.js');
 
 describe('testing websocket functions',function () {
   it('testing getting a random game',function (done) {
