@@ -44,7 +44,7 @@ module.exports = class game {
   delGame(callback){
     var uGame = schemas.Game;
     uGame.deleteOne({_id:this.game_UID}, function (err,result) {
-      if (err) callback(err);
+      callback(err,result);
     });
   }
   updateGame(callback){
@@ -114,8 +114,8 @@ module.exports = class game {
       pending:true
    })
    this.game_UID = game._id;
-   game.save(function (err) {
-     if(err)callback(err);
+   game.save(function (err,res) {
+     callback(err,res);
    });
   }
   editPending(id,callback){
@@ -134,8 +134,8 @@ module.exports = class game {
         game_IsNSFW:this.game_IsNSFW,
         pending:true
       })
-       game.save(function (err) {
-         if(err)callback(err);
+       game.save(function (err,res) {
+         callback(err,res);
        });
     })
   }
@@ -176,10 +176,9 @@ module.exports = class game {
           }
         })
       }
-      else if(err){
+      else{
         callback(err,null);
       }
-
     })
   }
   denyPending(id,callback){

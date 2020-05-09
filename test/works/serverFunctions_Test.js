@@ -3,35 +3,36 @@ var classes = require('../classes');
 var factory = require('../serverFunctions').factory;
 const mongoose = require('mongoose');
 var schemas = require("../schemas");
+var server = require('../server');
+
 adminid = '5e4bdab0e623ca4e5ca53946'
 userid =  '5e4bdab0e623ca4e5ca53945'
 
 describe('testing factory methods',function () {
-
-  this.timeout(100);
   before(function (done) {
     var users = schemas.User;
     users.deleteOne({_id:userid}).exec(function (err) {
-      if(err)console.log(err);
     })
     users.deleteOne({_id:adminid}).exec(function (err) {
-      if(err)console.log(err);
     })
+    var secure = new classes.secure();
+    var ps = secure.saltNewHashPassword('pass');
     //Create users with set IDs
     var user = new schemas.User({
       _id:mongoose.Types.ObjectId(userid),
       username: 'factory test name',
-      password: 'pass',
+      password: ps.passwordHash,
+      salt:ps.salt,
       email:'e@e.com',
       user_DOB:new Date()
     })
     user.save(function (err,res) {
-      if(err)console.log(err);
     })
     var admin = new schemas.User({
       _id:mongoose.Types.ObjectId(adminid),
       username: 'factory admin test name',
-      password: 'pass',
+      password: ps.passwordHash,
+      salt:ps.salt,
       email:'a@e.com',
       user_DOB:new Date(),
       isAdmin: true

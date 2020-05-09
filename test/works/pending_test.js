@@ -3,31 +3,9 @@ const expect  = require("chai").expect;
 const mongoose = require('mongoose');
 var schemas = require("../schemas");
 var db = require('../db');
+var server = require('../server')
 
 describe('Testing, user pending functions',function () {
-  before(function () {
-    const games = new schemas.Game({
-      //UserID needs to be set from the logged on user.
-      _id: new mongoose.Types.ObjectId,
-      userID: new mongoose.Types.ObjectId,
-      game_Name: 'Pending game name',
-      game_Summery:'Pending game name',
-      game_Rules: 'Pending game name',
-      game_Player_Count: 'Pending game name',
-      game_Equipment: ['Pending game name'],
-      game_IsNSFW:false
-   })
-   games.save(function (err) {
-     if(err)console.log(err);
-   });
-  })
-  afterEach(function (done) {
-    var uGame = schemas.Pending;
-    uGame.deleteOne({game_Name:'Pending game name'}, function (err,result) {
-      if (err) callback(err);
-      done();
-    });
-  })
   var game = new classes.game();
   game.game_UID= new mongoose.Types.ObjectId;
   game.userID= new mongoose.Types.ObjectId;
@@ -38,12 +16,39 @@ describe('Testing, user pending functions',function () {
   game.game_Equipment= ['Pending game name'];
   game.game_IsNSFW=false;
 
-  it('User saving the game',function (done) {
-    game.addPending(new mongoose.Types.ObjectId,function (err) {
-      if(err)console.log(err);
+  before(function (done) {
+    const games = new schemas.Game({
+      //UserID needs to be set from the logged on user.
+      _id: mongoose.Types.ObjectId('5e4bdab0e623ca4e5ca53999'),
+      userID: new mongoose.Types.ObjectId,
+      game_Name: 'Pending game name',
+      game_Summery:'Pending game name',
+      game_Rules: 'Pending game name',
+      game_Player_Count: 'Pending game name',
+      game_Equipment: ['Pending game name'],
+      game_IsNSFW:false
+   })
+   games.save(function (err,res) {
+     done()
+   });
+  })
+  after(function (done) {
+    const games = schemas.Game;
+    games.deleteMany({game_Name:'Pending game name'},function (err,res) {
+      done();
     })
+  })
+  afterEach(function (done) {
+    var uGame = schemas.Pending;
+    uGame.deleteOne({game_Name:'Pending game name'}, function (err,result) {
+      if (err) callback(err);
+      done();
+    });
+  })
 
-    setTimeout(function () {
+  it('User saving the game',function (done) {
+    game.addPending(new mongoose.Types.ObjectId,function (err,res) {
+      expect(err).to.be.null;
       var pn = schemas.Pending;
       pn.findOne({game_Name: 'Pending game name'}).exec(function (err,res) {
         expect(err).to.be.null;
@@ -55,13 +60,11 @@ describe('Testing, user pending functions',function () {
         expect(res).to.have.property('game_IsNSFW',false);
         done();
       })
-    }, 15);
+    })
   })
   it('User suggesting a game edit',function (done) {
-    game.editPending(new mongoose.Types.ObjectId,function (err) {
-      if(err)console.log(err);
-    })
-    setTimeout(function () {
+    game.editPending('5e4bdab0e623ca4e5ca53999',function (err,res) {
+      expect(err).to.be.null;
       var pend = schemas.Pending;
       pend.findOne({game_Name: 'Pending game name'}).exec(function (err,res) {
         expect(err).to.be.null;
@@ -73,10 +76,20 @@ describe('Testing, user pending functions',function () {
         expect(res).to.have.property('game_IsNSFW',false);
         done();
       })
-    }, 15);
+    })
   })
 })
 describe('Testing, admin approving or denying a pending request functions',function () {
+  var game = new classes.game();
+  game.game_UID= new mongoose.Types.ObjectId;
+  game.userID= new mongoose.Types.ObjectId;
+  game.game_Name= 'Pending game name';
+  game.game_Summery='Pending game name';
+  game.game_Rules= 'Pending game name';
+  game.game_Player_Count= 'Pending game name';
+  game.game_Equipment= ['Pending game name'];
+  game.game_IsNSFW=false;
+
   afterEach(function (done) {
     var game = schemas.Pending;
     game.deleteMany({game_Name:'Pending game name'}, function (err,result) {
@@ -95,7 +108,8 @@ describe('Testing, admin approving or denying a pending request functions',funct
   beforeEach(function (done) {
     const games = new schemas.Pending({
       //UserID needs to be set from the logged on user.
-      _id: new mongoose.Types.ObjectId,
+      id:mongoose.Types.ObjectId('5e4bdab0e623ca4e5ca53999'),
+      _id: mongoose.Types.ObjectId('5e4bdab0e623ca4e5ca53999'),
       userID: new mongoose.Types.ObjectId,
       game_Name: 'Pending game name',
       game_Summery:'Pending game name',
@@ -114,18 +128,8 @@ describe('Testing, admin approving or denying a pending request functions',funct
     });
   })
 
-
-  var game = new classes.game();
-  game.game_UID= new mongoose.Types.ObjectId;
-  game.userID= new mongoose.Types.ObjectId;
-  game.game_Name= 'Pending game name';
-  game.game_Summery='Pending game name';
-  game.game_Rules= 'Pending game name';
-  game.game_Player_Count= 'Pending game name';
-  game.game_Equipment= ['Pending game name'];
-  game.game_IsNSFW=false;
-
   it('Approving a pending request',function (done) {
+    game.game_UID= '5e4bdab0e623ca4e5ca53999',
     game.approvePending(function (err,res) {
       expect(err).to.be.null;
       var pend = schemas.Game;
@@ -147,7 +151,7 @@ describe('Testing, admin approving or denying a pending request functions',funct
     });
   })
   it('deny a pending request',function (done) {
-    game.denyPending(function (err,result) {
+    game.denyPending('5e4bdab0e623ca4e5ca53999',function (err,result) {
       expect(err).to.be.null;
       var games = schemas.Pending;
       games.findOne({game_Name: 'Pending game name'}).exec(function (err,res) {
