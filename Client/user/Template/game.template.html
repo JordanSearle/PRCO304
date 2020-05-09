@@ -1,27 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom main nav-menu mt-5 text-light">
-  <button class="navbar-toggler ml-auto btn-block" type="button" data-toggle="collapse" data-target="#btmNav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="navbar-collapse" id="btmNav">
-  <ul class="navbar-nav m-auto">
-    <li class="nav-item">
-      <a class="btn btn-dark" ng-click="prevGame()">PREVIOUS</a>
-    </li>
-    <li class="nav-item">
-      <a class="btn btn-dark" ng-click="randGame()">RANDOM</a>
-    </li>
-    <li class="nav-item">
-      <a class="btn btn-dark" ng-click="nextGame()">NEXT</a>
-    </li>
-  </ul>
-    <a class="btn btn-dark" ng-click="isEditFormOpen = !isEditFormOpen" >EDIT</a>
-  </div>
-</nav>
-
-
-
-<div class="mt-4 row">
+<div class="mb-5 row">
   <div class="col-12 col-md  mt-4">
     <div class="jumbotron pb-0">
       <h1 class="text-uppercase">{{game.game_Name}}</h1>
@@ -82,3 +59,23 @@
         </div>
     </form>
 </div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom main nav-menu mt-5 text-light">
+  <div class="navbar-nav w-100">
+    <div class="btn-group w-100" role="group" aria-label="Basic example">
+      <button class="btn btn-dark" ng-click="prevGame()">PREVIOUS</button>
+      <button class="btn btn-dark" ng-click="randGame()">RANDOM</button>
+      <button class="btn btn-dark" ng-click="nextGame()">NEXT</button>
+      <button class="btn btn-dark d-none d-md-block" ng-click="isEditFormOpen = !isEditFormOpen" >EDIT GAME</button>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-ellipsis-v"></i>
+      </button>
+    </div>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <button class="btn btn-dark btn-block d-md-none" ng-click="isEditFormOpen = !isEditFormOpen" >EDIT GAME</button>
+          </li>
+        </ul>
+      </div>
+  </div>
+</nav>

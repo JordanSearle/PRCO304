@@ -1,7 +1,7 @@
 <div class="container">
 <div class="m-1">
 
-  <h4 class="mt-4 text-center">Welcome to</h4>
+  <h4 class="text-center">Welcome to</h4>
   <h1 class="mb-4 text-center">That's the Spirit</h1>
   <p class="mb-3 ">
     Welcome to That's the Spirit, your number one source for all things social. We're dedicated to providing you the best database of activities, with a focus on a simple, fast, and easy to use service.<br>
@@ -9,6 +9,7 @@
     Sincerely,<br>
     <b>That's the Spirit Team.</b>
   </p>
+  <p>Cant find what you are looking for? You can recommend us new games from your <i><a ng-if="user.username ==null" href="#" data-toggle="modal" data-target="#loginModal">accounts page!</a> <a ng-if="user.username!=null" href="#!request"> accounts page!</a></i> </p>
 </div>
 <div class="input-group m-1">
   <div class="input-group-prepend d-none d-md-block">
@@ -72,7 +73,7 @@
           <div class="col">
             <h4 class="text-left">About:</h4>
             <h3>{{game.game_Summery}}</h3>
-            <div class="" ng-if="user.username!=null">
+            <div>
               <div class="btn-group w-100" role="group" aria-label="Game Navigation Buttons">
                 <button type="button" ng-if="user.username!=null" class="btn btn-danger" name="button" ng-click="like(game._id)"><i class="fas fa-heart"></i></button>
                 <button class="btn btn-primary mx-1" onclick="$('#exampleModal').modal('hide');"  ng-click="loadGamePage(game.game_Name)" >View More</button>
