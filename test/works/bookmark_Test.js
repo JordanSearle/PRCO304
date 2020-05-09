@@ -7,10 +7,9 @@ var chaiHTTP = require('chai-http');
 var chai = require('chai');
 chai.use(require('chai-match'));
 chai.use(chaiHTTP);
-const server = 'http://localhost:9000'
+const server = require('../server');
 
 describe('CRUD Bookmark class test',function () {
-  this.timeout(1000);
   const bookmark = new classes.bookmark();
   const bM = schemas.Bookmark;
   after(function () {
@@ -23,28 +22,27 @@ describe('CRUD Bookmark class test',function () {
     bookmark.gameID = '5e4bdab0e623ca4e5ca53999';
   })
   it('create  bookmark',function (done) {
-    bookmark.addBookmark(function (err) {
+    bookmark.addBookmark(function (err,res) {
       expect(err).to.be.null;
-    });
-    setTimeout(function () {
       bM.find({gameID:bookmark.gameID,userID:bookmark.userID}).exec(function (err,count) {
         expect(err).to.be.null;
         expect(count.length).to.equal(1);
         done();
       })
-    }, 50);
+    });
   })
   it('view bookmarks',function () {
-    bookmark.viewBookmark(function (res) {
-      expect(res).to.not.be.null;
+    bookmark.viewBookmark(function (err,res) {
+      expect(err).to.be.null;
+      expect(res).to.not.be.null
     })
   })
   it('delete bookmark',function () {
-    bookmark.delBookmark(function (err) {
+    bookmark.delBookmark(function (err,res) {
       expect(err).to.be.null;
-    })
-    bM.countDocuments({gameID:bookmark.gameID}).exec(function (err,count) {
-      expect(count).to.equal(0);
+      bM.countDocuments({gameID:bookmark.gameID}).exec(function (err,count) {
+        expect(count).to.equal(0);
+      })
     })
   })
 })
@@ -57,7 +55,7 @@ describe('CRUD Bookmark server test',function () {
       if(err)console.log(err);
     });
   })
-  it('POST game/bookmark',function () {
+  it('POST game/bookmark',function (done) {
     var agent = chai.request.agent(server)
     agent
     .post('/login')
@@ -75,27 +73,11 @@ describe('CRUD Bookmark server test',function () {
     .end(function (err,res) {
       expect(err).to.be.null;
       expect(res).to.have.status(201);
+      done();
     })
   })
 })
-  it('get game/bookmark',function () {
-    var agent = chai.request.agent(server)
-    agent
-    .post('/login')
-    .type('form')
-    .send({
-      'username':'UserOne',
-      'password':'password'
-    })
-    .then(function (res) {
-    agent.get('/game/bookmark/5e4bdab0e623ca4e5ca53999')
-    .end(function (err,res) {
-      expect(err).to.be.null;
-      expect(res).to.have.status(200);
-    })
-  })
-  })
-  it('Delete game/bookmark',function () {
+  it('Delete game/bookmark',function (done) {
     var agent = chai.request.agent(server)
     agent
     .post('/login')
@@ -113,32 +95,35 @@ describe('CRUD Bookmark server test',function () {
     .end(function (err,res) {
       expect(err).to.be.null;
       expect(res).to.have.status(200);
+      done();
     })
   })
   })
 })
+
 describe('TAG CRUDS',function () {
   const bookmark = new classes.bookmark();
+  bookmark.userID = '5e4bdab0e623ca4e5ca53955';
+  bookmark.gameID = '5e4bdab0e623ca4e5ca53999';
   const bM = schemas.Bookmark;
-  before(function () {
-    bookmark.userID = '5e4bdab0e623ca4e5ca54000';
-    bookmark.gameID = '5e4bdab0e623ca4e5ca51000';
-    bookmark.addBookmark(function (err) {
-      expect(err).to.be.null;
-    });
+  before(function (done) {
+    var bookmark = new schemas.Bookmark({
+      userID:mongoose.Types.ObjectId('5e4bdab0e623ca4e5ca53955'),
+      gameID:mongoose.Types.ObjectId('5e4bdab0e623ca4e5ca53999')
+    })
+    bookmark.save(function (err,res) {
+        done()
+    })
   })
-  after(function () {
+  after(function (done) {
     bM.deleteOne({userID:bookmark.userID,gameID:bookmark.gameID}).exec(function (err) {
-      if(err)console.log(err);
+      done();
     });
   })
   it('adding a tag',function (done) {
-    this.timeout = 100;
     var tagname ='Event One'
-    bookmark.addTag(tagname,function (err) {
+    bookmark.addTag(tagname,function (err,res) {
       expect(err).to.be.null;
-    });
-    setTimeout(function () {
       bM.findOne({userID:bookmark.userID,gameID:bookmark.gameID}).exec(function (err,res) {
         expect(err).to.be.null;
         expect(res.tags.length).to.be.above(0);
@@ -146,19 +131,17 @@ describe('TAG CRUDS',function () {
         expect(res.tags[0].name).to.not.equal('Random Characters');
         done();
       })
-    }, 50);
+    });
   })
   it('removing a tag',function (done) {
     var tagname ='Event One'
-    bookmark.delTag(tagname,function (err) {
+    bookmark.delTag(tagname,function (err,res) {
       expect(err).to.be.null;
-    });
-    setTimeout(function () {
       bM.findOne({userID:bookmark.userID,gameID:bookmark.gameID}).exec(function (err,res) {
         expect(err).to.be.null;
         expect(res.tags.length).to.be.equal(0);
         done();
       })
-    }, 50);
+    });
   })
 })
