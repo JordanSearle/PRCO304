@@ -31,6 +31,7 @@ module.exports = class pending extends game {
         game_Categories:this.game_Categories
      })
      this.game_UID = game._id;
+     console.log(game);
      game.save(function (err,res) {
        console.log(err+res);
        callback(err,res)

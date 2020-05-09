@@ -13,13 +13,23 @@ module.exports = class bookmark {
     //write to DB
     var userID = this.userID;
     var gameID = this.gameID;
+    var bm = schemas.Bookmark;
     var bookmark = new schemas.Bookmark({
       userID:mongoose.Types.ObjectId(userID),
       gameID:mongoose.Types.ObjectId(gameID)
     })
 
-    bookmark.save(function (err,res) {
-      callback(err,res);
+    bm.countDocuments({userID:userID,gameID:gameID}).exec(function (err,count) {
+      if (count == 1) {
+        bm.deleteOne({userID:userID,gameID:gameID},function (err) {
+          callback(err);
+        })
+      }
+      else{
+        bookmark.save(function (err) {
+          if(err)callback(err);
+        })
+      }
     })
   }
   viewBookmark(callback){
@@ -31,8 +41,8 @@ module.exports = class bookmark {
   }
   delBookmark(callback){
     var bookmark = schemas.Bookmark;
-    bookmark.deleteOne({userID:this.userID,gameID:this.gameID},function (err,res) {
-      callback(err,res);
+    bookmark.deleteOne({userID:this.userID,gameID:this.gameID},function (err) {
+      callback(err);
     })
   }
   addTag(tagName,callback){
@@ -40,8 +50,8 @@ module.exports = class bookmark {
       bookmark.findOne({userID:this.userID,gameID:this.gameID}).exec(function (err,res) {
         var tag = {name:tagName}
         res.tags.push(tag);
-        res.save(function (err,res) {
-          callback(err,res);
+        res.save(function (err) {
+          callback(err);
         });
       });
   }
@@ -50,8 +60,8 @@ module.exports = class bookmark {
       bookmark.findOne({userID:this.userID,gameID:this.gameID}).exec(function (err,res) {
         var tag = {name:tagName}
         res.tags.pull(tag);
-        res.save(function (err,res) {
-          callback(err,res);
+        res.save(function (err) {
+          callback(err);
         });
       });
   }

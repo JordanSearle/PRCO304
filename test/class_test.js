@@ -7,10 +7,10 @@ var chaiHTTP = require('chai-http');
 var chai = require('chai');
 chai.use(require('chai-match'));
 chai.use(chaiHTTP);
-const server = require('../server')
+const server = 'http://localhost:9000'
 
 describe('User Class Getters and Setters',function() {
-  var acc = new classes.user("1","UserOne","password",'salt',"email@email.com","04 Dec 1995 00:12:00 GMT");
+  var acc = new classes.user("1","UserOne","password","email@email.com","04 Dec 1995 00:12:00 GMT");
   context("Testing Getters", function(){
     it('Should return userID as "1"', function() {
       expect(acc.getUserID()).to.equal("1");
@@ -21,14 +21,26 @@ describe('User Class Getters and Setters',function() {
     it('Should return username as "UserOne"', function() {
       expect(acc.getUsername()).to.equal("UserOne");
     })
+    it('Should return username as false: details incorrect', function() {
+      expect(acc.getUsername()).to.not.equal("false");
+    })
     it('Should return password as "password"', function() {
       expect(acc.getPassword()).to.equal("password");
+    })
+    it('Should return password as false: details incorrect', function() {
+      expect(acc.getPassword()).to.not.equal("false");
     })
     it('Should return Email as "email@email.com"', function() {
       expect(acc.getEmail()).to.equal("email@email.com");
     })
+    it('Should return Email as false: details incorrect', function() {
+      expect(acc.getEmail()).to.not.equal("false");
+    })
     it('Should return DOB as "Mon, 04 Dec 1995 00:12:00 GMT"', function() {
       expect(acc.getDOB()).to.equal("Mon, 04 Dec 1995 00:12:00 GMT");
+    })
+    it('Should return DOB as false: details incorrect', function() {
+      expect(acc.getDOB()).to.not.equal("false");
     })
   })
   context("Testing Setters", function(){
@@ -71,7 +83,7 @@ describe('User Class Getters and Setters',function() {
 })
 
 describe('Admin class getters and setters',function() {
-  var admin = new classes.admin("A1","AdminTemp","password",'salt',"AdminTemp@email.com","04 Dec 1995 00:12:00 GMT");
+  var admin = new classes.admin("A1","AdminTemp","password","AdminTemp@email.com","04 Dec 1995 00:12:00 GMT");
   context('Testing getters',function () {
     it('getUserID returns UserID as "A1"',function () {
       expect(admin.getUserID()).to.equal("A1");
@@ -130,14 +142,6 @@ describe('Admin class getters and setters',function() {
 })
 describe('testing Admin and User overrides',function () {
   context('testing add and delete game for admin and user',function () {
-    before(function () {
-      before(done =>{
-        server.on( "app_started", function()
-        {
-          done();
-        })
-      })
-    })
     after(function (done) {
       var gm = schemas.Game;
       gm.deleteMany({game_Name:'Override Game Name'},function (err,res) {
@@ -159,7 +163,7 @@ describe('testing Admin and User overrides',function () {
     it('testing add game by user',function (done) {
       var user = new classes.user()
       user.setUserID('5e4bdab0e623ca4e5ca53945');
-      user.addGame('5e4bdab0e623ca4e5ca53945','Override Game Name','Override Game Summary','Override Game Rules','1+',['none'],false,{card:true},function(err,res) {
+      user.addGame('Override Game Name','Override Game Name','Override Game Name','1+',['none'],false,function(err,res) {
         var db = schemas.Pending;
         db.countDocuments({game_Name:'Override Game Name'}).exec(function (err,res) {
           expect(err).to.be.null;
@@ -171,7 +175,7 @@ describe('testing Admin and User overrides',function () {
     it('testing add game by admin',function (done) {
       var admin = new classes.admin()
       admin.setUserID('5e4bdab0e623ca4e5ca53945');
-      admin.addGame('5e4bdab0e623ca4e5ca53945','Override Game Name','Override Game Summary','Override Game Rules','1+',['none'],false,{card:true},function(err,res) {
+      admin.addGame('Override Game Name','Override Game Name','Override Game Name','1+',['none'],false,function(err,res) {
         var db = schemas.Game;
         db.countDocuments({game_Name:'Override Game Name'}).exec(function (err,res) {
           expect(err).to.be.null;

@@ -5,11 +5,9 @@ const mongoose = require('mongoose');
 var schemas = require("../schemas");
 adminid = '5e4bdab0e623ca4e5ca53946'
 userid =  '5e4bdab0e623ca4e5ca53945'
-var app = require('../server.js');
 
 describe('testing factory methods',function () {
-  var secure = new classes.secure()
-  var saltHash = secure.saltNewHashPassword('password');
+
   this.timeout(100);
   before(function (done) {
     var users = schemas.User;
@@ -23,8 +21,7 @@ describe('testing factory methods',function () {
     var user = new schemas.User({
       _id:mongoose.Types.ObjectId(userid),
       username: 'factory test name',
-      password: saltHash.passwordHash,
-      salt:saltHash.salt,
+      password: 'pass',
       email:'e@e.com',
       user_DOB:new Date()
     })
@@ -34,8 +31,7 @@ describe('testing factory methods',function () {
     var admin = new schemas.User({
       _id:mongoose.Types.ObjectId(adminid),
       username: 'factory admin test name',
-      password: saltHash.passwordHash,
-      salt:saltHash.salt,
+      password: 'pass',
       email:'a@e.com',
       user_DOB:new Date(),
       isAdmin: true

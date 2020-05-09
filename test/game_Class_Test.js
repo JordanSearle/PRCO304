@@ -3,7 +3,7 @@ const expect  = require("chai").expect;
 const mongoose = require('mongoose');
 var schemas = require("../schemas");
 var db = require('../db');
-var server = require('../server')
+
 
 describe('Game test',function () {
   var games = schemas.Game;
@@ -22,14 +22,7 @@ describe('Game test',function () {
     });
   })
   before(function () {
-    before(done =>{
-      server.on( "app_started", function()
-      {
-        games.deleteMany({'game_Name':'test game name'}).exec(function (err,res) {
-          done();
-        });
-      })
-    })
+    games.deleteMany({'game_Name':'test game name'}).exec();
   })
   context('testing variable values',function () {
     it('Expecting name to equal: test game name',function () {
@@ -40,37 +33,46 @@ describe('Game test',function () {
   })
   context('Testing Game Methods',function () {
     it('Saving new game to DB',function (done) {
-      game.saveGame(new mongoose.Types.ObjectId,function (err,res) {
+      this.timeout(3000);
+      game.saveGame(new mongoose.Types.ObjectId,function (err) {
         expect(err).to.be.null;
+      })
+      setTimeout(function(){
         games.countDocuments({'game_Name':'test game name'}, function (err, count) {
           expect(err).to.be.null;
           expect(count).to.equal(1);
           done();
         });
-      })
+      }, 50);
     })
     it('Updating game in DB',function(done) {
+      this.timeout(3000);
       game.game_Rules = 'new game rules';
-      game.updateGame(function (err,res) {
+      game.updateGame(function (err) {
         expect(err).to.be.null;
+      });
+      setTimeout(function(){
         games.findOne({'_id':game.game_UID},function (err, result) {
           expect(err).to.be.null;
           expect(result.game_Rules).to.not.equal('test game rules');
           expect(result.game_Rules).to.equal('new game rules');
-          done();
         })
-      });
+        done();
+      }, 50);
     })
 
     it('Deleting game in DB',function (done) {
-      game.delGame(function (err,res) {
+      this.timeout(500);
+      game.delGame(function (err) {
         expect(err).to.be.null;
+      });
+      setTimeout(function(){
         games.countDocuments({'game_Name':'test game name'}, function (err, count) {
           expect(count).to.equal(0);
           expect(err).to.be.null;
           done();
         });
-      });
+      }, 10);
     })
   })
 })

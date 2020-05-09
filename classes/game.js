@@ -44,7 +44,7 @@ module.exports = class game {
   delGame(callback){
     var uGame = schemas.Game;
     uGame.deleteOne({_id:this.game_UID}, function (err,result) {
-      callback(err,result);
+      if (err) callback(err);
     });
   }
   updateGame(callback){
@@ -67,47 +67,37 @@ module.exports = class game {
   //Rating function, not important right now.
   rate(gameID,userID,callback){
     var gm = schemas.Game;
-    gm.findOne({
-      _id:gameID,
+    gm.find({
+      _id:mongoose.Types.ObjectId(gameID),
+    },{
+      rating:{
+        "$elemMatch":{"$eq":mongoose.Types.ObjectId(userID)}
+      }
     }).exec(function (err,res) {
-        if (res) {
-          if (res.rating.length > 0) {
-            var data = res.rating.find( function( ele ) {
-              return ele.gameID === gameID;
-            });
-            if( data ) {
-              res.rating.forEach((item, i) => {
-                if (item.userID == userID) {
-                  res.rating.splice(i,1)
-                }
-              });
-              res.ratingCount--;
-              res.markModified('rating')
-              res.save(function (err,res) {
-                callback(err,res)
-              })
-            }
-            else{
-              res.rating.push({'userID':userID,'gameID':gameID})
-              res.ratingCount++;
-              res.markModified('rating')
-              res.save(function (err,res) {
-                callback(err,res)
-              })
-            }
-          }
-          else{
-            res.rating.push({'userID':userID,'gameID':gameID});
-            res.ratingCount++;
-            res.markModified('rating')
-            res.save(function (err,res) {
-              callback(err,res)
-            })
-          }
-        }
-        else{
-          callback('Error',null)
-        }
+      if(err)callback(err);
+      if(res[0].rating.length == 0){
+        var game = schemas.Game;
+        game.updateOne({
+          _id:mongoose.Types.ObjectId(gameID),
+           "rating": { "$ne": mongoose.Types.ObjectId(userID)}
+        },{
+          "$inc": { "ratingCount": 1 },
+          "$push":{"rating":  mongoose.Types.ObjectId(userID)}
+        }).exec(function (err,res) {
+          if(err)callback(err);
+        })
+      }
+      else{
+        gm.updateOne({
+          _id:mongoose.Types.ObjectId(gameID),
+           "rating": mongoose.Types.ObjectId(userID)
+        },{
+          "$inc": { "ratingCount": -1 },
+          "$pull":{"rating":  mongoose.Types.ObjectId(userID)}
+        }).exec(function (err,res) {
+          if(err)callback(err);
+        })
+      }
     })
   }
   addPending(id,callback){
@@ -124,8 +114,8 @@ module.exports = class game {
       pending:true
    })
    this.game_UID = game._id;
-   game.save(function (err,res) {
-     callback(err,res);
+   game.save(function (err) {
+     if(err)callback(err);
    });
   }
   editPending(id,callback){
@@ -144,9 +134,9 @@ module.exports = class game {
         game_IsNSFW:this.game_IsNSFW,
         pending:true
       })
-      game.save(function (err,res) {
-        callback(err,res);
-      });
+       game.save(function (err) {
+         if(err)callback(err);
+       });
     })
   }
   approvePending(callback){

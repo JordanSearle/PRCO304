@@ -160,4 +160,3 @@ var osUtil = require('os-utils');
     }
 }
 app.use(errorHandler);
-module.exports = server;

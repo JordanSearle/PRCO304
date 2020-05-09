@@ -42,7 +42,7 @@ module.exports = {
   user: function (req,res) {
     //create a new users
     if (!req.body.hasOwnProperty('username')||!req.body.hasOwnProperty('password')||!req.body.hasOwnProperty('email')||!req.body.hasOwnProperty('user_DOB')|| Object.keys(req.body).length === 0) {
-      res.status(400).send('An Error Occurred')
+      if(err){res.status(400).send('An Error Occurred')}
     }
     else {
       var fac = new controllerFactory();
@@ -58,7 +58,7 @@ module.exports = {
         result.setEmail(req.body.email);
         result.setDOB(req.body.user_DOB);
         result.addUser(function (err,response) {
-          //do somehting with error
+          //do somehting with error.
           if(err){res.status(400).send(err)}
           else{res.sendStatus(201)}//Correct Status?
         })
@@ -180,22 +180,16 @@ module.exports = {
   getUser: function (req,res) {
     //view user
     //Verifies the user is logged in or not. not logged in will redirect to default index page
-    var fac = new controllerFactory();
-    fac.create(req.session.user,function (result) {
-      if (result == false) {
-        res.redirect(403);
-      }
-      else{
-        result.viewUser(function (err,result) {
-          if (err) {
-            res.send(err)
-          }
-          else{
-            res.send(result);
-          }
+    verify(req,res,req.session.user,function (logged) {
+      if (logged) {
+        //will return the user's data
+        var user = new classes.user();
+        user.setUserID(req.session.user);
+        user.viewUser(function (result) {
+          res.send(result);
         })
       }
-    })
+    });
 
   },
   likeGame: function (ws,req) {
