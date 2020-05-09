@@ -14,6 +14,7 @@ module.exports = class user{
       this.#salt = salt;
       this.#email = email;
       this.#user_DOB = Date.parse(dob);
+
     }
     validateDetails(callback){
       //Return true or false based on password and username values
@@ -175,4 +176,5 @@ module.exports = class user{
     setDOB(dob){
       this.#user_DOB = new Date(dob);
     }
+    
   }

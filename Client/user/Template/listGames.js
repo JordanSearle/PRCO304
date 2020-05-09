@@ -21,6 +21,8 @@ app.config(['$routeProvider', function($routeProvider) {
 
     }]);
 app.controller('gameControl', function($scope, $http) {
+  $scope.myWelcome = [];
+  $scope.filter = [];
   $scope.categories = ['Movie','Coin','Card','Video Games','Sport','Misc','Board Games','Dinner Party','Birthdays','Retirement','Family Gathering']
   $scope.filterGame = function () {
     if ($scope.selIndex == '') {
@@ -40,17 +42,33 @@ app.controller('gameControl', function($scope, $http) {
     }
   }
   $scope.load = function () {
-    $http.get("/game")
-    .then(function(response) {
-      $scope.myWelcome = response.data;
-      $scope.filter = response.data;
+    $http.get("/user")
+    .then(function(res) {
+      $scope.user = res.data;
+      $http.get("/game")
+      .then(function(response) {
+        response.data.forEach((item, i) => {
+          if (item.game_IsNSFW == true) {
+            console.log(calculate_age(new Date($scope.user.user_DOB)));
+            if (calculate_age(new Date($scope.user.user_DOB)) >= 18) {
+              $scope.myWelcome.push(item);
+              $scope.filter.push(item);
+            }
+          }
+          else{
+            $scope.myWelcome.push(item);
+            $scope.filter.push(item);
+          }
+        });
+
+
+      });
+
     });
+
   }
   $scope.load();
-  $http.get("/user")
-  .then(function(response) {
-    $scope.user = response.data;
-  });
+
 
   $scope.logout =function () {
     logout($http);

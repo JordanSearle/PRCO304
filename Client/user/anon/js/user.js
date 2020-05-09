@@ -64,6 +64,9 @@ function prevGame($scope){
 
 function editAccount($scope,$http) {
   result = Object.assign({}, $scope.user, $scope.eUser);
+  console.log($scope.user);
+  console.log($scope.eUser);
+  console.log(result);
   $http.put("/user",result)
   .then(function (res) {
     alertStatusShow(res,$scope)
@@ -100,7 +103,6 @@ function loadGame($scope) {
   $scope.myWelcome.forEach((item, i) => {
     if ($scope.selGame == item.game_Name) {
       $scope.selected = encodeURIComponent($scope.selGame);
-      console.log($scope.selected);
       window.location.href = "#!/games/"+$scope.selected;
     }
   });
@@ -161,4 +163,9 @@ function alertStatusShow(json,$scope) {
   $('#delete').toast('hide');
   $('#delete').css('z-index', -1)
   $('#delete').children().children().attr("disabled", true);
+  }
+  function calculate_age(dob) {
+    var diff_ms = Date.now() - dob.getTime();
+    var age_dt = new Date(diff_ms);
+    return Math.abs(age_dt.getUTCFullYear() - 1970);
   }
