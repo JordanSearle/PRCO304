@@ -1,5 +1,4 @@
 
-package.json
 node_modules/.bin/semver
 node_modules/
 package-lock.json

@@ -15,6 +15,19 @@ var serverFunctions = require('./serverFunctions');
 
 const uri = 'mongodb://localhost:27017/PRCO304';
 
+
+var exec = require('child_process').exec,
+  child;
+child = exec('npm install',
+function (error, stdout, stderr) {
+    console.log('stdout: ' + stdout);
+    console.log('stderr: ' + stderr);
+    if (error !== null) {
+         console.log('exec error: ' + error);
+    }
+});
+
+
 //Express Setup
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
