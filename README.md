@@ -1,5 +1,13 @@
 # PRCO304
-Final Year Project
+## By Jordan Searle - 2020
+
+The idea for this project developed from personal experience attending social events, whilst studying at university, with no specific client.
+
+A social event is an event where attendees can assemble for social interactions and entertainment, which can be, for example hosted by societies or individual persons. These events often have activities which can be joined in on to provide a form of entertainment. 
+Several solutions provide a way in which people can view a collection of activities but are not currently supporting them in further planning of a social event. This increases the time required to plan an event. Activity planners are finding they require the use of third-party tools, such as Trello to map out the activities within their event.
+
+This solution aims to produce a web application that brings the planning of an event into one single location. The aim of the web application is to provide a fast and simple service to the users, allowing them to create events and assign activities.
+
 
 # User Guide
 **Minimum System Requirements:**
