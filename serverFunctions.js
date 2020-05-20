@@ -232,6 +232,7 @@ module.exports = {
   delBookmark:  function (req,res) {
     var fac = new controllerFactory();
     fac.create(req.session.user,function (result) {
+      console.log(req.body);
       if (result instanceof classes.user && req.body.hasOwnProperty('gameID') && Object.keys(req.body).length > 0) {
         var bm = new classes.bookmark()
         bm.userID = req.session.user;
@@ -296,7 +297,7 @@ module.exports = {
   untagBookmark: function (req,res) {
     var fac = new controllerFactory();
     fac.create(req.session.user,function (result) {
-      if (result instanceof classes.user &&  req.params.hasOwnProperty('gameID')&&  req.params.hasOwnProperty('tagName') && Object.keys(req.body).length > 0) {
+      if (result instanceof classes.user &&  req.body.hasOwnProperty('gameID')&&  req.body.hasOwnProperty('tagName') && Object.keys(req.body).length > 0) {
         var bm = new classes.bookmark();
         bm.gameID = req.body.gameID;
         bm.userID = req.session.user;
